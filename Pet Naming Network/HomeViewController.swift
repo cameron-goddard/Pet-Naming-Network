@@ -42,22 +42,22 @@ class HomeViewController: UITabBarController, UITabBarControllerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let voteVC = VoteViewController()
-        let voteTabBarItem = UITabBarItem(title: "Vote", image: UIImage(systemName: "folder"), selectedImage: UIImage(systemName: "folder"))
+        let voteTabBarItem = UITabBarItem(title: "Vote", image: UIImage(systemName: "tray.and.arrow.down.fill"), selectedImage: UIImage(systemName: "tray.and.arrow.down.fill"))
         voteVC.tabBarItem = voteTabBarItem
         
         let newImageVC = NewImageViewController()
-        let newImageTabBarItem = UITabBarItem(title: "New", image: UIImage(systemName: "folder"), selectedImage: UIImage(systemName: "folder"))
+        let newImageTabBarItem = UITabBarItem(title: "New", image: UIImage(systemName: "plus.circle.fill"), selectedImage: UIImage(systemName: "plus.circle.fill"))
         newImageVC.tabBarItem = newImageTabBarItem
         
         let giveNamesVC = VoteViewController()
-        let giveNamesTabBarItem = UITabBarItem(title: "Vote", image: UIImage(systemName: "folder"), selectedImage: UIImage(systemName: "folder"))
+        let giveNamesTabBarItem = UITabBarItem(title: "Name", image: UIImage(systemName: "rectangle.and.pencil.and.ellipsis"), selectedImage: UIImage(systemName: "rectangle.and.pencil.and.ellipsis"))
         giveNamesVC.tabBarItem = giveNamesTabBarItem
         
         self.viewControllers = [voteVC, newImageVC, giveNamesVC]
     }
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        print("Selected \(viewController.title!)")
+        //print("Selected \(viewController.title!)")
     }
     
 
