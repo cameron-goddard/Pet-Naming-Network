@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		264105C827470DBD004C6DA4 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264105C727470DBD004C6DA4 /* AccountViewController.swift */; };
+		264105CA274715DE004C6DA4 /* Pet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264105C9274715DE004C6DA4 /* Pet.swift */; };
+		264105CC27492C5D004C6DA4 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264105CB27492C5D004C6DA4 /* Account.swift */; };
+		264105CE27493F96004C6DA4 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264105CD27493F96004C6DA4 /* HeaderView.swift */; };
+		264105D027493FC3004C6DA4 /* PetCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264105CF27493FC3004C6DA4 /* PetCollectionViewCell.swift */; };
 		3B2B6101273D9637000F99DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B6100273D9637000F99DC /* AppDelegate.swift */; };
 		3B2B6103273D9637000F99DC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B6102273D9637000F99DC /* SceneDelegate.swift */; };
 		3B2B6105273D9637000F99DC /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B6104273D9637000F99DC /* HomeViewController.swift */; };
@@ -21,6 +26,11 @@
 
 /* Begin PBXFileReference section */
 		0E1F7F807DA05668F2652FA4 /* Pods-Pet Naming Network.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pet Naming Network.debug.xcconfig"; path = "Target Support Files/Pods-Pet Naming Network/Pods-Pet Naming Network.debug.xcconfig"; sourceTree = "<group>"; };
+		264105C727470DBD004C6DA4 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		264105C9274715DE004C6DA4 /* Pet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pet.swift; sourceTree = "<group>"; };
+		264105CB27492C5D004C6DA4 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		264105CD27493F96004C6DA4 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		264105CF27493FC3004C6DA4 /* PetCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetCollectionViewCell.swift; sourceTree = "<group>"; };
 		3B2B60FD273D9637000F99DC /* Pet Naming Network.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pet Naming Network.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B2B6100273D9637000F99DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3B2B6102273D9637000F99DC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +89,11 @@
 				3B2B6109273D9639000F99DC /* Assets.xcassets */,
 				3B2B610B273D9639000F99DC /* LaunchScreen.storyboard */,
 				3B2B610E273D9639000F99DC /* Info.plist */,
+				264105C727470DBD004C6DA4 /* AccountViewController.swift */,
+				264105C9274715DE004C6DA4 /* Pet.swift */,
+				264105CB27492C5D004C6DA4 /* Account.swift */,
+				264105CD27493F96004C6DA4 /* HeaderView.swift */,
+				264105CF27493FC3004C6DA4 /* PetCollectionViewCell.swift */,
 			);
 			path = "Pet Naming Network";
 			sourceTree = "<group>";
@@ -89,7 +104,6 @@
 				0E1F7F807DA05668F2652FA4 /* Pods-Pet Naming Network.debug.xcconfig */,
 				F9E3C02795D06736FC224164 /* Pods-Pet Naming Network.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -217,9 +231,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B792418273EEFBB00B5FC5C /* VoteViewController.swift in Sources */,
+				264105D027493FC3004C6DA4 /* PetCollectionViewCell.swift in Sources */,
 				3B2B6105273D9637000F99DC /* HomeViewController.swift in Sources */,
+				264105C827470DBD004C6DA4 /* AccountViewController.swift in Sources */,
 				3B79241C273EF0A500B5FC5C /* GiveNamesViewController.swift in Sources */,
 				3B2B6101273D9637000F99DC /* AppDelegate.swift in Sources */,
+				264105CE27493F96004C6DA4 /* HeaderView.swift in Sources */,
+				264105CC27492C5D004C6DA4 /* Account.swift in Sources */,
+				264105CA274715DE004C6DA4 /* Pet.swift in Sources */,
 				3B2B6103273D9637000F99DC /* SceneDelegate.swift in Sources */,
 				3B79241A273EF05F00B5FC5C /* NewImageViewController.swift in Sources */,
 			);
