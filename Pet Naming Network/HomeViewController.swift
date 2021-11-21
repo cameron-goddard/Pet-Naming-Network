@@ -9,11 +9,25 @@ import UIKit
 
 class HomeViewController: UITabBarController, UITabBarControllerDelegate{
 
-    
-
-    
     private var petCollectionView:UICollectionView!;
-    private var petsShown:[Pet] = [Pet(petName: "Doge", user: "SharkLord777", petImageURL: "doggo", petState: .featured),Pet(petName: "???", user: "SharkLord777", petImageURL: "nice", petState: .featured)]
+    
+    public static var DefaultPFP:[String:UIImage]{
+        let alpha:String = "ABCDEFGHIJKMNLOPQRSTUVWXYZ";
+        var images:[String:UIImage] = [:];
+        for i in 1...26{
+            let s:String = alpha[alpha.index(alpha.startIndex, offsetBy: i-1)].uppercased()
+            images[s] = UIImage(named: "alphabet_\(i)") ?? UIImage()
+        }
+        return images;
+    };
+    
+    
+    
+    private var petsShown:[Pet] = [Pet(petName: "Doge", user: "SharkLord777", petImageURL: "doggo", petState: .Featured),Pet(petName: "???", user: "SharkLord777", petImageURL: "nice", petState: .Featured)]
+    private var account:Account = Account(userName: "", userPosts: []);
+    
+    
+    
     private var petCellReuseIdentifier = "petCellReuseIdentifier"
     private let headerReuseIdentifier = "headerReuseIdentifer"
     private let cellPadding: CGFloat = 10
@@ -28,6 +42,9 @@ class HomeViewController: UITabBarController, UITabBarControllerDelegate{
         navigationItem.largeTitleDisplayMode = .always
         self.delegate = self
         view.backgroundColor = .systemBackground
+        
+        
+        account = Account(userName: "SharkLord777",userPosts: petsShown)
         
         petCollectionView = {
             let layout = UICollectionViewFlowLayout();
@@ -74,7 +91,7 @@ class HomeViewController: UITabBarController, UITabBarControllerDelegate{
     
     
     @objc func presentAccount(){
-        let vc = AccountViewController();
+        let vc = AccountViewController(account: account);
         present(vc, animated: true, completion: nil)
     }
     

@@ -12,7 +12,7 @@ class Pet{
     
     var petName:String;
    // var nameSuggestions:[String];
-    var userUploaded:String;
+    var user:String;
     var petImage:UIImage;
     var petState:State;
     //var timeUploaded:String;
@@ -20,16 +20,36 @@ class Pet{
     
     init(petName:String, user:String,petImageURL:String,petState:State){
         self.petName = petName;
-        self.userUploaded = user;
+        self.user = user;
         self.petImage = UIImage(named: petImageURL) ?? UIImage()
         self.petState = petState;
     }
     
    
 }
+class PetPost:Codable{
+    let id:String;
+    let state:String;
+    let picture:String;
+    let user:String;
+    let names:[String];
+    let date_created:String;
+
+    init(id: String, state: String, picture: String, user: String, names: [String], date_created: String) {
+        self.id = id
+        self.state = state;
+        self.picture = picture
+        self.user = user
+        self.names = names
+        self.date_created = date_created
+    }
+}
+
+
+
 enum State{
-    case naming
-    case voting
-    case featured
+    case Naming
+    case Voting
+    case Featured
     
 }

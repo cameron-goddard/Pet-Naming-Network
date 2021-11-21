@@ -18,5 +18,18 @@ class Account{
         self.userPFP = userPFP;
         self.userPosts = userPosts;
     }
+    init(userName:String,userPosts:[Pet]){
+        self.userName = userName;
+        self.userPFP = UIImage();
+        self.userPosts = userPosts;
+    }
     
+}
+class User:Codable{
+    var id:Int
+    var username:String
+    var pets:[PetPost]
+    var names:[String]
+
+
 }

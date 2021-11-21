@@ -41,7 +41,7 @@ class PetCollectionViewCell: UICollectionViewCell {
     func configure(for pet:Pet){
         petNameLabel.text = pet.petName;
         petImageView.image = cropToBounds(image: pet.petImage, width: pet.petImage.size.width, height: pet.petImage.size.height);
-        userNameLabel.text = "By:\(pet.userUploaded)"
+        userNameLabel.text = "By:\(pet.user)"
         let gradient = CAGradientLayer()
 
         gradient.frame = contentView.bounds
