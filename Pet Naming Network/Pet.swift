@@ -11,7 +11,7 @@ import UIKit
 class Pet{
     
     var petName:String;
-   // var nameSuggestions:[String];
+    var nameSuggestions:[String] = [];
     var user:String;
     var petImage:UIImage;
     var petState:State;
@@ -25,6 +25,13 @@ class Pet{
         self.petState = petState;
     }
     
+    public func addPetName(name:String){
+        nameSuggestions.append(name);
+    }
+    
+    public func petNames(nameSuggestions:[String]){
+        self.nameSuggestions=nameSuggestions;
+    }
    
 }
 class PetPost:Codable{

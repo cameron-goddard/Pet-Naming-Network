@@ -23,7 +23,7 @@ class HomeViewController: UITabBarController, UITabBarControllerDelegate{
     
     
     
-    private var petsShown:[Pet] = [Pet(petName: "Doggo", user: "SharkLord777", petImageURL: "doggo", petState: .Featured),Pet(petName: "???", user: "SharkLord777", petImageURL: "nice", petState: .Featured),Pet(petName: "Gamer", user: "SharkLord777", petImageURL: "gamer", petState: .Featured)]
+    private var petsShown:[Pet] = [Pet(petName: "Doggo", user: "SharkLord777", petImageURL: "doggo", petState: .Featured),Pet(petName: "???", user: "SharkLord777", petImageURL: "nice", petState: .Featured),Pet(petName: "Gamer", user: "SharkLord777", petImageURL: "gamer", petState: .Featured),Pet(petName: "cat", user: "SharkLord777", petImageURL: "waffle", petState: .Featured)]
     private var account:Account = Account(userName: "", userPosts: []);
     
     
@@ -166,6 +166,8 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        let vc = PetViewController(pet: petsShown[indexPath.item]);
+            present(vc, animated: true, completion: nil)
        
     }
 }

@@ -178,6 +178,8 @@ extension AccountViewController: UICollectionViewDelegateFlowLayout, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        let vc = PetViewController(pet: account.userPosts[indexPath.item]);
+            present(vc, animated: true, completion: nil)
        
     }
 }
