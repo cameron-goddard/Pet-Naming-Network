@@ -9,11 +9,15 @@ import UIKit
 
 class AccountViewController: UIViewController {
 
+    
+    var imagePicker: ImagePicker!
+    
     private var petsPostedCollectionView:UICollectionView!;
     
     private var profilePic:UIButton = UIButton();
     private var userName:UITextView = UITextView();
     private var background:UIView = UIView();
+  
     private var petPostCellReuseIdentifier = "petPostCellReuseIdentifier"
     private let headerReuseIdentifier = "headerReuseIdentifer2"
     private let cellPadding: CGFloat = 10
@@ -25,8 +29,7 @@ class AccountViewController: UIViewController {
         self.account=account;
         let c:String = account.userName[account.userName.index(account.userName.startIndex, offsetBy: 0)].uppercased()
         let pic: UIImage = HomeViewController.DefaultPFP[c] ?? UIImage()
-  
-        profilePic.setImage(pic, for: UIControl.State.normal)
+       profilePic.setImage(pic, for: UIControl.State.normal)
         
         super .init(nibName: nil, bundle: nil)
     }
@@ -35,12 +38,15 @@ class AccountViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Profile"
         view.backgroundColor = .systemGray6
         
-        
+        self.imagePicker = ImagePicker(presentationController: self, delegate: self)
         
         userName.text = account.userName
         userName.textColor = .black
@@ -53,14 +59,17 @@ class AccountViewController: UIViewController {
         view.addSubview(userName)
         
         profilePic.translatesAutoresizingMaskIntoConstraints = false
-        profilePic.setTitle("PFP", for: .normal)
+        profilePic.setTitle("P", for: .normal)
         profilePic.setTitleColor(.black, for: .normal)
-        profilePic.backgroundColor = .red
+        profilePic.backgroundColor = account.bgColor
         profilePic.layer.borderColor = UIColor.white.cgColor
         profilePic.layer.borderWidth = 8
         profilePic.layer.cornerRadius = width/2
         profilePic.layer.masksToBounds = true;
-    
+        profilePic.titleLabel?.font = .boldSystemFont(ofSize: 50)
+        profilePic.titleLabel?.textColor = .white;
+        
+        
         
         
         profilePic.addTarget(self, action: #selector(editProfilePicture), for: .touchUpInside)
@@ -91,9 +100,9 @@ class AccountViewController: UIViewController {
         
         setUpViews()
     }
-    @objc func editProfilePicture(){
+    @objc func editProfilePicture(_ sender: UIButton){
        print("HELLO!")
-        print(account.bgColor);
+        self.imagePicker.present(from: sender)
     }
     func setUpViews() {
         NSLayoutConstraint.activate([
@@ -119,7 +128,7 @@ class AccountViewController: UIViewController {
         ])
         let collectionViewPadding: CGFloat = 12
         NSLayoutConstraint.activate([
-            petsPostedCollectionView.topAnchor.constraint(equalTo: userName.topAnchor,constant:20),
+            petsPostedCollectionView.topAnchor.constraint(equalTo: userName.topAnchor,constant:30),
             petsPostedCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             petsPostedCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: collectionViewPadding),
             petsPostedCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
@@ -196,4 +205,10 @@ extension UIView {
     layer.shouldRasterize = true
     layer.rasterizationScale = scale ? UIScreen.main.scale : 1
   }
+}
+extension AccountViewController: ImagePickerDelegate {
+
+    func didSelect(image: UIImage?) {
+        self.profilePic.setImage(image, for: UIControl.State.normal)
+    }
 }

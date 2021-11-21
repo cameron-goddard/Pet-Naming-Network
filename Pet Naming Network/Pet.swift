@@ -51,7 +51,12 @@ class PetPost:Codable{
         self.date_created = date_created
     }
 }
-
+class PetName:Codable{
+    let id:Int;
+    let name:String;
+    let pet:String;
+    let votes:String;
+}
 
 
 enum State{
