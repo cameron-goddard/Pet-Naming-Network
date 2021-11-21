@@ -21,18 +21,20 @@ class PetCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .systemGray6
 
         petImageView.contentMode = .scaleAspectFit
-        contentView.addSubview(petImageView)
+        
         
         petNameLabel.textAlignment = .center
         petNameLabel.font = UIFont.boldSystemFont(ofSize: 16)
         petNameLabel.textColor = .orange
-        contentView.addSubview(petNameLabel);
+       
         userNameLabel.textAlignment = .center
         userNameLabel.font = .systemFont(ofSize: 12)
         userNameLabel.textColor = .black
-        contentView.addSubview(userNameLabel);
         
-        setupConstraints();
+        contentView.addSubview(petNameLabel);
+        contentView.addSubview(userNameLabel);
+        contentView.addSubview(petImageView)
+      
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -46,17 +48,33 @@ class PetCollectionViewCell: UICollectionViewCell {
 
         gradient.frame = contentView.bounds
         gradient.colors = [UIColor.orange.cgColor,UIColor.yellow.cgColor,UIColor.white.cgColor,UIColor.yellow.cgColor]
-
         contentView.layer.insertSublayer(gradient, at: 0)
+        setupConstraints();
+    }
+    
+    func accountConfigure(for pet:Pet){
+        petNameLabel.text = "";
+        petImageView.image = cropToBounds(image: pet.petImage, width: pet.petImage.size.width, height: pet.petImage.size.height);
+        userNameLabel.text = ""
+        petImageView.layer.borderWidth = 2;
+        petImageView.layer.borderColor = UIColor.systemBlue.cgColor
+        let padding:CGFloat = 6;
+        let width = contentView.frame.width-padding*2;
+        petImageView.snp.makeConstraints{make in
+            make.centerX.centerY.equalToSuperview();
+            make.height.width.equalTo(width);
+        }
     }
     
     func setupConstraints(){
         let padding:CGFloat = 6;
-        let width = contentView.frame.width-padding;
+        let width = contentView.frame.width-padding*2;
         petImageView.snp.makeConstraints{make in
             make.top.equalToSuperview().offset(padding)
+            make.centerX.equalToSuperview();
             make.height.width.equalTo(width);
-            make.trailing.leading.equalToSuperview().offset(padding/2)
+            make.leading.equalToSuperview().offset(padding)
+            make.trailing.equalToSuperview().offset(-padding)
         }
         petNameLabel.snp.makeConstraints{make in
             make.top.equalTo(petImageView.snp.bottom).offset(padding);

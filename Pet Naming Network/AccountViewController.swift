@@ -13,6 +13,7 @@ class AccountViewController: UIViewController {
     
     private var profilePic:UIButton = UIButton();
     private var userName:UITextView = UITextView();
+    private var background:UIView = UIView();
     private var petPostCellReuseIdentifier = "petPostCellReuseIdentifier"
     private let headerReuseIdentifier = "headerReuseIdentifer2"
     private let cellPadding: CGFloat = 10
@@ -26,6 +27,7 @@ class AccountViewController: UIViewController {
         let pic: UIImage = HomeViewController.DefaultPFP[c] ?? UIImage()
   
         profilePic.setImage(pic, for: UIControl.State.normal)
+        
         super .init(nibName: nil, bundle: nil)
     }
     
@@ -37,9 +39,13 @@ class AccountViewController: UIViewController {
         super.viewDidLoad()
         title = "Profile"
         view.backgroundColor = .systemGray6
+        
+        
+        
         userName.text = account.userName
         userName.textColor = .black
-        userName.font = .systemFont(ofSize: 14)
+        userName.textAlignment = .center
+        userName.font = .boldSystemFont(ofSize: 20)
         userName.layer.backgroundColor = UIColor.systemGray6.cgColor
         userName.translatesAutoresizingMaskIntoConstraints = false;
         userName.layer.cornerRadius = 20;
@@ -50,14 +56,21 @@ class AccountViewController: UIViewController {
         profilePic.setTitle("PFP", for: .normal)
         profilePic.setTitleColor(.black, for: .normal)
         profilePic.backgroundColor = .red
-        profilePic.layer.borderColor = UIColor.black.cgColor
+        profilePic.layer.borderColor = UIColor.white.cgColor
         profilePic.layer.borderWidth = 8
         profilePic.layer.cornerRadius = width/2
         profilePic.layer.masksToBounds = true;
+    
+        
         
         profilePic.addTarget(self, action: #selector(editProfilePicture), for: .touchUpInside)
-        view.addSubview(profilePic)
+        background = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height/2))
+        background.backgroundColor = account.bgColor
         
+        background.dropShadow()
+        
+        view.addSubview(background)
+        background.addSubview(profilePic)
         
         petsPostedCollectionView = {
             let layout = UICollectionViewFlowLayout();
@@ -80,16 +93,25 @@ class AccountViewController: UIViewController {
     }
     @objc func editProfilePicture(){
        print("HELLO!")
+        print(account.bgColor);
     }
     func setUpViews() {
         NSLayoutConstraint.activate([
-            profilePic.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            profilePic.topAnchor.constraint(equalTo: view.topAnchor,constant: view.frame.size.height/8),
+            background.topAnchor.constraint(equalTo: view.topAnchor),
+            background.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            background.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            background.heightAnchor.constraint(equalToConstant: view.frame.size.height/2),
+        ])
+        
+
+        NSLayoutConstraint.activate([
+            profilePic.centerXAnchor.constraint(equalTo: background.centerXAnchor),
+            profilePic.centerYAnchor.constraint(equalTo: background.centerYAnchor),
             profilePic.widthAnchor.constraint(equalToConstant: width),
-            profilePic.heightAnchor.constraint(equalToConstant: width)
+            profilePic.heightAnchor.constraint(equalToConstant: width),
         ])
         NSLayoutConstraint.activate([
-            userName.topAnchor.constraint(equalTo: profilePic.bottomAnchor,constant: 20),
+            userName.topAnchor.constraint(equalTo: background.bottomAnchor,constant: 5),
             userName.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             userName.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 30),
             userName.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -30),
@@ -121,7 +143,7 @@ extension AccountViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
        
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: petPostCellReuseIdentifier, for: indexPath) as! PetCollectionViewCell
-        cell.configure(for: account.userPosts[indexPath.row]);
+        cell.accountConfigure(for: account.userPosts[indexPath.row]);
             
             return cell;
         
@@ -142,9 +164,9 @@ extension AccountViewController: UICollectionViewDelegateFlowLayout, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-            let numItemsPerRow: CGFloat = 2.0
+            let numItemsPerRow: CGFloat = 3.1
             let size = (collectionView.frame.width - cellPadding) / numItemsPerRow
-            return CGSize(width: size, height: (size*3)/2-10)
+            return CGSize(width: size, height: (size))
        
         
     }
@@ -160,6 +182,16 @@ extension AccountViewController: UICollectionViewDelegateFlowLayout, UICollectio
     }
 }
 
+extension UIView {
+  func dropShadow(scale: Bool = true) {
+    layer.masksToBounds = false
+    layer.shadowColor = UIColor.black.cgColor
+    layer.shadowOpacity = 0.5
+    layer.shadowOffset = CGSize(width: -1, height: 1)
+    layer.shadowRadius = 1
 
-
-
+    layer.shadowPath = UIBezierPath(rect: bounds).cgPath
+    layer.shouldRasterize = true
+    layer.rasterizationScale = scale ? UIScreen.main.scale : 1
+  }
+}

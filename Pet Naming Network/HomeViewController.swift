@@ -23,7 +23,7 @@ class HomeViewController: UITabBarController, UITabBarControllerDelegate{
     
     
     
-    private var petsShown:[Pet] = [Pet(petName: "Doge", user: "SharkLord777", petImageURL: "doggo", petState: .Featured),Pet(petName: "???", user: "SharkLord777", petImageURL: "nice", petState: .Featured)]
+    private var petsShown:[Pet] = [Pet(petName: "Doggo", user: "SharkLord777", petImageURL: "doggo", petState: .Featured),Pet(petName: "???", user: "SharkLord777", petImageURL: "nice", petState: .Featured),Pet(petName: "Gamer", user: "SharkLord777", petImageURL: "gamer", petState: .Featured)]
     private var account:Account = Account(userName: "", userPosts: []);
     
     
@@ -152,9 +152,9 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-            let numItemsPerRow: CGFloat = 2.0
+            let numItemsPerRow: CGFloat = 2
             let size = (collectionView.frame.width - cellPadding) / numItemsPerRow
-            return CGSize(width: size, height: (size*3)/2-10)
+        return CGSize(width: size, height: (size*3)/2-40)
        
         
     }

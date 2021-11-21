@@ -12,16 +12,22 @@ class Account{
     var userName:String;
     var userPFP:UIImage;
     var userPosts:[Pet];
-    
+    var bgColor:UIColor;
     init(userName:String,userPFP:UIImage,userPosts:[Pet]){
         self.userName = userName;
         self.userPFP = userPFP;
         self.userPosts = userPosts;
+        bgColor = UIColor(displayP3Red: CGFloat(Int.random(in: 180...255)), green: CGFloat(Int.random(in: 180...255)), blue: CGFloat(Int.random(in: 180...255)), alpha: CGFloat(1))
     }
     init(userName:String,userPosts:[Pet]){
         self.userName = userName;
         self.userPFP = UIImage();
         self.userPosts = userPosts;
+        let r:CGFloat = CGFloat.random(in: 0.7...1)
+        let g:CGFloat = CGFloat.random(in: 0.7...1)
+        let b:CGFloat = CGFloat.random(in: 0.7...1)
+        bgColor = UIColor(displayP3Red: r, green: g, blue: b, alpha: CGFloat(1))
+       // bgColor = UIColor(displayP3Red: 0.2 , green: 0, blue: 0, alpha: CGFloat(1))
     }
     
 }
