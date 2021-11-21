@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import SnapKit
 
 class PetCollectionViewCell: UICollectionViewCell {
@@ -41,27 +42,28 @@ class PetCollectionViewCell: UICollectionViewCell {
         petNameLabel.text = pet.petName;
         petImageView.image = cropToBounds(image: pet.petImage, width: pet.petImage.size.width, height: pet.petImage.size.height);
         userNameLabel.text = "By:\(pet.userUploaded)"
+        let gradient = CAGradientLayer()
+
+        gradient.frame = contentView.bounds
+        gradient.colors = [UIColor.orange.cgColor,UIColor.yellow.cgColor,UIColor.white.cgColor,UIColor.yellow.cgColor]
+
+        contentView.layer.insertSublayer(gradient, at: 0)
     }
     
     func setupConstraints(){
         let padding:CGFloat = 6;
-        let width = contentView.frame.width
+        let width = contentView.frame.width-padding;
         petImageView.snp.makeConstraints{make in
             make.top.equalToSuperview().offset(padding)
-        }
-        petImageView.snp.makeConstraints{make in
             make.height.width.equalTo(width);
+            make.trailing.leading.equalToSuperview().offset(padding/2)
         }
         petNameLabel.snp.makeConstraints{make in
             make.top.equalTo(petImageView.snp.bottom).offset(padding);
-        }
-        petNameLabel.snp.makeConstraints{make in
             make.trailing.leading.equalToSuperview()
         }
         userNameLabel.snp.makeConstraints{make in
             make.top.equalTo(petNameLabel.snp.bottom).offset(padding);
-        }
-        userNameLabel.snp.makeConstraints{make in
             make.trailing.leading.equalToSuperview()
         }
         
