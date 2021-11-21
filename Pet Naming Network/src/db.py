@@ -1,7 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy 
+from enum import Enum
+from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
-from enum import Enum
 
 class State(Enum):
     NAMING = 1
@@ -26,39 +26,37 @@ pets_names_association_table = db.Table(
 
 # PET table
 
-class Pets(db.Model):
+class Pet(db.Model):
 
     __tablename__ = "pet"
 
-    id = db.Column(db.Integer, primary_key = True)
-    state = db.Column( db.Integer, nullable = False)
-    picture = db.Column( db.String, nullable = False )
-    user = db.Column( db.Integer, db.ForeignKey("user.id") )
+    id = db.Column(db.Integer, primary_key=True)
+    state = db.Column(db.Integer, nullable=False)
+    picture = db.Column(db.String, nullable=False)
+    user = db.Column(db.Integer, db.ForeignKey("user.id"))
     # names = db.Column( db.String, nullable = False )
-    date_created = db.Column( db.Integer, nullable = False)
-
-
+    date_created = db.Column(db.Integer, nullable=False)
 
     def __init__(self, **kwargs):
 
         self.state = State.NAMING
         self.picture = kwargs.get("picture")
         self.user = kwargs.get("user")
-        #self.names = 
+        # self.names =
         self.date_created = kwargs.get("date_created")
-        
+
     def serialize(self):
 
         return {
 
-            "id":self.id,
-            "state":self.state,
-            "picture":self.picture,
-            "user":self.user,
-            "date_created":self.date_created
+            "id": self.id,
+            "state": self.state,
+            "picture": self.picture,
+            "user": self.user,
+            # TODO: ^^^ Once we make the user table change this to subserialize
+            "date_created": self.date_created
 
         }
-
 
 
 # USER table
@@ -68,12 +66,12 @@ class Users(db.Model):
 
     __tablename__ = "user"
 
-    id = db.Column(db.Integer, primary_key = True)
-    username = db.Column(db.String, nullable = False)
-    pets = db.Column( db.Integer, db.ForeignKey("pet.id") )
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String, nullable=False)
+    pets = db.Column(db.Integer, db.ForeignKey("pet.id"))
 
 
-# NAME table 
+# NAME table
 
 class Names(db.Model):
 
