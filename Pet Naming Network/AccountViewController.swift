@@ -9,7 +9,6 @@ import UIKit
 
 class AccountViewController: UIViewController {
 
-    
     var imagePicker: ImagePicker!
     
     private var petsPostedCollectionView:UICollectionView!;
@@ -209,6 +208,7 @@ extension UIView {
 extension AccountViewController: ImagePickerDelegate {
 
     func didSelect(image: UIImage?) {
+        account.userPFP = image ?? UIImage();
         self.profilePic.setImage(image, for: UIControl.State.normal)
     }
 }
