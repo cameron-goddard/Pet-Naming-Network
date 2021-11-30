@@ -26,7 +26,7 @@ def failure_response(message, code=404):
 
 @app.route("/home/naming/")
 def get_nameable_pets():
-    pets = Pets.query.filter_by(state=State.Naming)
+    pets = Pet.query.filter_by(state=State.Naming)
 
     if pets is None:
         return failure_response("No pets to name!")
