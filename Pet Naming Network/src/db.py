@@ -9,22 +9,7 @@ class State(Enum):
     FEATURED = 3
 
 
-user_pets_association_table = db.Table(
-    "user_pets_association",
-    db.Model.metadata,
-    db.Column("user_id", db.Integer, db.ForeignKey("user.id")),
-    db.Column("name_id", db.Integer, db.ForeignKey("name.id"))
-)
-
-pets_names_association_table = db.Table(
-    "pets_names_association",
-    db.Model.metadata,
-    db.Column("pet_id", db.Integer, db.ForeignKey("pet.id")),
-    db.Column("name_id", db.Integer, db.ForeignKey("user.id"))
-)
-
-
-# PET table
+# PET table 
 
 class Pet(db.Model):
 
@@ -34,7 +19,7 @@ class Pet(db.Model):
     state = db.Column(db.Integer, nullable=False)
     picture = db.Column(db.String, nullable=False)
     user = db.Column(db.Integer, db.ForeignKey("user.id"))
-    # names = db.Column( db.String, nullable = False )
+    names = db.relationship( "Names", cascade = "delete" )
     date_created = db.Column(db.Integer, nullable=False)
 
     def __init__(self, **kwargs):
@@ -42,22 +27,27 @@ class Pet(db.Model):
         self.state = State.NAMING
         self.picture = kwargs.get("picture")
         self.user = kwargs.get("user")
-        # self.names =
         self.date_created = kwargs.get("date_created")
 
     def serialize(self):
 
         return {
-
             "id": self.id,
             "state": self.state,
             "picture": self.picture,
             "user": self.user,
-            # TODO: ^^^ Once we make the user table change this to subserialize
+            "names": [s.sub_serialize() for s in self.names],
             "date_created": self.date_created
-
         }
-
+    
+    def sub_serialize(self):
+        return {
+            "id": self.id,
+            "state": self.state,
+            "picture": self.picture,
+            "names": [s.serialize() for s in self.names],
+            "date_created": self.date_created
+        }
 
 # USER table
 
@@ -68,7 +58,20 @@ class Users(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False)
-    pets = db.Column(db.Integer, db.ForeignKey("pet.id"))
+    pets = db.relationship("Pet", cascade = "delete")
+    names = db.relationship("Names", cascade = "delete")
+
+    def __init__(self, **kwargs):
+
+        self.username = kwargs.get("username")
+
+    def serialize(self):
+        return {
+            "id":self.id,
+            "username":self.username,
+            "pets": [s.sub_serialize for s in self.pets],
+            "names": [s.serialize for s in self.names]
+        }
 
 
 # NAME table
@@ -76,3 +79,30 @@ class Users(db.Model):
 class Names(db.Model):
 
     __tablename__ = "name"
+
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String, nullable = False)
+    pet = db.Column(db.Integer, db.ForeignKey("pet.id"))
+    votes = db.Column( db.ARRAY(db.Integer, dimensions = 2), nullable = False )
+    user = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    def __init__(self, **kwargs):
+        self.name = kwargs.get("name")
+        self.pet = kwargs.get("pet")
+        self.votes = [0, 0]
+
+    def serialize(self):
+        return {
+            "id":self.id,
+            "name":self.name,
+            "pet":self.pet,
+            "votes":self.votes
+        }
+
+    def sub_serialize(self):
+        return {
+            "id":self.id,
+            "name":self.name,
+            "votes":self.votes
+        }
+        
