@@ -11,7 +11,8 @@ class GiveNamesViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.title = "Give Name"
+        view.backgroundColor = .systemBackground
         // Do any additional setup after loading the view.
     }
     

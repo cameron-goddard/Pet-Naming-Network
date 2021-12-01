@@ -14,6 +14,8 @@
 		264105D027493FC3004C6DA4 /* PetCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264105CF27493FC3004C6DA4 /* PetCollectionViewCell.swift */; };
 		26654B28274AA5CB006C014D /* PetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26654B27274AA5CB006C014D /* PetViewController.swift */; };
 		26654B2A274B0173006C014D /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26654B29274B0172006C014D /* ImagePicker.swift */; };
+		26F452A22757366100067ADB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F452A12757366000067ADB /* LoginViewController.swift */; };
+		26F452A42757418700067ADB /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F452A32757418700067ADB /* TabBarController.swift */; };
 		3B2B6101273D9637000F99DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B6100273D9637000F99DC /* AppDelegate.swift */; };
 		3B2B6103273D9637000F99DC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B6102273D9637000F99DC /* SceneDelegate.swift */; };
 		3B2B6105273D9637000F99DC /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B6104273D9637000F99DC /* HomeViewController.swift */; };
@@ -35,6 +37,8 @@
 		264105CF27493FC3004C6DA4 /* PetCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetCollectionViewCell.swift; sourceTree = "<group>"; };
 		26654B27274AA5CB006C014D /* PetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetViewController.swift; sourceTree = "<group>"; };
 		26654B29274B0172006C014D /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		26F452A12757366000067ADB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		26F452A32757418700067ADB /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		3B2B60FD273D9637000F99DC /* Pet Naming Network.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pet Naming Network.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B2B6100273D9637000F99DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3B2B6102273D9637000F99DC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -100,6 +104,8 @@
 				264105CF27493FC3004C6DA4 /* PetCollectionViewCell.swift */,
 				26654B27274AA5CB006C014D /* PetViewController.swift */,
 				26654B29274B0172006C014D /* ImagePicker.swift */,
+				26F452A12757366000067ADB /* LoginViewController.swift */,
+				26F452A32757418700067ADB /* TabBarController.swift */,
 			);
 			path = "Pet Naming Network";
 			sourceTree = "<group>";
@@ -236,8 +242,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26F452A22757366100067ADB /* LoginViewController.swift in Sources */,
 				26654B2A274B0173006C014D /* ImagePicker.swift in Sources */,
 				3B792418273EEFBB00B5FC5C /* VoteViewController.swift in Sources */,
+				26F452A42757418700067ADB /* TabBarController.swift in Sources */,
 				264105D027493FC3004C6DA4 /* PetCollectionViewCell.swift in Sources */,
 				3B2B6105273D9637000F99DC /* HomeViewController.swift in Sources */,
 				264105C827470DBD004C6DA4 /* AccountViewController.swift in Sources */,
