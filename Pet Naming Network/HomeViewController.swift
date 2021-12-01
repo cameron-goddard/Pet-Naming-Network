@@ -21,10 +21,11 @@ class HomeViewController: UITabBarController, UITabBarControllerDelegate{
         return images;
     };
     
+    private var userName:String = "Bob123"
     
-    
-    private var petsShown:[Pet] = [Pet(petName: "Doggo", user: "SharkLord777", petImageURL: "doggo", petState: .Featured),Pet(petName: "???", user: "SharkLord777", petImageURL: "nice", petState: .Featured),Pet(petName: "Gamer", user: "SharkLord777", petImageURL: "gamer", petState: .Featured),Pet(petName: "cat", user: "SharkLord777", petImageURL: "waffle", petState: .Featured)]
-    private var account:Account = Account(userName: "", userPosts: []);
+    private var account:Account = Account(userName: "",userPosts: [])
+    private var petsShown:[Pet] = []
+  
     
     
     
@@ -43,8 +44,8 @@ class HomeViewController: UITabBarController, UITabBarControllerDelegate{
         self.delegate = self
         view.backgroundColor = .systemBackground
         
-        
-        account = Account(userName: "SharkLord777",userPosts: petsShown)
+        petsShown = [Pet(petName: "Doggo", user: userName, petImageURL: "doggo", petState: .Featured),Pet(petName: "???", user: userName, petImageURL: "nice", petState: .Featured),Pet(petName: "Gamer", user: userName, petImageURL: "gamer", petState: .Featured),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .Featured)]
+        account = Account(userName: userName,userPosts: petsShown)
         
         petCollectionView = {
             let layout = UICollectionViewFlowLayout();
