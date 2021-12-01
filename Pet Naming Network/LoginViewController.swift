@@ -39,19 +39,19 @@ class LoginViewController: UIViewController {
     private let loginButton:UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 52));
         button.setTitle("Log In", for: .normal)
-        button.backgroundColor = .white
+        button.backgroundColor = .systemBlue
         button.layer.borderColor = UIColor.systemBlue.cgColor;
         button.layer.borderWidth = 1;
         button.translatesAutoresizingMaskIntoConstraints = false;
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        
         return button;
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
        
-        petsShown = [Pet(petName: "Doggo", user: userName, petImageURL: "doggo", petState: .Featured),Pet(petName: "???", user: userName, petImageURL: "nice", petState: .Featured),Pet(petName: "Gamer", user: userName, petImageURL: "gamer", petState: .Featured),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .Featured)]
-        account = Account(userName: userName,userPosts: petsShown)
+        
         view.addSubview(appTitleLabel)
       
         view.addSubview(userNameTextField)
@@ -81,41 +81,47 @@ class LoginViewController: UIViewController {
             loginButton.heightAnchor.constraint(equalToConstant: 36),
         ])
     }
-
+   
+    
     @objc func login(){
         print("LOGIN!!")
-        userName = userNameTextField.text ?? "Bob123";
+        userName = userNameTextField.text ?? "";
+        if(userName.elementsEqual("")){
+            print("Deny!")
+           // loginButton.shake();
+        }else{
+        loginButton.startAnimatingPressActions()
+       
         
+        
+        petsShown = [Pet(petName: "Doggo", user: userName, petImageURL: "doggo", petState: .Featured),Pet(petName: "???", user: userName, petImageURL: "nice", petState: .Featured),Pet(petName: "Gamer", user: userName, petImageURL: "gamer", petState: .Featured),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .Featured),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .Featured),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .Featured),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .Featured)]
         account = Account(userName: userName,userPosts: petsShown)
-      
-        let tabBarVC = UITabBarController();
+        
+        let tabBarVC = TabBarController(account:account);
         
         let homeVC = UINavigationController(rootViewController: HomeViewController(petsShown: petsShown))
-        let voteVC = UINavigationController(rootViewController: VoteViewController())
         let newImageVC = UINavigationController(rootViewController: NewImageViewController())
-        let giveNameVC = UINavigationController(rootViewController: GiveNamesViewController())
-        let accountVC = UINavigationController(rootViewController: AccountViewController(account: account))
+        let actionVC = UINavigationController(rootViewController: ActionViewController())
+        
         homeVC.title = "Home"
-        voteVC.title = "Vote"
         newImageVC.title = "Add Image"
-        giveNameVC.title = "Give Name"
-        accountVC.title = "Account"
+        actionVC.title = "Give Name"
 
-        tabBarVC.setViewControllers([homeVC,voteVC,newImageVC,giveNameVC,accountVC], animated: false)
+        tabBarVC.setViewControllers([homeVC,newImageVC,actionVC], animated: false)
         let items:[UITabBarItem] = tabBarVC.tabBar.items ?? [UITabBarItem()];
 
-
-        let images = ["house", "tray.and.arrow.down.fill", "plus.circle.fill", "rectangle.and.pencil.and.ellipsis","person.crop.circle"]
+        //"tray.and.arrow.down.fill",
+        //,"person.crop.circle"
+        let images = ["house",  "plus.circle.fill", "rectangle.and.pencil.and.ellipsis"]
         for i in 0..<items.count{
             
             items[i].image = UIImage(systemName: images[i])
         }
-        print(items)
-       
-        tabBarVC.modalPresentationStyle = .fullScreen
-        print(tabBarVC)
         
-        present(tabBarVC, animated: true)
+     
+        self.navigationController?.pushViewController(tabBarVC, animated: true)
+        }
     }
-
+        
+    
 }

@@ -49,7 +49,7 @@ class HomeViewController: UIViewController{
         self.navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
       //  self.delegate = self
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .clear
         
       
         petCollectionView = {
@@ -66,6 +66,7 @@ class HomeViewController: UIViewController{
             collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
             return collectionView;
         }()
+        petCollectionView.backgroundColor = .systemBackground
         
         view.addSubview(petCollectionView);
         //instantiateButtons();
@@ -81,57 +82,10 @@ class HomeViewController: UIViewController{
         ])
         
     }
-//    func instantiateButtons(){
-//        let importAction = UIAction(title: "Import", image: UIImage(systemName: "folder")) { action in }
-//
-//        let sortButton = UIBarButtonItem(
-//            title: "Sort",
-//            image: UIImage(named: "line.3.horizontal.decrease.circle"),
-//            primaryAction: nil,
-//            menu: UIMenu(title: "", children: [importAction])
-//            )
-//        self.navigationItem.leftBarButtonItem = sortButton
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "person.crop.circle"), style: .plain, target: self, action: #selector(presentAccount))
-//
-//    }
+
     
     
-//    @objc func presentAccount(){
-//        let vc = AccountViewController(account: account);
-//        present(vc, animated: true, completion: nil)
-//    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//
-//        let voteVC = UINavigationController(rootViewController: VoteViewController())
-//        let giveNamesVC = UINavigationController(rootViewController: GiveNamesViewController())
-//
-////        let voteVC = VoteViewController()
-////        let voteTabBarItem = UITabBarItem(title: "Vote", image: UIImage(systemName: "tray.and.arrow.down.fill"), selectedImage: UIImage(systemName: "tray.and.arrow.down.fill"))
-////        voteVC.tabBarItem = voteTabBarItem
-////
-////        let newImageVC = NewImageViewController()
-////        let newImageTabBarItem = UITabBarItem(title: "New", image: UIImage(systemName: "plus.circle.fill"), selectedImage: UIImage(systemName: "plus.circle.fill"))
-////        newImageVC.tabBarItem = newImageTabBarItem
-////
-////        let giveNamesVC = VoteViewController()
-////        giveNamesVC.title = "Vote"
-////        let giveNamesTabBarItem = UITabBarItem(title: "Name", image: UIImage(systemName: "rectangle.and.pencil.and.ellipsis"), selectedImage: UIImage(systemName: "rectangle.and.pencil.and.ellipsis"))
-//      //  giveNamesVC.tabBarItem = giveNamesTabBarItem
-//
-//        guard let items = self.tabBar.items else{
-//            return;
-//        }
-//        items[0].image = UIImage(systemName: "tray.and.arrow.down.fill");
-//        items[1].image = UIImage(systemName: "rectangle.and.pencil.and.ellipsis");
-//
-//        self.setViewControllers([voteVC, giveNamesVC], animated: true)
-    }
-    
-    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        //print("Selected \(viewController.title!)")
-    }
+
 }
 extension HomeViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {

@@ -23,6 +23,10 @@ class AccountViewController: UIViewController {
     private let sectionPadding: CGFloat = 5
     var width:CGFloat = 150.0;
     private var account:Account;
+    init(){
+        self.account = Account(userName: "Bob123", userPosts: [])
+        super.init(nibName: nil, bundle: nil)
+    }
     
     init(account:Account){
         self.account=account;
@@ -30,7 +34,7 @@ class AccountViewController: UIViewController {
         let pic: UIImage = HomeViewController.DefaultPFP[c] ?? UIImage()
        profilePic.setImage(pic, for: UIControl.State.normal)
        
-        super .init(nibName: nil, bundle: nil)
+        super.init(nibName: nil, bundle: nil)
         self.imagePicker = ImagePicker(presentationController: self, delegate: self)
     }
     
