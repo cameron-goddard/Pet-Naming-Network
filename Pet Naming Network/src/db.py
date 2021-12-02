@@ -105,6 +105,8 @@ class Users(db.Model):
     def logout(self):
         self.logged_in = False
 
+    def getID(self)
+        return self.id
 
 
 # NAME table
@@ -116,13 +118,13 @@ class Names(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     pet = db.Column(db.Integer, db.ForeignKey("pet.id"))
-    votes = db.Column(db.ARRAY(db.Integer, dimensions=2), nullable=False)
+    votes = db.Column(db.Integer, nullable=False)#db.Column(db.ARRAY(db.Integer, dimensions=2), nullable=False)
     user = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     def __init__(self, **kwargs):
         self.name = kwargs.get("name")
         self.pet = kwargs.get("pet")
-        self.votes = [0, 0]
+        self.votes = 0
         self.user = kwargs.get("user")
 
     def serialize(self):
@@ -139,6 +141,12 @@ class Names(db.Model):
             "name": self.name,
             "votes": self.votes
         }
+
+    def update_vote(self):
+        self.votes = self.votes+1
+
+    def get_votes(self):
+        return self.votes
 
 # Image class
 # For all the random details images have, they should have their own table.

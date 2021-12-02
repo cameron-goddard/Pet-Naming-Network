@@ -23,8 +23,8 @@ def success_response(data, code=200):
 def failure_response(message, code=404):
     return json.dumps({"error": message}), code
 
-
-
+int VOTE_CAP = 10
+int NAME_CAP = 3
 
 # upload your own pets
 @app.route("/home/uploading/", methods=["POST"])
@@ -53,27 +53,25 @@ def upload_pet():
 
 @app.route("/home/naming/<int:pet_id>/", methods=["POST"])
 def upload_name(pet_id):
-    # get pet 
     pet = Pet.query.filter_by(pet_id = pet_id)
 
-    # get name you're adding
     body = json.loads(request.data)
     name = body.get("name")
 
-    # get current_user 
+    if not name:
+        return failure_response("No name recieved.", 400)
+
     current_user = Users.query.filter_by( logged_in = True )
 
     if not current_user:
         return failure_response("Please log in to upload a name.", 400)
         #current_user = "anonymous"
 
-    # add to name with name, pet
     name = Names( name = name, pet = pet_id, user = current_user.serialize().get("id") )
     current_user.names.append(name)
     pet.names.append(name)
 
-    # if pet names == 3, change state to VOTING
-    if( len(pet.serialize().get("names")) >= 3)
+    if( len(pet.serialize().get("names")) >= NAME_CAP)
         pet.update_state( state = State.VOTING )
 
     db.session.add(name)
@@ -86,22 +84,51 @@ def upload_name(pet_id):
 
 @app.route("/home/voting/<int:pet_id>/", methods=["POST"])
 def vote(pet_id):
-    pass
+    pet = Pet.query.filter_by(pet_id = pet_id)
 
-    # get pet 
+    body = json.loads(request.data)
+    name_id = body.get("name_id")
+    if not name_id:
+        return failure_response("Name not given.", 500)
+ 
+    name = Names.query.filter_by( id = name_id )
+    if not name:
+        return failure_response("Name not found.", 500)
 
-    # get name you're voting for (body)
+    name.update_vote()
 
-    # update name[vote]
+    if(name.get_votes() >= VOTE_CAP ):
+        pet.update_state( state = State.FEATURED )
 
-    # if name[vote] >= 3, change state to FEATURED
+    return success_response( pet.serialize(), 201 )
+    
+
+# Get pet names from pet id
+
+
+@app.route("/home/<int:pet_id>/names/", methods = ["GET"])
+def get_pet_names(pet_id):
+
+    pets = Names(pet = pet_id).all()
+
+    return success_response( [p.serialize() for p in pets] )
+
+# Get user from pet id
+
+
+@app.route("/home/<int:pet_id>/user/")
+def get_user_from_pet(pet_id):
+
+    pet = Pet.query.filter_by( id = pet_id )
+    user_id = pet.serialize().get("user")
+    user = Users.query.filter_by(id = user_id)
+    return success_response( user.serialize() )
 
 # create an account
 
 
 @app.route("/home/account/", methods=["POST"])
 def create_account():
-    # get name (from body)
     username = body.get("username")
 
     if not username:
@@ -113,7 +140,6 @@ def create_account():
 
     new_user = Users(username = username)
 
-    # add to Users table 
     db.session.add(new_user)
     db.session.commit()
 
@@ -125,20 +151,14 @@ def create_account():
 
 @app.route("/home/login/", methods=["POST"])
 def login():
-    # get user (body)
     username = body.get("username")
 
-    # check user is given
     if not username:
         return failure_response("Please provide your username.")
 
-    # check if user exists
     login_user = Users.query.filter_by( username = username )
     if not login_user: 
         return failure_response("User not found. Please create an account.", 400)
-
-    # check if someone is already logged in
-        # set them to false 
 
     current_user = Users.query.filter_by( logged_in = True )
     if current_user:
