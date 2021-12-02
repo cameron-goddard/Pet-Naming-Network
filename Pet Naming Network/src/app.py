@@ -61,16 +61,32 @@ def upload_pet():
 # add a name to a pet
 
 
-@app.route("/home/naming/", methods=["POST"])
+@app.route("/home/naming/<int:pet_id>/", methods=["POST"])
 def upload_name():
     pass
+    # get pet 
+
+    # get name you're adding (body)
+
+    # add to name with name, pet
+
+    # if pet names == 3, then change state VOTING
+
 
 # voting on names
 
 
-@app.route("/home/voting/", methods=["POST"])
+@app.route("/home/voting/<int:pet_id>/", methods=["POST"])
 def vote():
     pass
+
+    # get pet 
+
+    # get name you're voting for (body)
+
+    # update name[vote]
+
+    # if name[vote] >= 3, change state to FEATURED
 
 # create an account
 
@@ -79,12 +95,29 @@ def vote():
 def create_account():
     pass
 
+    # get name (from body)
+
+    # check that it doesn't exist already 
+
+    # add to Users table 
+
+    # set as true 
+
 # log in to the app
 
 
 @app.route("/home/login/", methods=["POST"])
 def login():
     pass
+
+    # get user (body)
+
+    # check user exists
+
+    # check if someone is already logged in
+        # set them to false 
+
+    # set user to current 
 
 # Get the next votable pet
 # Its names will be part of the success response
@@ -122,6 +155,8 @@ def getmynames():
         # TODO change this to work with current user
     )
 
+# Get featured pets 
+
 
 @app.route("/home/", methods=["GET"])
 def getfeaturedpets():
@@ -130,3 +165,6 @@ def getfeaturedpets():
          [p.serialize()
           for p in Pet.query.filter_by(state=State.FEATURED).all()]}
     )
+
+
+############### PET INFORMATION
