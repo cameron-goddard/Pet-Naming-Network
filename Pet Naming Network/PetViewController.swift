@@ -10,9 +10,10 @@ import SnapKit
 
 class PetViewController: UIViewController {
 
-    private var petImageView:UIImageView = UIImageView();
-    private var petNameLabel:UILabel = UILabel();
-    private var userNameLabel:UILabel = UILabel();
+    private var petImageView:UIImageView = UIImageView()
+    private var petNameLabel:UILabel = UILabel()
+    private var userNameLabel:UILabel = UILabel()
+    private var closeButton = UIButton(type: .close)
   
     private var pet:Pet
     init(pet:Pet){
@@ -29,6 +30,10 @@ class PetViewController: UIViewController {
         
         title = "Pet"
         view.backgroundColor = .white;
+        
+        closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(closeButton)
         
         petImageView.contentMode = .scaleAspectFit
         
@@ -56,13 +61,19 @@ class PetViewController: UIViewController {
         setupConstraints()
     }
     
-    
+    @objc func closeView() {
+        dismiss(animated: true, completion: nil)
+    }
     
     func setupConstraints(){
         let padding:CGFloat = 8;
         let imagePadding:CGFloat = 40;
         let width:CGFloat = view.frame.width-imagePadding*4;
         
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 15),
+            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15)
+        ])
         NSLayoutConstraint.activate([
             petImageView.topAnchor.constraint(equalTo: view.topAnchor,constant: imagePadding),
             petImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),

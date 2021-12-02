@@ -13,9 +13,11 @@ class AccountViewController: UIViewController {
     
     private var petsPostedCollectionView:UICollectionView!;
     
-    private var profilePic:UIButton = UIButton();
-    private var userName:UITextView = UITextView();
-    private var background:UIView = UIView();
+    private var profilePic:UIButton = UIButton()
+    private var userName:UITextView = UITextView()
+    private var background:UIView = UIView()
+    
+    private var closeButton = UIButton(type: .close)
   
     private var petPostCellReuseIdentifier = "petPostCellReuseIdentifier"
     private let headerReuseIdentifier = "headerReuseIdentifer2"
@@ -79,6 +81,12 @@ class AccountViewController: UIViewController {
         view.addSubview(background)
         background.addSubview(profilePic)
         
+        closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        background.addSubview(closeButton)
+        
+        
+        
         petsPostedCollectionView = {
             let layout = UICollectionViewFlowLayout();
             layout.scrollDirection = .vertical;
@@ -101,12 +109,21 @@ class AccountViewController: UIViewController {
     @objc func editProfilePicture(_ sender: UIButton){
         self.imagePicker.present(from: sender)
     }
+    
+    @objc func closeView() {
+        dismiss(animated: true, completion: nil)
+    }
+    
     func setUpViews() {
         NSLayoutConstraint.activate([
             background.topAnchor.constraint(equalTo: view.topAnchor),
             background.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             background.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             background.heightAnchor.constraint(equalToConstant: view.frame.size.height/2),
+        ])
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 15),
+            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15)
         ])
         
 
