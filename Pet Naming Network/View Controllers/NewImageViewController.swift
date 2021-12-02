@@ -30,7 +30,7 @@ class NewImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Add Image"
+        title = "New"
         view.backgroundColor = .systemBackground
        
         

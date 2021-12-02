@@ -45,11 +45,10 @@ class HomeViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Featured"
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always
+        //navigationItem.largeTitleDisplayMode = .always
       //  self.delegate = self
-        view.backgroundColor = .clear
+        view.backgroundColor = .systemBackground
         
       
         petCollectionView = {
@@ -72,6 +71,14 @@ class HomeViewController: UIViewController{
         //instantiateButtons();
         setupConstraints()
     }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tabBarController?.title = "Featured"
+    }
+    
+    
+    
     func setupConstraints() {
         let collectionViewPadding: CGFloat = 12
         NSLayoutConstraint.activate([
