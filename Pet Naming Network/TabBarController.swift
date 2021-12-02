@@ -9,7 +9,7 @@ import UIKit
 
 class TabBarController: UITabBarController {
 
-    private var accountVC:AccountViewController;
+    private var accountVC:AccountViewController
     
     init(account:Account){
         accountVC = AccountViewController(account: account)
@@ -22,8 +22,8 @@ class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .systemBackground
+        
         
 //        let appearance = UINavigationBarAppearance()
 //        appearance.backgroundColor = .green
@@ -37,25 +37,23 @@ class TabBarController: UITabBarController {
 
 //        tabBar.barTintColor = .green
 //        tabBar.isTranslucent = false
-        tabBar.tintColor = .systemBlue
-        tabBar.unselectedItemTintColor = .systemGray
+        //tabBar.tintColor = .systemBlue
+        //tabBar.unselectedItemTintColor = .systemGray
         
     
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "person.crop.circle"), style: .plain, target: self, action: #selector(presentAccount))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle"), style: .plain, target: self, action: #selector(presentAccount))
         
-        self.navigationItem.hidesBackButton=true;
+        self.navigationItem.hidesBackButton=true
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(title: "Log Out", style: .plain, target: self, action: #selector(logOut))
-        
-        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: UIImage(systemName: "rectangle.portrait.and.arrow.right"), style: .plain, target: self, action: #selector(logOut))
     }
     
-    @objc func logOut(){
+    @objc func logOut() {
         self.navigationController?.popViewController(animated: true);
     }
-    @objc func presentAccount(){
-           present(accountVC, animated: true, completion: nil)
-       }
-
+    
+    @objc func presentAccount() {
+        present(accountVC, animated: true, completion: nil)
+    }
 }
