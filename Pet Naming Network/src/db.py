@@ -70,6 +70,9 @@ class Pet(db.Model):
             "date_created": self.date_created
         }
 
+    def update_state(self, State state):
+        self.state = state
+
 # USER table
 
 
@@ -81,11 +84,11 @@ class Users(db.Model):
     username = db.Column(db.String, nullable=False)
     pets = db.relationship("Pet", cascade="delete")
     names = db.relationship("Names", cascade="delete")
-    current = db.Column(db.Boolean, nullable=False)
+    logged_in = db.Column(db.Boolean, nullable=False)
 
     def __init__(self, **kwargs):
         self.username = kwargs.get("username")
-        self.current = False
+        self.logged_in = False
 
     def serialize(self):
         return {
@@ -93,8 +96,15 @@ class Users(db.Model):
             "username": self.username,
             "pets": [s.sub_serialize for s in self.pets],
             "names": [s.serialize for s in self.names],
-            "current":self.current
+            "logged_in":self.logged_in
         }
+
+    def login(self):
+        self.logged_in = True
+    
+    def logout(self):
+        self.logged_in = False
+
 
 
 # NAME table
@@ -113,6 +123,7 @@ class Names(db.Model):
         self.name = kwargs.get("name")
         self.pet = kwargs.get("pet")
         self.votes = [0, 0]
+        self.user = kwargs.get("user")
 
     def serialize(self):
         return {

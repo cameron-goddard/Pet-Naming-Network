@@ -23,17 +23,7 @@ def success_response(data, code=200):
 def failure_response(message, code=404):
     return json.dumps({"error": message}), code
 
-# get all nameable pets
 
-
-@app.route("/home/naming/")
-def get_nameable_pets():
-    pets = Pet.query.filter_by(state=State.Naming)
-
-    if pets is None:
-        return failure_response("No pets to name!")
-
-    return success_response(pets.serialize())
 
 
 # upload your own pets
@@ -58,26 +48,44 @@ def upload_pet():
     db.session.commit()
     return success_response(new_pet.serialize(), 201)
 
+
 # add a name to a pet
 
-
 @app.route("/home/naming/<int:pet_id>/", methods=["POST"])
-def upload_name():
-    pass
+def upload_name(pet_id):
     # get pet 
+    pet = Pet.query.filter_by(pet_id = pet_id)
 
-    # get name you're adding (body)
+    # get name you're adding
+    body = json.loads(request.data)
+    name = body.get("name")
+
+    # get current_user 
+    current_user = Users.query.filter_by( logged_in = True )
+
+    if not current_user:
+        return failure_response("Please log in to upload a name.", 400)
+        #current_user = "anonymous"
 
     # add to name with name, pet
+    name = Names( name = name, pet = pet_id, user = current_user.serialize().get("id") )
+    current_user.names.append(name)
+    pet.names.append(name)
 
-    # if pet names == 3, then change state VOTING
+    # if pet names == 3, change state to VOTING
+    if( len(pet.serialize().get("names")) >= 3)
+        pet.update_state( state = State.VOTING )
+
+    db.session.add(name)
+    db.session.commit()
+
+    return success_response(name.serialize(), 201)
 
 
 # voting on names
 
-
 @app.route("/home/voting/<int:pet_id>/", methods=["POST"])
-def vote():
+def vote(pet_id):
     pass
 
     # get pet 
@@ -93,31 +101,67 @@ def vote():
 
 @app.route("/home/account/", methods=["POST"])
 def create_account():
-    pass
-
     # get name (from body)
+    username = body.get("username")
 
-    # check that it doesn't exist already 
+    if not username:
+        return failure_response("Please provide a username.")
+
+    already_exists = Users.query.filter_by( username = username )
+    if already_exists: 
+        return failure_response("An account with that username already exists. Please log in.", 400)
+
+    new_user = Users(username = username)
 
     # add to Users table 
+    db.session.add(new_user)
+    db.session.commit()
 
-    # set as true 
+    return success_response(new_user.serialize(), 201)
+
 
 # log in to the app
 
 
 @app.route("/home/login/", methods=["POST"])
 def login():
-    pass
-
     # get user (body)
+    username = body.get("username")
 
-    # check user exists
+    # check user is given
+    if not username:
+        return failure_response("Please provide your username.")
+
+    # check if user exists
+    login_user = Users.query.filter_by( username = username )
+    if not login_user: 
+        return failure_response("User not found. Please create an account.", 400)
 
     # check if someone is already logged in
         # set them to false 
 
-    # set user to current 
+    current_user = Users.query.filter_by( logged_in = True )
+    if current_user:
+        current_user.logout()
+
+    login_user.login()
+
+    return success_response( current_user.serialize() )
+
+
+# Get the next nameable pet
+# Its names will be part of the success response
+
+
+@app.route("/home/naming/")
+def get_nameable_pets():
+    current_user = Users.query.filter_by( logged_in = True )
+    pets = Pet.query.filter_by( state=State.NAMING and user not current_user.getID() )
+
+    if not pets:
+        return failure_response("There are no pets to name at this time.")
+
+    return success_response(pets.serialize())
 
 # Get the next votable pet
 # Its names will be part of the success response
@@ -125,38 +169,51 @@ def login():
 
 @app.route("/home/voting/", methods=["GET"])
 def getvotable():
-    # TODO: change to be consistent wih current name
-    notmypets = Pet.query.filter(Pet.user != 0).all()
-    pet = notmypets.query.filter_by(state=State.VOTING).first()
-    # ^^ Not sure if this works
+    current_user = Users.query.filter_by( logged_in = True )
+    pet = Pet.query.filter_by( state = State.VOTING and user not current_user.getID() )
+
     if (pet == None):
-        return failure_response("There are no nameable pets at this time.")
-    return success_response(pet.serialize(), 201)
+        return failure_response("There are no pets to vote on at this time.")
+
+    return success_response(pet.serialize())
 
 # Get the pets you have contributed
 
 
 @app.route("/home/account/pets/", methods=["GET"])
 def getmypets():
+    current_user = Users.query.filter_by( logged_in = True )
+    if not current_user:
+        return failure_response("Please log in.", 400)
+
+    pets = Pet.query.filter_by( user = current_user.getID()).all()
+
+    if ( pet == None ):
+        return failure_response("You haven't created any pets yet!")
+
     return success_response(
-        {"Your Pets": [p.serialize()
-                       for p in Pet.query.filter_by(user=0).all()]}
-        # TODO change this to work with current user
+        {"Your Pets": [p.serialize() for p in pets]}
     )
+
 
 # Get the names you have contributed
 
-
 @app.route("/home/account/names/", methods=["GET"])
 def getmynames():
+    current_user = Users.query.filter_by( logged_in = True )
+    if not current_user:
+        return failure_response("Please log in.", 400)
+
+    names = Names.query.filter_by( user = current_user.getID()).all()
+
+    if ( pet == None ):
+        return failure_response("You haven't named any pets yet!")
+
     return success_response(
-        {"Your Names": [n.serialize()
-                        for n in Names.query.filter_by(user=0).all()]}
-        # TODO change this to work with current user
+        {"Your Names": [n.serialize() for n in names]}
     )
 
 # Get featured pets 
-
 
 @app.route("/home/", methods=["GET"])
 def getfeaturedpets():
@@ -166,5 +223,3 @@ def getfeaturedpets():
           for p in Pet.query.filter_by(state=State.FEATURED).all()]}
     )
 
-
-############### PET INFORMATION
