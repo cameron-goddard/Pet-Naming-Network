@@ -70,9 +70,6 @@ class Pet(db.Model):
             "date_created": self.date_created
         }
 
-    def update_state(self, state):
-        self.state = state
-
 # USER table
 
 
@@ -84,11 +81,11 @@ class Users(db.Model):
     username = db.Column(db.String, nullable=False)
     pets = db.relationship("Pet", cascade="delete")
     names = db.relationship("Names", cascade="delete")
-    logged_in = db.Column(db.Boolean, nullable=False)
+    current = db.Column(db.Boolean, nullable=False)
 
     def __init__(self, **kwargs):
         self.username = kwargs.get("username")
-        self.logged_in = False
+        self.current = False
 
     def serialize(self):
         return {
@@ -96,17 +93,8 @@ class Users(db.Model):
             "username": self.username,
             "pets": [s.sub_serialize for s in self.pets],
             "names": [s.serialize for s in self.names],
-            "logged_in":self.logged_in
+            "current":self.current
         }
-
-    def login(self):
-        self.logged_in = True
-    
-    def logout(self):
-        self.logged_in = False
-
-    def getID(self):
-        return self.id
 
 
 # NAME table
@@ -118,14 +106,13 @@ class Names(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     pet = db.Column(db.Integer, db.ForeignKey("pet.id"))
-    votes = db.Column(db.Integer, nullable=False)#db.Column(db.ARRAY(db.Integer, dimensions=2), nullable=False)
+    votes = db.Column(db.ARRAY(db.Integer, dimensions=2), nullable=False)
     user = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     def __init__(self, **kwargs):
         self.name = kwargs.get("name")
         self.pet = kwargs.get("pet")
-        self.votes = 0
-        self.user = kwargs.get("user")
+        self.votes = [0, 0]
 
     def serialize(self):
         return {
@@ -142,15 +129,8 @@ class Names(db.Model):
             "votes": self.votes
         }
 
-    def update_vote(self):
-        self.votes = self.votes+1
-
-    def get_votes(self):
-        return self.votes
-
 # Image class
 # For all the random details images have, they should have their own table.
-
 
 class Asset(db.Model):
     __tablename__ = "asset"
