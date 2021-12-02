@@ -59,9 +59,8 @@ class PetName:Codable{
 }
 
 
-enum State{
+enum State {
     case Naming
     case Voting
     case Featured
-    
 }

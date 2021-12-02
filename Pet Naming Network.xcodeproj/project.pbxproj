@@ -24,6 +24,8 @@
 		3B2B6108273D9637000F99DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B2B6106273D9637000F99DC /* Main.storyboard */; };
 		3B2B610A273D9639000F99DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B2B6109273D9639000F99DC /* Assets.xcassets */; };
 		3B2B610D273D9639000F99DC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B2B610B273D9639000F99DC /* LaunchScreen.storyboard */; };
+		3B489E982759526000FFB473 /* VoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B489E972759526000FFB473 /* VoteViewController.swift */; };
+		3B489E9A2759527300FFB473 /* NameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B489E992759527300FFB473 /* NameViewController.swift */; };
 		3B79241A273EF05F00B5FC5C /* NewImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B792419273EF05F00B5FC5C /* NewImageViewController.swift */; };
 		D25FBEF9B5702929ABA017E2 /* Pods_Pet_Naming_Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCAFD3C6DEE5CF7917898F6 /* Pods_Pet_Naming_Network.framework */; };
 /* End PBXBuildFile section */
@@ -49,6 +51,8 @@
 		3B2B6109273D9639000F99DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3B2B610C273D9639000F99DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3B2B610E273D9639000F99DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3B489E972759526000FFB473 /* VoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteViewController.swift; sourceTree = "<group>"; };
+		3B489E992759527300FFB473 /* NameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameViewController.swift; sourceTree = "<group>"; };
 		3B792419273EF05F00B5FC5C /* NewImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewImageViewController.swift; sourceTree = "<group>"; };
 		F9E3C02795D06736FC224164 /* Pods-Pet Naming Network.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pet Naming Network.release.xcconfig"; path = "Target Support Files/Pods-Pet Naming Network/Pods-Pet Naming Network.release.xcconfig"; sourceTree = "<group>"; };
 		FFCAFD3C6DEE5CF7917898F6 /* Pods_Pet_Naming_Network.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pet_Naming_Network.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,8 +93,7 @@
 			children = (
 				3B2B6100273D9637000F99DC /* AppDelegate.swift */,
 				3B2B6102273D9637000F99DC /* SceneDelegate.swift */,
-				3B2B6104273D9637000F99DC /* HomeViewController.swift */,
-				3B792419273EF05F00B5FC5C /* NewImageViewController.swift */,
+				3B489E9D27596F3B00FFB473 /* View Controllers */,
 				3B2B6106273D9637000F99DC /* Main.storyboard */,
 				3B2B6109273D9639000F99DC /* Assets.xcassets */,
 				3B2B610B273D9639000F99DC /* LaunchScreen.storyboard */,
@@ -104,10 +107,29 @@
 				26654B29274B0172006C014D /* ImagePicker.swift */,
 				26F452A12757366000067ADB /* LoginViewController.swift */,
 				26F452A32757418700067ADB /* TabBarController.swift */,
-				26F452A527581F9A00067ADB /* ActionViewController.swift */,
 				26F452A72758388400067ADB /* SuccessViewController.swift */,
 			);
 			path = "Pet Naming Network";
+			sourceTree = "<group>";
+		};
+		3B489E9C27596F2300FFB473 /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				3B489E972759526000FFB473 /* VoteViewController.swift */,
+				3B489E992759527300FFB473 /* NameViewController.swift */,
+			);
+			path = Actions;
+			sourceTree = "<group>";
+		};
+		3B489E9D27596F3B00FFB473 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				3B2B6104273D9637000F99DC /* HomeViewController.swift */,
+				3B792419273EF05F00B5FC5C /* NewImageViewController.swift */,
+				26F452A527581F9A00067ADB /* ActionViewController.swift */,
+				3B489E9C27596F2300FFB473 /* Actions */,
+			);
+			path = "View Controllers";
 			sourceTree = "<group>";
 		};
 		7B684EB6D3202267C327710D /* Pods */ = {
@@ -242,6 +264,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B489E982759526000FFB473 /* VoteViewController.swift in Sources */,
 				26F452A22757366100067ADB /* LoginViewController.swift in Sources */,
 				26654B2A274B0173006C014D /* ImagePicker.swift in Sources */,
 				26F452A627581F9A00067ADB /* ActionViewController.swift in Sources */,
@@ -249,6 +272,7 @@
 				264105D027493FC3004C6DA4 /* PetCollectionViewCell.swift in Sources */,
 				3B2B6105273D9637000F99DC /* HomeViewController.swift in Sources */,
 				264105C827470DBD004C6DA4 /* AccountViewController.swift in Sources */,
+				3B489E9A2759527300FFB473 /* NameViewController.swift in Sources */,
 				3B2B6101273D9637000F99DC /* AppDelegate.swift in Sources */,
 				264105CE27493F96004C6DA4 /* HeaderView.swift in Sources */,
 				264105CC27492C5D004C6DA4 /* Account.swift in Sources */,
@@ -409,6 +433,7 @@
 				DEVELOPMENT_TEAM = AUBXDCV2VL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Pet Naming Network/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = Test;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = LaunchScreen;
@@ -438,6 +463,7 @@
 				DEVELOPMENT_TEAM = AUBXDCV2VL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Pet Naming Network/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = Test;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = LaunchScreen;
