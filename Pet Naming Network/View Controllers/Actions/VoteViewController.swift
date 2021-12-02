@@ -9,8 +9,7 @@ import UIKit
 
 class VoteViewController: UIViewController {
 
-    private var actionControl = UISegmentedControl(items: ["TEST", "TEST"])
-    private var testLabel = UILabel()
+    private var imageView = UIImageView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
