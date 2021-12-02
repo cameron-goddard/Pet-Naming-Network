@@ -1,7 +1,7 @@
 import os
 import json
 from datetime import datetime
-from db import db, Pet, Names, Users, State
+from db import db, Pet, Names, Users, State, Asset
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -12,6 +12,8 @@ db_filename = "pet_naming_network.db"
 db.init_app(app)
 with app.app_context():
     db.create_all()
+    anonuser = Users(username="Anonymous")
+    # Not sure if this works at all
 
 
 def success_response(data, code=200):
@@ -38,18 +40,20 @@ def get_nameable_pets():
 @app.route("/home/uploading/", methods=["POST"])
 def upload_pet():
     body = json.loads(request.data)
-    picture = body.get("picture")  # Will change this from a string eventually
-    # vv Should autofill unless the user is using the app for the first time
     user = body.get("user")
     time = datetime.datetime.today()
-    if (picture == None):
-        return failure_response("Picture required!")
-    elif (user == None):
+
+    image_data = body.get("image_data")  # This should be a base64 url
+    if image_data is None:
+        return failure_response("No base64 URL found!")
+    asset = Asset(image_data=image_data)
+    db.session.add(asset)
+    # THIS should be an id for a picture
+    pic_id = asset.getID
+
+    if (user == None):
         user = 0
-        # TODO: I was thinking that if people want to submit pets / names
-        # anonymously then we could have index 0 of the user table always be
-        # "anonymous"
-    new_pet = Pet(picture=picture, user=user, time=time)
+    new_pet = Pet(pic_id=pic_id, user=user, time=time)
     db.session.add(new_pet)
     db.session.commit()
     return success_response(new_pet.serialize(), 201)
