@@ -48,14 +48,29 @@ class LoginViewController: UIViewController {
         return button;
     }()
     
+    private var spinner = UIActivityIndicatorView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
        
         
         view.addSubview(appTitleLabel)
       
+       
+        
         view.addSubview(userNameTextField)
         view.addSubview(loginButton)
+        
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+      //  spinner.center = self.view.center
+        spinner.isHidden = true;
+        spinner.backgroundColor = .clear
+        spinner.hidesWhenStopped = true;
+        spinner.style = .large
+        spinner.color = UIColor.red
+        view.addSubview(spinner)
+        
+                
         view.backgroundColor = .white
         loginButton.center = view.center
         loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
@@ -80,11 +95,20 @@ class LoginViewController: UIViewController {
             loginButton.widthAnchor.constraint(equalToConstant: 120),
             loginButton.heightAnchor.constraint(equalToConstant: 36),
         ])
+        NSLayoutConstraint.activate([
+            spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor,constant: 20),
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+        ])
     }
    
     
     @objc func login(){
         print("LOGIN!!")
+        spinner.isHidden = false;
+        spinner.startAnimating()
+        self.view.isUserInteractionEnabled = false;
+        
         userName = userNameTextField.text ?? "";
         if(userName.elementsEqual("")){
             print("Deny!")
@@ -118,9 +142,12 @@ class LoginViewController: UIViewController {
             items[i].image = UIImage(systemName: images[i])
         }
         
-     
+          
         self.navigationController?.pushViewController(tabBarVC, animated: true)
         }
+        spinner.stopAnimating()
+        self.view.isUserInteractionEnabled = true;
+        spinner.isHidden = true;
     }
         
     
