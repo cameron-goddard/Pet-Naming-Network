@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from db import db, Pet, Names, Users, State, Asset
 from flask import Flask, request
+from sqlalchemy import func
 
 app = Flask(__name__)
 
@@ -87,6 +88,14 @@ def upload_name(pet_id):
     return success_response(name.serialize(), 201)
 
 
+# get most popular name based on pet_id
+@app.route("/home/<int:pet_id>/popular/", methods=["GET"])
+def most_popular_name(pet_id):
+    names = Names(pet=pet_id).all()
+    top_name = names.query(func.max(Names.votes)).first()
+    return success_response(top_name.serialize())
+
+
 # voting on names
 
 @app.route("/home/voting/<int:pet_id>/", methods=["POST"])
@@ -103,9 +112,19 @@ def vote(pet_id):
         return failure_response("Name not found.", 500)
 
     name.update_vote()
+    pet.update_vote()
 
-    if(name.get_votes() >= VOTE_CAP):
-        pet.update_state(state=State.FEATURED)
+    # get most voted pet names
+
+    if(pet.get_votes() >= VOTE_CAP):
+
+        pet_names = Names.query.filter_by(pet=pet_id).all()
+        top_name = pet_names.query(func.max(Names.votes))
+        same_votes = pet_names.query.filter_by(
+            votes=top_name.sub_serialize().get("votes"))
+
+        if(len(same_votes) == 1):
+            pet.update_state(state=State.FEATURED)
 
     return success_response(pet.serialize(), 201)
 
