@@ -85,3 +85,48 @@ def create_account():
 @app.route("/home/login/", methods=["POST"])
 def login():
     pass
+
+# Get the next votable pet
+# Its names will be part of the success response
+
+
+@app.route("/home/voting/", methods=["GET"])
+def getvotable():
+    # TODO: change to be consistent wih current name
+    notmypets = Pet.query.filter(Pet.user != 0).all()
+    pet = notmypets.query.filter_by(state=State.VOTING).first()
+    # ^^ Not sure if this works
+    if (pet == None):
+        return failure_response("There are no nameable pets at this time.")
+    return success_response(pet.serialize(), 201)
+
+# Get the pets you have contributed
+
+
+@app.route("/home/account/pets/", methods=["GET"])
+def getmypets():
+    return success_response(
+        {"Your Pets": [p.serialize()
+                       for p in Pet.query.filter_by(user=0).all()]}
+        # TODO change this to work with current user
+    )
+
+# Get the names you have contributed
+
+
+@app.route("/home/account/names/", methods=["GET"])
+def getmynames():
+    return success_response(
+        {"Your Names": [n.serialize()
+                        for n in Names.query.filter_by(user=0).all()]}
+        # TODO change this to work with current user
+    )
+
+
+@app.route("/home/", methods=["GET"])
+def getfeaturedpets():
+    return success_response(
+        {"Featured Pets":
+         [p.serialize()
+          for p in Pet.query.filter_by(state=State.FEATURED).all()]}
+    )
