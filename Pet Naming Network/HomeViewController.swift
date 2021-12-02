@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomeViewController: UITabBarController, UITabBarControllerDelegate{
+class HomeViewController: UIViewController{
 
     private var petCollectionView:UICollectionView!;
     
@@ -21,12 +21,19 @@ class HomeViewController: UITabBarController, UITabBarControllerDelegate{
         return images;
     };
     
-    private var userName:String = "Bob123"
-    
-    private var account:Account = Account(userName: "",userPosts: [])
-    private var petsShown:[Pet] = []
   
     
+ 
+    private var petsShown:[Pet] = []
+  
+    init(petsShown:[Pet]){
+        self.petsShown = petsShown;
+        super .init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     
     private var petCellReuseIdentifier = "petCellReuseIdentifier"
@@ -41,12 +48,10 @@ class HomeViewController: UITabBarController, UITabBarControllerDelegate{
         title = "Featured"
         self.navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
-        self.delegate = self
-        view.backgroundColor = .systemBackground
+      //  self.delegate = self
+        view.backgroundColor = .clear
         
-        petsShown = [Pet(petName: "Doggo", user: userName, petImageURL: "doggo", petState: .Featured),Pet(petName: "???", user: userName, petImageURL: "nice", petState: .Featured),Pet(petName: "Gamer", user: userName, petImageURL: "gamer", petState: .Featured),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .Featured)]
-        account = Account(userName: userName,userPosts: petsShown)
-        
+      
         petCollectionView = {
             let layout = UICollectionViewFlowLayout();
             layout.scrollDirection = .vertical;
@@ -61,9 +66,10 @@ class HomeViewController: UITabBarController, UITabBarControllerDelegate{
             collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
             return collectionView;
         }()
+        petCollectionView.backgroundColor = .systemBackground
         
         view.addSubview(petCollectionView);
-        instantiateButtons();
+        //instantiateButtons();
         setupConstraints()
     }
     func setupConstraints() {
@@ -76,47 +82,10 @@ class HomeViewController: UITabBarController, UITabBarControllerDelegate{
         ])
         
     }
-    func instantiateButtons(){
-        let importAction = UIAction(title: "Import", image: UIImage(systemName: "folder")) { action in }
-        
-        let sortButton = UIBarButtonItem(
-            title: "Sort",
-            image: UIImage(named: "line.3.horizontal.decrease.circle"),
-            primaryAction: nil,
-            menu: UIMenu(title: "", children: [importAction])
-            )
-        self.navigationItem.leftBarButtonItem = sortButton
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "person.crop.circle"), style: .plain, target: self, action: #selector(presentAccount))
-        
-    }
+
     
     
-    @objc func presentAccount(){
-        let vc = AccountViewController(account: account);
-        present(vc, animated: true, completion: nil)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        let voteVC = VoteViewController()
-        let voteTabBarItem = UITabBarItem(title: "Vote", image: UIImage(systemName: "tray.and.arrow.down.fill"), selectedImage: UIImage(systemName: "tray.and.arrow.down.fill"))
-        voteVC.tabBarItem = voteTabBarItem
-                
-        let newImageVC = NewImageViewController()
-        let newImageTabBarItem = UITabBarItem(title: "New", image: UIImage(systemName: "plus.circle.fill"), selectedImage: UIImage(systemName: "plus.circle.fill"))
-        newImageVC.tabBarItem = newImageTabBarItem
-        
-        let giveNamesVC = VoteViewController()
-        let giveNamesTabBarItem = UITabBarItem(title: "Name", image: UIImage(systemName: "rectangle.and.pencil.and.ellipsis"), selectedImage: UIImage(systemName: "rectangle.and.pencil.and.ellipsis"))
-        giveNamesVC.tabBarItem = giveNamesTabBarItem
-        
-        
-        self.viewControllers = [voteVC, newImageVC, giveNamesVC]
-    }
-    
-    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        //print("Selected \(viewController.title!)")
-    }
+
 }
 extension HomeViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {

@@ -23,14 +23,19 @@ class AccountViewController: UIViewController {
     private let sectionPadding: CGFloat = 5
     var width:CGFloat = 150.0;
     private var account:Account;
+    init(){
+        self.account = Account(userName: "Bob123", userPosts: [])
+        super.init(nibName: nil, bundle: nil)
+    }
     
     init(account:Account){
         self.account=account;
         let c:String = account.userName[account.userName.index(account.userName.startIndex, offsetBy: 0)].uppercased()
         let pic: UIImage = HomeViewController.DefaultPFP[c] ?? UIImage()
        profilePic.setImage(pic, for: UIControl.State.normal)
-        
-        super .init(nibName: nil, bundle: nil)
+       
+        super.init(nibName: nil, bundle: nil)
+        self.imagePicker = ImagePicker(presentationController: self, delegate: self)
     }
     
     required init?(coder: NSCoder) {
@@ -42,10 +47,10 @@ class AccountViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Profile"
+        title = account.userName
         view.backgroundColor = .systemGray6
         
-        self.imagePicker = ImagePicker(presentationController: self, delegate: self)
+        
         
         userName.text = account.userName
         userName.textColor = .black
@@ -67,11 +72,8 @@ class AccountViewController: UIViewController {
         profilePic.layer.masksToBounds = true;
         profilePic.titleLabel?.font = .boldSystemFont(ofSize: 50)
         profilePic.titleLabel?.textColor = .white;
-        
-        
-        
-        
         profilePic.addTarget(self, action: #selector(editProfilePicture), for: .touchUpInside)
+        
         background = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height/2))
         background.backgroundColor = account.bgColor
         
@@ -100,7 +102,6 @@ class AccountViewController: UIViewController {
         setUpViews()
     }
     @objc func editProfilePicture(_ sender: UIButton){
-       print("HELLO!")
         self.imagePicker.present(from: sender)
     }
     func setUpViews() {
