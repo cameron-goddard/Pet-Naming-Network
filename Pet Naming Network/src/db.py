@@ -81,17 +81,19 @@ class Users(db.Model):
     username = db.Column(db.String, nullable=False)
     pets = db.relationship("Pet", cascade="delete")
     names = db.relationship("Names", cascade="delete")
+    current = db.Column(db.Boolean, nullable=False)
 
     def __init__(self, **kwargs):
-
         self.username = kwargs.get("username")
+        self.current = False
 
     def serialize(self):
         return {
             "id": self.id,
             "username": self.username,
             "pets": [s.sub_serialize for s in self.pets],
-            "names": [s.serialize for s in self.names]
+            "names": [s.serialize for s in self.names],
+            "current":self.current
         }
 
 
