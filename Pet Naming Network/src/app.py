@@ -8,6 +8,9 @@ app = Flask(__name__)
 
 db_filename = "pet_naming_network.db"
 
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///%s" % db_filename
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ECHO"] = True
 
 db.init_app(app)
 with app.app_context():
@@ -23,8 +26,8 @@ def success_response(data, code=200):
 def failure_response(message, code=404):
     return json.dumps({"error": message}), code
 
-int VOTE_CAP = 10
-int NAME_CAP = 3
+VOTE_CAP = 10
+NAME_CAP = 3
 
 # upload your own pets
 @app.route("/home/uploading/", methods=["POST"])
@@ -71,7 +74,7 @@ def upload_name(pet_id):
     current_user.names.append(name)
     pet.names.append(name)
 
-    if( len(pet.serialize().get("names")) >= NAME_CAP)
+    if( len(pet.serialize().get("names")) >= NAME_CAP):
         pet.update_state( state = State.VOTING )
 
     db.session.add(name)
@@ -129,6 +132,7 @@ def get_user_from_pet(pet_id):
 
 @app.route("/home/account/", methods=["POST"])
 def create_account():
+    body = json.dumps(request.data)
     username = body.get("username")
 
     if not username:
@@ -151,6 +155,7 @@ def create_account():
 
 @app.route("/home/login/", methods=["POST"])
 def login():
+    body = json.dumps(request.data)
     username = body.get("username")
 
     if not username:
@@ -176,9 +181,9 @@ def login():
 @app.route("/home/naming/")
 def get_nameable_pets():
     current_user = Users.query.filter_by( logged_in = True )
-    pets = Pet.query.filter_by( state=State.NAMING and user not current_user.getID() )
+    pets = Pet.query.filter_by( Pet.state==State.NAMING and Pet.user != current_user.getID() )
 
-    if not pets:
+    if pets is None:
         return failure_response("There are no pets to name at this time.")
 
     return success_response(pets.serialize())
@@ -190,7 +195,7 @@ def get_nameable_pets():
 @app.route("/home/voting/", methods=["GET"])
 def getvotable():
     current_user = Users.query.filter_by( logged_in = True )
-    pet = Pet.query.filter_by( state = State.VOTING and user not current_user.getID() )
+    pet = Pet.query.filter_by( state = State.VOTING and Pet.user != current_user.getID() )
 
     if (pet == None):
         return failure_response("There are no pets to vote on at this time.")
@@ -208,7 +213,7 @@ def getmypets():
 
     pets = Pet.query.filter_by( user = current_user.getID()).all()
 
-    if ( pet == None ):
+    if ( pets is None ):
         return failure_response("You haven't created any pets yet!")
 
     return success_response(
@@ -226,7 +231,7 @@ def getmynames():
 
     names = Names.query.filter_by( user = current_user.getID()).all()
 
-    if ( pet == None ):
+    if ( names is None ):
         return failure_response("You haven't named any pets yet!")
 
     return success_response(
@@ -243,3 +248,12 @@ def getfeaturedpets():
           for p in Pet.query.filter_by(state=State.FEATURED).all()]}
     )
 
+
+@app.route("/reset/")
+def reset():
+    db.drop_all()
+    db.create_all()
+    return success_response("yes")
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port = 5000, debug = True)

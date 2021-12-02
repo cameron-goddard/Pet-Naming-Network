@@ -70,7 +70,7 @@ class Pet(db.Model):
             "date_created": self.date_created
         }
 
-    def update_state(self, State state):
+    def update_state(self, state):
         self.state = state
 
 # USER table
@@ -105,7 +105,7 @@ class Users(db.Model):
     def logout(self):
         self.logged_in = False
 
-    def getID(self)
+    def getID(self):
         return self.id
 
 
