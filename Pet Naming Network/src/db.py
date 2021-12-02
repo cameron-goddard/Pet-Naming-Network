@@ -84,7 +84,7 @@ class Names(db.Model):
     name = db.Column(db.String, nullable = False)
     pet = db.Column(db.Integer, db.ForeignKey("pet.id"))
     votes = db.Column( db.ARRAY(db.Integer, dimensions = 2), nullable = False )
-    user = db.Column(db.Integer, db.ForeignKey("user.id"))
+    #user = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     def __init__(self, **kwargs):
         self.name = kwargs.get("name")
@@ -105,4 +105,3 @@ class Names(db.Model):
             "name":self.name,
             "votes":self.votes
         }
-        
