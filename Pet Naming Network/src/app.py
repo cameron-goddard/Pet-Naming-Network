@@ -116,10 +116,9 @@ def vote(pet_id):
 @app.route("/home/<int:pet_id>/names/", methods=["GET"])
 def get_pet_names(pet_id):
 
-    # TODO:Why is this called pets?
-    pets = Names(pet=pet_id).all()
+    names = Names(pet=pet_id).all()
 
-    return success_response([p.serialize() for p in pets])
+    return success_response([n.serialize() for n in names])
 
 # Get user from pet id
 
