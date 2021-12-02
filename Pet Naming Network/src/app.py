@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from db import db, Pet, Names, Users, State, Asset
 from flask import Flask, request
+from sqlalchemy import func
 
 app = Flask(__name__)
 
@@ -26,13 +27,10 @@ def success_response(data, code=200):
 def failure_response(message, code=404):
     return json.dumps({"error": message}), code
 
-
 VOTE_CAP = 10
 NAME_CAP = 3
 
 # upload your own pets
-
-
 @app.route("/home/uploading/", methods=["POST"])
 def upload_pet():
     body = json.loads(request.data)
@@ -74,7 +72,7 @@ def upload_name(pet_id):
         #current_user = "anonymous"
 
     name = Names(name=name, pet=pet_id,
-                 user=current_user.serialize().get("id"))
+                 user=current_user.serialize().get("id"))    
     current_user.names.append(name)
     pet.names.append(name)
 
@@ -87,6 +85,15 @@ def upload_name(pet_id):
     return success_response(name.serialize(), 201)
 
 
+# get most popular name based on pet_id 
+@app.route("/home/<int:pet_id>/popular/", methods = ["GET"])
+def most_popular_name(pet_id):
+    names = Names(pet = pet_id).all()
+    top_name = names.query( func.max(Names.votes) ).first()
+    return success_response( top_name.serialize() )
+
+
+
 # voting on names
 
 @app.route("/home/voting/<int:pet_id>/", methods=["POST"])
@@ -97,29 +104,37 @@ def vote(pet_id):
     name_id = body.get("name_id")
     if not name_id:
         return failure_response("Name not given.", 500)
-
+ 
     name = Names.query.filter_by(id=name_id)
     if not name:
         return failure_response("Name not found.", 500)
 
     name.update_vote()
+    pet.update_vote()
 
-    if(name.get_votes() >= VOTE_CAP):
-        pet.update_state(state=State.FEATURED)
+    # get most voted pet names
 
-    return success_response(pet.serialize(), 201)
+    if(pet.get_votes() >= VOTE_CAP):
 
+        pet_names = Names.query.filter_by( pet = pet_id ).all()
+        top_name = pet_names.query( func.max(Names.votes) )
+        same_votes = pet_names.query.filter_by( votes = top_name.sub_serialize().get("votes") )
+
+        if( len(same_votes) == 1):
+            pet.update_state( state = State.FEATURED )
+
+    return success_response( pet.serialize(), 201 )
+    
 
 # Get pet names from pet id
 
 
-@app.route("/home/<int:pet_id>/names/", methods=["GET"])
+@app.route("/home/<int:pet_id>/names/", methods = ["GET"])
 def get_pet_names(pet_id):
 
-    # TODO:Why is this called pets?
-    pets = Names(pet=pet_id).all()
+    names = Names(pet = pet_id).all()
 
-    return success_response([p.serialize() for p in pets])
+    return success_response( [p.serialize() for p in names] )
 
 # Get user from pet id
 
@@ -127,10 +142,10 @@ def get_pet_names(pet_id):
 @app.route("/home/<int:pet_id>/user/")
 def get_user_from_pet(pet_id):
 
-    pet = Pet.query.filter_by(id=pet_id)
+    pet = Pet.query.filter_by( id = pet_id )
     user_id = pet.serialize().get("user")
-    user = Users.query.filter_by(id=user_id)
-    return success_response(user.serialize())
+    user = Users.query.filter_by(id = user_id)
+    return success_response( user.serialize() )
 
 # create an account
 
@@ -143,11 +158,11 @@ def create_account():
     if not username:
         return failure_response("Please provide a username.")
 
-    already_exists = Users.query.filter_by(username=username)
-    if already_exists:
+    already_exists = Users.query.filter_by( username = username )
+    if already_exists: 
         return failure_response("An account with that username already exists. Please log in.", 400)
 
-    new_user = Users(username=username)
+    new_user = Users(username = username)
 
     db.session.add(new_user)
     db.session.commit()
@@ -166,17 +181,17 @@ def login():
     if not username:
         return failure_response("Please provide your username.")
 
-    login_user = Users.query.filter_by(username=username)
-    if not login_user:
+    login_user = Users.query.filter_by( username = username )
+    if not login_user: 
         return failure_response("User not found. Please create an account.", 400)
 
-    current_user = Users.query.filter_by(logged_in=True)
+    current_user = Users.query.filter_by( logged_in = True )
     if current_user:
         current_user.logout()
 
     login_user.login()
 
-    return success_response(current_user.serialize())
+    return success_response( current_user.serialize() )
 
 
 # Get the next nameable pet
@@ -200,9 +215,8 @@ def get_nameable_pet():
 
 @app.route("/home/voting/", methods=["GET"])
 def getvotable():
-    current_user = Users.query.filter_by(logged_in=True)
-    pet = Pet.query.filter_by(
-        state=State.VOTING and Pet.user != current_user.getID())
+    current_user = Users.query.filter_by( logged_in = True )
+    pet = Pet.query.filter_by( state = State.VOTING and Pet.user != current_user.getID() )
 
     if (pet == None):
         return failure_response("There are no pets to vote on at this time.")
@@ -214,13 +228,13 @@ def getvotable():
 
 @app.route("/home/account/pets/", methods=["GET"])
 def getmypets():
-    current_user = Users.query.filter_by(logged_in=True)
+    current_user = Users.query.filter_by( logged_in = True )
     if not current_user:
         return failure_response("Please log in.", 400)
 
-    pets = Pet.query.filter_by(user=current_user.getID()).all()
+    pets = Pet.query.filter_by( user = current_user.getID()).all()
 
-    if (pets is None):
+    if ( pets is None ):
         return failure_response("You haven't created any pets yet!")
 
     return success_response(
@@ -232,20 +246,20 @@ def getmypets():
 
 @app.route("/home/account/names/", methods=["GET"])
 def getmynames():
-    current_user = Users.query.filter_by(logged_in=True)
+    current_user = Users.query.filter_by( logged_in = True )
     if not current_user:
         return failure_response("Please log in.", 400)
 
-    names = Names.query.filter_by(user=current_user.getID()).all()
+    names = Names.query.filter_by( user = current_user.getID()).all()
 
-    if (names is None):
+    if ( names is None ):
         return failure_response("You haven't named any pets yet!")
 
     return success_response(
         {"Your Names": [n.sub_serialize() for n in names]}
     )
 
-# Get featured pets
+# Get featured pets 
 
 
 @app.route("/home/", methods=["GET"])
@@ -265,4 +279,5 @@ def reset():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port = 5000, debug = True)
+    
