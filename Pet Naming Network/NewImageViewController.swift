@@ -15,7 +15,7 @@ class NewImageViewController: UIViewController {
     private var newImageView:UIImageView = UIImageView();
     private var addImageButton:UIButton = UIButton();
     private var uploadImageButton:UIButton = UIButton();
-    //private var addView:UIView = UIView();
+
     let padding:CGFloat = 20;
     let buttonSize:CGFloat = 120;
     init(){
@@ -46,42 +46,36 @@ class NewImageViewController: UIViewController {
         addImageButton.titleLabel?.font = .boldSystemFont(ofSize: 50)
         addImageButton.titleLabel?.textColor = .white;
         addImageButton.addTarget(self, action: #selector(addImage), for: .touchUpInside)
-      //  addImageButton.setImage(UIImage(systemName: "plus.circle.fill"), for: UIControl.State.normal)
         
-     
-       // addImageButton.isHidden = true;
+        
         
         newImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width-padding*2, height: view.frame.size.width-padding*2))
         newImageView.addDashedBorder()
         
-        newImageView.backgroundColor = .systemGray4
+        newImageView.backgroundColor = .white
         newImageView.translatesAutoresizingMaskIntoConstraints = false;
         newImageView.isUserInteractionEnabled = true;
+        newImageView.image = nil;
         view.addSubview(newImageView)
         newImageView.addSubview(addImageButton)
     
-//        addView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width-padding*2, height: view.frame.size.width-padding*2))
-//        addView.addDashedBorder()
-//
-//        addView.backgroundColor = .systemGray3
-//        addView.translatesAutoresizingMaskIntoConstraints = false;
-//        view.addSubview(addView)
-//        addView.addSubview(addImageButton)
         
+        uploadImageButton.translatesAutoresizingMaskIntoConstraints = false
+        uploadImageButton.setTitle("Upload", for: .normal)
+        uploadImageButton.setTitleColor(.systemGray, for: .normal)
+        uploadImageButton.backgroundColor = .systemGray6
+        uploadImageButton.layer.borderColor = UIColor.systemGray.cgColor
+        uploadImageButton.layer.borderWidth = 2
+        uploadImageButton.layer.masksToBounds = true;
+        uploadImageButton.titleLabel?.font = .boldSystemFont(ofSize: 24)
+        uploadImageButton.addTarget(self, action: #selector(uploadImage), for: .touchUpInside)
+        
+        view.addSubview(uploadImageButton)
         
         setupConstraints()
     }
     
     func  setupConstraints(){
-       // let width = view.frame.width;
-//        NSLayoutConstraint.activate([
-//            addView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: padding*2),
-//            addView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            addView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -padding),
-//            addView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: padding),
-//            addView.heightAnchor.constraint(equalToConstant: view.frame.size.width-padding*2),
-//            addView.widthAnchor.constraint(equalToConstant: view.frame.size.width-padding*2),
-//        ])
         NSLayoutConstraint.activate([
             newImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: padding*2),
             newImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -97,13 +91,12 @@ class NewImageViewController: UIViewController {
             addImageButton.widthAnchor.constraint(equalToConstant: buttonSize),
             addImageButton.heightAnchor.constraint(equalToConstant: buttonSize),
         ])
-        
-//        NSLayoutConstraint.activate([
-//            newImageView.topAnchor.constraint(equalTo: addView.topAnchor),
-//            newImageView.bottomAnchor.constraint(equalTo: addView.bottomAnchor),
-//            newImageView.trailingAnchor.constraint(equalTo: addView.trailingAnchor),
-//            newImageView.leadingAnchor.constraint(equalTo: addView.leadingAnchor)
-//        ])
+        NSLayoutConstraint.activate([
+            uploadImageButton.topAnchor.constraint(equalTo: newImageView.bottomAnchor,constant: padding*2),
+            uploadImageButton.heightAnchor.constraint(equalToConstant: 48),
+            uploadImageButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            uploadImageButton.widthAnchor.constraint(equalToConstant: view.frame.size.width/2)
+        ])
         
     }
     
@@ -112,6 +105,30 @@ class NewImageViewController: UIViewController {
         print("CLICK!!")
        self.imagePicker.present(from: sender)
     }
+    func toggleUploadButton(){
+        if(newImageView.image == nil){
+            uploadImageButton.setTitleColor(.systemGray, for: .normal)
+            uploadImageButton.backgroundColor = .systemGray6
+            uploadImageButton.layer.borderColor = UIColor.systemGray.cgColor
+        }else{
+            uploadImageButton.setTitleColor(.white, for: .normal)
+            uploadImageButton.backgroundColor = .systemBlue
+            uploadImageButton.layer.borderColor = UIColor.white.cgColor
+        }
+    }
+    
+    
+    @objc func uploadImage(){
+        if(newImageView.image != nil){
+            let vc = SuccessViewController()
+            present(vc, animated: true, completion: nil)
+            addImageButton.isHidden = false
+            newImageView.image = nil;
+            
+            toggleUploadButton()
+        }
+    }
+    
     private func cropToBounds(image: UIImage, width: Double, height: Double) -> UIImage {
             let cgimage = image.cgImage!
             let contextImage: UIImage = UIImage(cgImage: cgimage)
@@ -151,7 +168,7 @@ extension NewImageViewController: ImagePickerDelegate {
         self.addImageButton.isHidden = true;
         let img:UIImage = image ?? UIImage()
         self.newImageView.image = cropToBounds(image: img, width: img.size.width, height: img.size.height);
-        
+        self.toggleUploadButton()
     }
 }
 extension UIView {
