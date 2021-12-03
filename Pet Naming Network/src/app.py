@@ -105,7 +105,7 @@ def most_popular_name(pet_id):
 
 @app.route("/home/voting/<int:pet_id>/", methods=["POST"])
 def vote(pet_id):
-    pet = Pet.query.filter_by(pet_id=pet_id)
+    pet = Pet.query.filter_by(id=pet_id).first()
 
     body = json.loads(request.data)
     name_id = body.get("name_id")
@@ -113,7 +113,7 @@ def vote(pet_id):
     if not name_id:
         return failure_response("Name not given.", 500)
 
-    name = Names.query.filter_by(id=name_id)
+    name = Names.query.filter_by(id=name_id).first()
     if not name:
         return failure_response("Name not found.", 500)
 
@@ -141,7 +141,7 @@ def vote(pet_id):
 @app.route("/home/<int:pet_id>/names/", methods=["GET"])
 def get_pet_names(pet_id):
 
-    names = Names(pet=pet_id).all()
+    names = Names.query.filter_by(pet=pet_id).all()
 
     return success_response([n.serialize() for n in names])
 
