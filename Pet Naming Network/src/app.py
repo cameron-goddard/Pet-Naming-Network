@@ -37,14 +37,15 @@ NAME_CAP = 3
 @app.route("/home/uploading/", methods=["POST"])
 def upload_pet():
     body = json.loads(request.data)
-    user = current_user = Users.query.filter_by(logged_in=True)
-    time = datetime.datetime.today()
+    user = Users.query.filter_by(logged_in=True)
+    time = datetime.today()
 
     image_data = body.get("image_data")  # This should be a base64 url
     if image_data is None:
         return failure_response("No base64 URL found!")
     asset = Asset(image_data=image_data)
     db.session.add(asset)
+    db.session.commit()
     # THIS should be an id for a picture
     pic_id = asset.getID
 
@@ -155,15 +156,15 @@ def get_user_from_pet(pet_id):
 
 @app.route("/home/account/", methods=["POST"])
 def create_account():
-    body = json.dumps(request.data)
+    body = json.loads(request.data)
     username = body.get("username")
 
     if not username:
         return failure_response("Please provide a username.")
 
-    already_exists = Users.query.filter_by(username=username)
+    already_exists = Users.query.filter_by(username=username).all()
     if already_exists:
-        return failure_response("An account with that username already exists. Please log in.", 400)
+        return failure_response(already_exists, 400)
 
     new_user = Users(username=username)
 
@@ -178,23 +179,23 @@ def create_account():
 
 @app.route("/home/login/", methods=["POST"])
 def login():
-    body = json.dumps(request.data)
+    body = json.loads(request.data)
     username = body.get("username")
 
     if not username:
         return failure_response("Please provide your username.")
 
-    login_user = Users.query.filter_by(username=username)
+    login_user = Users.query.filter_by(username=username).first()
     if not login_user:
         return failure_response("User not found. Please create an account.", 400)
 
-    current_user = Users.query.filter_by(logged_in=True)
+    current_user = Users.query.filter_by(logged_in=True).first()
     if current_user:
         current_user.logout()
 
     login_user.login()
 
-    return success_response(current_user.serialize())
+    return success_response(login_user.serialize())
 
 
 # Get the next nameable pet

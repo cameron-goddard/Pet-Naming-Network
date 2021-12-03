@@ -6,7 +6,7 @@ import os
 from mimetypes import guess_extension, guess_type
 from io import BytesIO
 import datetime
-import boto3
+#import boto3
 import base64
 from enum import Enum
 from flask_sqlalchemy import SQLAlchemy
@@ -46,10 +46,9 @@ class Pet(db.Model):
     def __init__(self, **kwargs):
 
         self.state = State.NAMING
-        # Make sure this matches with pic creation
         self.pic_id = kwargs.get("picture")
         self.user = kwargs.get("user")
-        self.date_created = kwargs.get("date_created")
+        self.date_created = kwargs.get("time")
         self.voted = 0
 
     def serialize(self):
@@ -175,6 +174,7 @@ class Asset(db.Model):
 
     def __init__(self, **kwargs):
         self.create(kwargs.get("image_data"))
+
 
     def getURL(self):
         return f"{self.base_url}/{self.salt}.{self.extension}"
