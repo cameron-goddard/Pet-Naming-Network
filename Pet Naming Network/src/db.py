@@ -41,6 +41,7 @@ class Pet(db.Model):
     user = db.Column(db.Integer, db.ForeignKey("user.id"))
     names = db.relationship("Names", cascade="delete")
     date_created = db.Column(db.Integer, nullable=False)
+    voted = db.Column(db.Integer, nullable=False)
 
     def __init__(self, **kwargs):
 
@@ -49,6 +50,7 @@ class Pet(db.Model):
         self.pic_id = kwargs.get("picture")
         self.user = kwargs.get("user")
         self.date_created = kwargs.get("date_created")
+        self.voted = 0
 
     def serialize(self):
 
@@ -72,6 +74,12 @@ class Pet(db.Model):
 
     def update_state(self, state):
         self.state = state
+
+    def update_vote(self):
+        self.voted = self.voted +1
+
+    def get_votes(self):
+        return self.voted
 
 # USER table
 
@@ -142,8 +150,10 @@ class Names(db.Model):
             "votes": self.votes
         }
 
+
     def update_vote(self):
         self.votes = self.votes+1
+
 
     def get_votes(self):
         return self.votes

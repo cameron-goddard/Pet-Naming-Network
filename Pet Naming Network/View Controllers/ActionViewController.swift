@@ -11,8 +11,6 @@ class ActionViewController: UIViewController {
 
     private var actionControl = UISegmentedControl(items: ["Vote", "Name"])
     
-    private var containerView = UIView()
-    
     private lazy var voteVC : VoteViewController = {
         var vc = VoteViewController()
         self.add(vc: vc)
@@ -39,9 +37,7 @@ class ActionViewController: UIViewController {
         ])
         self.navigationItem.titleView = actionControl
         
-        containerView.backgroundColor = .green
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        //view.addSubview(containerView)
+        
         
         add(vc: voteVC)
         
@@ -67,12 +63,6 @@ class ActionViewController: UIViewController {
         addChild(vc)
         view.addSubview(vc.view)
         //vc.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        //vc.view.frame = containerView.bounds
-        NSLayoutConstraint.activate([
-            //vc.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            //vc.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            //vc.view.heightAnchor.constraint(equalToConstant: 500)
-        ])
         
         vc.didMove(toParent: self)
     }
@@ -82,8 +72,6 @@ class ActionViewController: UIViewController {
         vc.view.removeFromSuperview()
         vc.removeFromParent()
     }
-    
-    
     
     func setUpConstraints() {
         
