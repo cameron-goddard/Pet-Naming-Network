@@ -1,0 +1,238 @@
+﻿Upload a pet
+
+
+POST /home/uploading/
+Request
+{
+        “image_data”: “<base64 encoded image data>”
+}
+
+
+Response
+<HTTP STATUS CODE 201>
+{
+        “id”: 1,
+        “state”: “State.NAMING”,
+        “pic”:”<URL of provided picture>”,
+        “user”:”<Currently Active Username>”,
+        “names”: [],
+        “date_created”: <current date/time>
+}
+
+
+Add a name to a pet
+POST /home/naming/<int:pet_id>/
+Request
+{
+        “name”: “Ulysses”
+}
+Response
+<HTTP STATUS CODE 201>
+{        
+        “id”: 1,
+        “name”: “Ulysses”,
+        “pet”: 1,
+        “votes”: 0
+}
+
+
+Add a vote
+Note: if the user votes “no” on a name, don’t add a vote. This only adds a yes vote.
+POST /home/voting/<int:pet_id>/
+Request:
+{
+        “name_id”: 1
+}
+Response:
+<HTTP STATUS CODE 201>
+{
+        “id”: 1,
+        “state”: “State.NAMING”,
+        “pic”:”<URL of provided picture>”,
+        “user”:”<User that posted the pet>”,
+        “names”: [
+{
+“id”: 1,
+“name”: “Ulysses”,
+“votes”: 1
+},
+#MORE NAMES HERE
+]
+        “date_created”: <date/time created>
+}
+
+
+Get names for a certain pet
+GET /home/<int:pet_id>/names/
+<HTTP STATUS CODE 200>
+Response:
+{
+        [
+        {
+“id”: 1,
+“name”: “Ulysses”,
+“votes”: 1
+},
+#MORE NAMES HERE
+]
+}
+
+
+Get a featured pet’s most popular name
+GET /home/<int:pet_id>/popular/
+Response:
+<HTTP STATUS CODE 200>
+{
+        {
+“id”: 1,
+“name”: “Ulysses”,
+“votes”: 7
+}
+}
+
+
+Get the username of someone who posted a certain pet
+GET /home/<int:pet_id>/user/
+<HTTP STATUS CODE 200>
+Response:
+{
+        “id”: 1,
+        “username”: “SharkLord777”,
+        “pets”: [
+                        {
+        “id”: 1,
+        “state”: “State.NAMING”,
+        “pic”:”<URL of provided picture>”,
+        “names”: [
+“id”: 1,
+“name”: “Ulysses”,
+“votes”: 1
+},
+#MORE NAMES HERE (That are on this pet)
+],
+        “date_created”: <created date/time>
+},
+#MORE PETS HERE
+],
+“names”: [
+                {
+                “id”: 2,
+“name”: “Brenda”,
+“votes”: 0
+},
+#MORE NAMES HERE (That the user has submitted)
+]
+}
+
+
+Create an account
+POST /home/account
+Request:
+{
+        “username”: “SharkLord778”
+}
+Response:
+<HTTP STATUS CODE 200>
+Response:
+{
+        “id” 2,
+        “username”: “Sharklord778”,
+        “pets”: [],
+        “names”: [],
+}
+
+
+Login to an existing account
+POST /home/login/
+Request:
+{
+        “username”: “SharkLord778”
+}
+Response:
+{
+        “id” 2,
+        “username”: “Sharklord778”,
+        “pets”: [],
+        “names”: [],
+}
+
+
+
+
+Get the next nameable pet
+GET /home/naming/
+Response
+<HTTP STATUS CODE 200>
+{
+        “id”: 2,
+        “state”: “State.NAMING”,
+        “pic”:”<URL of provided picture>”,
+        “user”:”Sharklord778”,
+        “names”: [],
+        “date_created”: <created date/time>
+}
+
+
+Get the next votable pet
+GET /home/voting/
+Response
+<HTTP STATUS CODE 200>
+{
+        “id”: 2,
+        “state”: “State.VOTING”,
+        “pic”:”<URL of provided picture>”,
+        “user”:”SharkLord778”,
+        “names”: [#THERE WILL BE NAMES HERE],
+        “date_created”: <created date/time>
+}
+
+
+Get the pets you have contributed:
+GET /home/account/pets/
+Response
+<HTTP STATUS CODE 200>
+{
+        “Your Pets”: [
+                {
+                “id”: 2,
+                “state”: “State.VOTING”,
+                “pic”:”<URL of provided picture>”,
+                “user”:”SharkLord778”,
+                “names”: [#NAMES HERE],
+                “date_created”: <created date/time>
+},
+#POSSIBLY MORE PETS HERE
+]
+}
+
+
+Get the names you have contributed
+GET /home/account/names/
+<HTTP STATUS CODE 200>
+{
+        “Your Names”:[
+                {
+                “id”: 2,
+“name”: “Brenda”,
+“votes”: 0
+},
+#MORE NAMES HERE (That the user has submitted)
+]
+}
+
+
+Get featured pets
+GET /home/
+{
+        “Featured Pets”: [
+                {
+                “id”: 2,
+                “state”: “State.FEATURED”,
+                “pic”:”<URL of provided picture>”,
+                “user”:”SharkLord778”,
+                “names”: [#NAMES HERE],
+                “date_created”: <created date/time>
+},
+#POSSIBLY MORE PETS HERE
+]
+}
