@@ -67,20 +67,13 @@ class PetViewController: UIViewController {
         view.addSubview(petImageView)
         
         petNameLabel.text = pet.petName
-        petNameLabel.textAlignment = .left
+        petNameLabel.textAlignment = .center
         petNameLabel.font = UIFont.boldSystemFont(ofSize: 24)
         petNameLabel.textColor = .orange
         petNameLabel.translatesAutoresizingMaskIntoConstraints = false;
  
         view.addSubview(petNameLabel)
-        
-        tableLabel.text = "Other Name Suggestions"
-        tableLabel.textAlignment = .center
-        tableLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        tableLabel.textColor = .black
-        tableLabel.translatesAutoresizingMaskIntoConstraints = false;
- 
-        view.addSubview(petNameLabel)
+    
         
         userNameLabel.text = pet.user
         
@@ -90,6 +83,14 @@ class PetViewController: UIViewController {
         userNameLabel.translatesAutoresizingMaskIntoConstraints = false;
         
         view.addSubview(userNameLabel);
+        
+        tableLabel.text = "Other Name Suggestions"
+        tableLabel.textAlignment = .center
+        tableLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        tableLabel.textColor = .black
+        tableLabel.translatesAutoresizingMaskIntoConstraints = false;
+
+        view.addSubview(tableLabel)
         
         setupConstraints()
     }
@@ -131,7 +132,6 @@ class PetViewController: UIViewController {
             tableLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor,constant: 20),
-            tableLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         NSLayoutConstraint.activate([
             namesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

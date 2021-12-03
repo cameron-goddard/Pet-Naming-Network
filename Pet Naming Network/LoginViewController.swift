@@ -39,27 +39,28 @@ class LoginViewController: UIViewController {
         let button = UIButton()
         button.configuration = .filled()
         button.setTitle("Log In", for: .normal)
-        //button.backgroundColor = .systemBlue
-        //button.layer.borderColor = UIColor.systemBlue.cgColor;
-        //button.layer.borderWidth = 1;
         button.translatesAutoresizingMaskIntoConstraints = false;
-        //button.setTitleColor(.white, for: .normal)
         
         return button;
     }()
     
    // private var spinner = UIActivityIndicatorView()
-    
+    private var myActivityIndicator = UIActivityIndicatorView(style: .large)
+      
     override func viewDidLoad() {
         super.viewDidLoad()
-       
         
+              myActivityIndicator.center = view.center
+              myActivityIndicator.hidesWhenStopped = false
+            myActivityIndicator.startAnimating()
+        myActivityIndicator.isHidden = true;
         view.addSubview(appTitleLabel)
       
        
         
         view.addSubview(userNameTextField)
         view.addSubview(loginButton)
+        view.addSubview(myActivityIndicator)
 //
 //        spinner.translatesAutoresizingMaskIntoConstraints = false
 //      //  spinner.center = self.view.center
@@ -74,7 +75,8 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .white
         loginButton.center = view.center
         loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
-       setupConstraints()
+        print("Please Work");
+        setupConstraints()
     }
     
     func setupConstraints(){
@@ -101,14 +103,21 @@ class LoginViewController: UIViewController {
 //
 //        ])
     }
-   
-    
+    @objc func login2(){
+        myActivityIndicator.isHidden = false;
+        myActivityIndicator.startAnimating()
+        login();
+    }
     @objc func login(){
-        print("LOGIN!!")
+
 //        spinner.isHidden = false;
 //        spinner.startAnimating()
 //        self.view.isUserInteractionEnabled = false;
 //
+        
+        
+        myActivityIndicator.isHidden = false;
+       
         userName = userNameTextField.text ?? "";
         if(userName.elementsEqual("")){
             print("Deny!")
@@ -146,7 +155,7 @@ class LoginViewController: UIViewController {
           
         self.navigationController?.pushViewController(tabBarVC, animated: true)
         }
-
+        myActivityIndicator.stopAnimating()
     }
         
     

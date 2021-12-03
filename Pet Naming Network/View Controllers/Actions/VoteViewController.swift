@@ -13,7 +13,7 @@ class VoteViewController: UIViewController {
     private var namesTableView = UITableView()
     let userName = "test"
     
-    private var votableNames : [Pet] = [Pet(petName: "Doggo", user: "test", petImageURL: "doggo", petState: .Featured),Pet(petName: "???", user: "test", petImageURL: "nice", petState: .Featured),Pet(petName: "Gamer", user: "test", petImageURL: "gamer", petState: .Featured),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .Featured),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .Featured),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .Featured),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .Featured)]
+    private var votableNames : [Pet] = [Pet(petName: "Doggo", user: "test", petImageURL: "doggo", petState: .FEATURED),Pet(petName: "???", user: "test", petImageURL: "nice", petState: .FEATURED),Pet(petName: "Gamer", user: "test", petImageURL: "gamer", petState: .FEATURED),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .FEATURED)]
     
     private let reuseIdentifier = "votableNameCellReuse"
     

@@ -97,6 +97,8 @@
 		3B2B60FF273D9637000F99DC /* Pet Naming Network */ = {
 			isa = PBXGroup;
 			children = (
+				26F452A12757366000067ADB /* LoginViewController.swift */,
+				26F452A72758388400067ADB /* SuccessViewController.swift */,
 				3B2B6104273D9637000F99DC /* HomeViewController.swift */,
 				264105C727470DBD004C6DA4 /* AccountViewController.swift */,
 				26F452AB2759D62F00067ADB /* NamesTableViewCell.swift */,
@@ -132,8 +134,6 @@
 		3B489E9D27596F3B00FFB473 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				26F452A72758388400067ADB /* SuccessViewController.swift */,
-				26F452A12757366000067ADB /* LoginViewController.swift */,
 				3B792419273EF05F00B5FC5C /* NewImageViewController.swift */,
 				26F452A527581F9A00067ADB /* ActionViewController.swift */,
 				3B489E9C27596F2300FFB473 /* Actions */,

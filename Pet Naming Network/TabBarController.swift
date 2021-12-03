@@ -24,24 +24,7 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
-        
-//        let appearance = UINavigationBarAppearance()
-//        appearance.backgroundColor = .green
-//        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-//        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-//        navigationController?.navigationBar.tintColor = .systemBlue
-//        navigationController?.navigationBar.standardAppearance = appearance
-//        navigationController?.navigationBar.compactAppearance = appearance
-//        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-//        self.navigationController?.navigationBar.standardAppearance.backgroundColor = UIColor.green
-
-//        tabBar.barTintColor = .green
-//        tabBar.isTranslucent = false
-        //tabBar.tintColor = .systemBlue
-        //tabBar.unselectedItemTintColor = .systemGray
-        
     
-        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle"), style: .plain, target: self, action: #selector(presentAccount))
         
         self.navigationItem.hidesBackButton=true
