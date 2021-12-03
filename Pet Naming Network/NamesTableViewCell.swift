@@ -14,11 +14,10 @@ class NamesTableViewCell: UITableViewCell {
     var voteLabel = UILabel();
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = .clear;
-        
+        //contentView.backgroundColor = .blue;
         
         nameLabel.font = .systemFont(ofSize: 16)
-        nameLabel.textColor = .black
+
         nameLabel.translatesAutoresizingMaskIntoConstraints = false;
         contentView.addSubview(nameLabel)
         
@@ -28,7 +27,7 @@ class NamesTableViewCell: UITableViewCell {
         voteLabel.translatesAutoresizingMaskIntoConstraints = false;
         contentView.addSubview(voteLabel)
         
-        setupConstraints();
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -36,23 +35,19 @@ class NamesTableViewCell: UITableViewCell {
     }
     func configure(name:String, votes:Int) {
         nameLabel.text = name;
-        voteLabel.text = "Votes: \(votes)";
+        voteLabel.text = "Votes: \(votes)"
     }
-    func setupConstraints(){
-        
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 20),
             nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             nameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         NSLayoutConstraint.activate([
-            
             voteLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             voteLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             voteLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             voteLabel.widthAnchor.constraint(equalToConstant: 100),
         ])
-        
     }
 }

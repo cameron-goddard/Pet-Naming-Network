@@ -6,23 +6,24 @@
 //
 
 import UIKit
-import SnapKit
 
 class PetViewController: UIViewController {
-
-    
 
     private var petImageView:UIImageView = UIImageView()
     private var petNameLabel:UILabel = UILabel()
     private var userNameLabel:UILabel = UILabel()
+    private var votesLabel = UILabel()
     private var closeButton = UIButton(type: .close)
     private var tableLabel:UILabel = UILabel()
-    private var namesTableView:UITableView = UITableView();
+    private var backgroundImageView = UIImageView()
+    private var namesTableView:UITableView = UITableView()
     private var reuseIdentifier = "namesCellReuse"
     
-    let cellHeight:CGFloat = 80;
+
     var votes:[Int] = [];
-    var names:[String] = [];
+    let cellHeight:CGFloat = 50;
+    
+    var names:[String] = []
     private var pet:Pet
     init(pet:Pet){
         self.pet = pet;
@@ -36,61 +37,73 @@ class PetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         title = "Pet"
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .secondarySystemBackground
         
         for x in 0...pet.nameSuggestions.count-1{
             names.append(pet.nameSuggestions[x])
             votes.append(x)
         }
-        namesTableView.backgroundColor = .clear
+        
+        namesTableView.layer.cornerRadius = 10
+        
         namesTableView.translatesAutoresizingMaskIntoConstraints = false
         namesTableView.dataSource = self
         namesTableView.delegate = self
         namesTableView.register(NamesTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
-        namesTableView.isScrollEnabled=true;
-        namesTableView.showsVerticalScrollIndicator = true;
+        namesTableView.isScrollEnabled = true
+        namesTableView.showsVerticalScrollIndicator = true
         view.addSubview(namesTableView)
         namesTableView.reloadData()
         
+        backgroundImageView.image = pet.petImage
+        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        //blurEffectView.frame = contentView.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        backgroundImageView.addSubview(blurEffectView)
+        view.addSubview(backgroundImageView)
         
-        
+        petImageView.contentMode = .scaleToFill
+        petImageView.image = pet.petImage
+        petImageView.layer.masksToBounds = true
+        petImageView.layer.cornerRadius = 10
+        petImageView.translatesAutoresizingMaskIntoConstraints = false
+        petImageView.dropShadow()
+        backgroundImageView.addSubview(petImageView)
         
         closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(closeButton)
-        
-        petImageView.contentMode = .scaleAspectFit
-        
-        petImageView.image = pet.petImage;
-        petImageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(petImageView)
+        backgroundImageView.addSubview(closeButton)
         
         petNameLabel.text = pet.petName
         petNameLabel.textAlignment = .center
-        petNameLabel.font = UIFont.boldSystemFont(ofSize: 24)
-        petNameLabel.textColor = .orange
-        petNameLabel.translatesAutoresizingMaskIntoConstraints = false;
- 
-        view.addSubview(petNameLabel)
+        petNameLabel.font = UIFont.boldSystemFont(ofSize: 36)
+        petNameLabel.textColor = .white
+        petNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        backgroundImageView.addSubview(petNameLabel)
     
+        let submitText = "Submitted by: "
+        let attrs = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16)]
+        let submitAttrString = NSMutableAttributedString(string: submitText, attributes:attrs)
+        let user = NSMutableAttributedString(string:pet.user)
+        submitAttrString.append(user)
+        userNameLabel.attributedText = submitAttrString
+        userNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(userNameLabel)
         
-        userNameLabel.text = pet.user
-        
-        userNameLabel.textAlignment = .center
-        userNameLabel.font = .systemFont(ofSize: 16)
-        userNameLabel.textColor = .black
-        userNameLabel.translatesAutoresizingMaskIntoConstraints = false;
-        
-        view.addSubview(userNameLabel);
+        let votesText = "Votes: "
+        let votesAttrString = NSMutableAttributedString(string: votesText, attributes:attrs)
+        let votes = NSMutableAttributedString(string:"test")
+        votesAttrString.append(votes)
+        votesLabel.attributedText = votesAttrString
+        votesLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(votesLabel)
         
         tableLabel.text = "Other Name Suggestions"
-        tableLabel.textAlignment = .center
         tableLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        tableLabel.textColor = .black
-        tableLabel.translatesAutoresizingMaskIntoConstraints = false;
-
+        tableLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableLabel)
         
         setupConstraints()
@@ -102,46 +115,58 @@ class PetViewController: UIViewController {
     
     func setupConstraints(){
         let padding:CGFloat = 8;
-        let imagePadding:CGFloat = 40;
+        let imagePadding:CGFloat = 20;
         let width:CGFloat = view.frame.width-imagePadding*4;
         
+        
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 15),
-            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15)
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImageView.heightAnchor.constraint(equalToConstant: view.frame.size.height/2.7),
         ])
         NSLayoutConstraint.activate([
-            petImageView.topAnchor.constraint(equalTo: view.topAnchor,constant: imagePadding),
+            closeButton.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 15),
+            closeButton.leadingAnchor.constraint(equalTo: backgroundImageView.leadingAnchor, constant: 15)
+        ])
+        NSLayoutConstraint.activate([
+            petImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor,constant: 40),
             petImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            petImageView.heightAnchor.constraint(equalToConstant: width),
-            petImageView.widthAnchor.constraint(equalToConstant: width),
-            petImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant:imagePadding),
-            petImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant:-imagePadding),
+            
+            petImageView.widthAnchor.constraint(equalToConstant: 200),
+            petImageView.heightAnchor.constraint(equalToConstant: 200),
+            //petImageView.leadingAnchor.constraint(equalTo: backgroundImageView.leadingAnchor,constant:imagePadding),
+            //petImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor,constant:-imagePadding),
         ])
         NSLayoutConstraint.activate([
-            petNameLabel.topAnchor.constraint(equalTo: petImageView.bottomAnchor,constant: padding),
-            petNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            petNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: padding),
-            petNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -padding),
+            petNameLabel.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor,constant: -10),
+            //petNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            petNameLabel.leadingAnchor.constraint(equalTo: backgroundImageView.leadingAnchor, constant: 20),
+            //petNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -padding),
         ])
         NSLayoutConstraint.activate([
-            userNameLabel.topAnchor.constraint(equalTo: petNameLabel.bottomAnchor,constant: padding),
-            userNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            userNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: padding),
+            userNameLabel.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor,constant: 20),
+            //userNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            userNameLabel.leadingAnchor.constraint(equalTo: backgroundImageView.leadingAnchor),
             userNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -padding),
         ])
         NSLayoutConstraint.activate([
-            tableLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor,constant: 20),
+            votesLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor,constant: 10),
+            votesLabel.leadingAnchor.constraint(equalTo: userNameLabel.leadingAnchor)
         ])
         NSLayoutConstraint.activate([
-            namesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            namesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            tableLabel.topAnchor.constraint(equalTo: votesLabel.bottomAnchor,constant: 40),
+        ])
+        NSLayoutConstraint.activate([
+            //namesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            //namesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            namesTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            namesTableView.widthAnchor.constraint(equalToConstant: view.frame.width-40),
             namesTableView.topAnchor.constraint(equalTo: tableLabel.bottomAnchor,constant: 10),
             namesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
 }
 extension PetViewController: UITableViewDataSource {
 
@@ -155,7 +180,6 @@ extension PetViewController: UITableViewDataSource {
             let vote = votes[indexPath.row]
             cell.configure(name: name,votes: vote)
             cell.selectionStyle = .none
-            
             return cell
         } else {
             return UITableViewCell()
