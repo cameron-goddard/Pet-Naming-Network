@@ -65,12 +65,15 @@ def upload_pet():
 
 @app.route("/home/naming/<int:pet_id>/", methods=["POST"])
 def upload_name(pet_id):
-    pet = Pet.query.filter_by(pet_id=pet_id)
+    pet = Pet.query.filter_by(id=pet_id).first()
+
+    if(len(pet.serialize().get("state")) != State.NAMING):
+        return failure_response("Should not be named right now!")
 
     body = json.loads(request.data)
     name = body.get("name")
 
-    if not name:
+    if name is None:
         return failure_response("No name recieved.", 400)
 
     current_user = Users.query.filter_by(logged_in=True).first()
@@ -118,7 +121,9 @@ def vote(pet_id):
         return failure_response("Name not found.", 500)
 
     name.update_vote()
+    db.session.commit()
     pet.update_vote()
+    db.session.commit()
 
     # get most voted pet names
 
@@ -131,6 +136,7 @@ def vote(pet_id):
 
         if(len(same_votes) == 1):
             pet.update_state(state=State.FEATURED)
+            db.session.commit()
 
     return success_response(pet.serialize(), 201)
 
@@ -151,10 +157,14 @@ def get_pet_names(pet_id):
 @app.route("/home/<int:pet_id>/user/")
 def get_user_from_pet(pet_id):
 
-    pet = Pet.query.filter_by(id=pet_id)
-    user_id = pet.serialize().get("user")
-    user = Users.query.filter_by(id=user_id)
-    return success_response(user.serialize())
+    pet = Pet.query.filter_by(id=pet_id).first()
+    user_id = pet.get_user_id()
+    user = Users.query.filter_by(id=user_id).first()
+
+    if user == None:
+        return failure_response("User not found")
+
+    return success_response( user.sub_serialize() )
 
 # create an account
 
