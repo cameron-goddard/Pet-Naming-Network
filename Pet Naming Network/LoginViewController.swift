@@ -116,7 +116,7 @@ class LoginViewController: UIViewController {
 //
         
         
-        myActivityIndicator.isHidden = false;
+
        
         userName = userNameTextField.text ?? "";
         if(userName.elementsEqual("")){
@@ -155,7 +155,7 @@ class LoginViewController: UIViewController {
           
         self.navigationController?.pushViewController(tabBarVC, animated: true)
         }
-        myActivityIndicator.stopAnimating()
+       
     }
         
     
