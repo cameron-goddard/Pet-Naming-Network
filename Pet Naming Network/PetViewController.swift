@@ -36,8 +36,9 @@ class PetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         title = "Pet"
-        view.backgroundColor = .white;
+        view.backgroundColor = .systemBackground
         
         for x in 0...pet.nameSuggestions.count-1{
             names.append(pet.nameSuggestions[x])
