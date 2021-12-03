@@ -28,6 +28,12 @@ def failure_response(message, code=404):
     return json.dumps({"error": message}), code
 
 
+@app.route("/")
+def hello_world():
+    return "hello world"
+    # We need this so the api has a default page
+
+
 VOTE_CAP = 10
 NAME_CAP = 3
 
@@ -327,4 +333,5 @@ def reset():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = os.environ.get("PORT", 5000)
+    app.run(host="0.0.0.0", port=port)
