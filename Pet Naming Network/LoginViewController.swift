@@ -9,8 +9,7 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
-    //private var imagePicker: ImagePicker!
-    
+
     private var userName:String = "Bob123"
     private var account:Account = Account(userName: "", userPosts: [])
     private var petsShown:[Pet] = []
@@ -37,7 +36,6 @@ class LoginViewController: UIViewController {
     }()
     
     private let loginButton:UIButton = {
-        //let button = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 52));
         let button = UIButton()
         button.configuration = .filled()
         button.setTitle("Log In", for: .normal)
@@ -50,7 +48,7 @@ class LoginViewController: UIViewController {
         return button;
     }()
     
-    private var spinner = UIActivityIndicatorView()
+   // private var spinner = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,16 +60,16 @@ class LoginViewController: UIViewController {
         
         view.addSubview(userNameTextField)
         view.addSubview(loginButton)
-        
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-      //  spinner.center = self.view.center
-        spinner.isHidden = true;
-        spinner.backgroundColor = .clear
-        spinner.hidesWhenStopped = true;
-        spinner.style = .large
-        spinner.color = UIColor.red
-        view.addSubview(spinner)
-        
+//
+//        spinner.translatesAutoresizingMaskIntoConstraints = false
+//      //  spinner.center = self.view.center
+//        spinner.isHidden = true;
+//        spinner.backgroundColor = .clear
+//        spinner.hidesWhenStopped = true;
+//        spinner.style = .large
+//        spinner.color = UIColor.red
+//        view.addSubview(spinner)
+//
                 
         view.backgroundColor = .white
         loginButton.center = view.center
@@ -97,30 +95,29 @@ class LoginViewController: UIViewController {
             loginButton.widthAnchor.constraint(equalToConstant: 120),
             loginButton.heightAnchor.constraint(equalToConstant: 36),
         ])
-        NSLayoutConstraint.activate([
-            spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor,constant: 20),
-            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-
-        ])
+//        NSLayoutConstraint.activate([
+//            spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor,constant: 20),
+//            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//
+//        ])
     }
    
     
     @objc func login(){
         print("LOGIN!!")
-        spinner.isHidden = false;
-        spinner.startAnimating()
-        self.view.isUserInteractionEnabled = false;
-        
+//        spinner.isHidden = false;
+//        spinner.startAnimating()
+//        self.view.isUserInteractionEnabled = false;
+//
         userName = userNameTextField.text ?? "";
         if(userName.elementsEqual("")){
             print("Deny!")
            // loginButton.shake();
         }else{
         loginButton.startAnimatingPressActions()
-       
         
-        
-        petsShown = [Pet(petName: "Doggo", user: userName, petImageURL: "doggo", petState: .Featured),Pet(petName: "???", user: userName, petImageURL: "nice", petState: .Featured),Pet(petName: "Gamer", user: userName, petImageURL: "gamer", petState: .Featured),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .Featured),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .Featured),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .Featured),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .Featured)]
+
+            petsShown = [Pet(petName: "Doggo", user: userName, petImageURL: "doggo", petState: .FEATURED),Pet(petName: "???", user: userName, petImageURL: "nice", petState: .FEATURED),Pet(petName: "Gamer", user: userName, petImageURL: "gamer", petState: .FEATURED),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .FEATURED)]
         account = Account(userName: userName,userPosts: petsShown)
         
         let tabBarVC = TabBarController(account:account)
@@ -149,9 +146,7 @@ class LoginViewController: UIViewController {
           
         self.navigationController?.pushViewController(tabBarVC, animated: true)
         }
-        spinner.stopAnimating()
-        self.view.isUserInteractionEnabled = true;
-        spinner.isHidden = true;
+
     }
         
     

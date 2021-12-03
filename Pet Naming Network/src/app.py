@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from db import db, Pet, Names, Users, State, Asset
 from flask import Flask, request
+from sqlalchemy import func
 
 app = Flask(__name__)
 
@@ -36,14 +37,15 @@ NAME_CAP = 3
 @app.route("/home/uploading/", methods=["POST"])
 def upload_pet():
     body = json.loads(request.data)
-    user = current_user = Users.query.filter_by(logged_in=True)
-    time = datetime.datetime.today()
+    user = Users.query.filter_by(logged_in=True)
+    time = datetime.today()
 
     image_data = body.get("image_data")  # This should be a base64 url
     if image_data is None:
         return failure_response("No base64 URL found!")
     asset = Asset(image_data=image_data)
     db.session.add(asset)
+    db.session.commit()
     # THIS should be an id for a picture
     pic_id = asset.getID
 
@@ -87,6 +89,14 @@ def upload_name(pet_id):
     return success_response(name.serialize(), 201)
 
 
+# get most popular name based on pet_id
+@app.route("/home/<int:pet_id>/popular/", methods=["GET"])
+def most_popular_name(pet_id):
+    names = Names(pet=pet_id).all()
+    top_name = names.query(func.max(Names.votes)).first()
+    return success_response(top_name.serialize())
+
+
 # voting on names
 
 @app.route("/home/voting/<int:pet_id>/", methods=["POST"])
@@ -103,9 +113,19 @@ def vote(pet_id):
         return failure_response("Name not found.", 500)
 
     name.update_vote()
+    pet.update_vote()
 
-    if(name.get_votes() >= VOTE_CAP):
-        pet.update_state(state=State.FEATURED)
+    # get most voted pet names
+
+    if(pet.get_votes() >= VOTE_CAP):
+
+        pet_names = Names.query.filter_by(pet=pet_id).all()
+        top_name = pet_names.query(func.max(Names.votes))
+        same_votes = pet_names.query.filter_by(
+            votes=top_name.sub_serialize().get("votes"))
+
+        if(len(same_votes) == 1):
+            pet.update_state(state=State.FEATURED)
 
     return success_response(pet.serialize(), 201)
 
@@ -116,10 +136,9 @@ def vote(pet_id):
 @app.route("/home/<int:pet_id>/names/", methods=["GET"])
 def get_pet_names(pet_id):
 
-    # TODO:Why is this called pets?
-    pets = Names(pet=pet_id).all()
+    names = Names(pet=pet_id).all()
 
-    return success_response([p.serialize() for p in pets])
+    return success_response([n.serialize() for n in names])
 
 # Get user from pet id
 
@@ -137,15 +156,15 @@ def get_user_from_pet(pet_id):
 
 @app.route("/home/account/", methods=["POST"])
 def create_account():
-    body = json.dumps(request.data)
+    body = json.loads(request.data)
     username = body.get("username")
 
     if not username:
         return failure_response("Please provide a username.")
 
-    already_exists = Users.query.filter_by(username=username)
+    already_exists = Users.query.filter_by(username=username).all()
     if already_exists:
-        return failure_response("An account with that username already exists. Please log in.", 400)
+        return failure_response(already_exists, 400)
 
     new_user = Users(username=username)
 
@@ -160,23 +179,23 @@ def create_account():
 
 @app.route("/home/login/", methods=["POST"])
 def login():
-    body = json.dumps(request.data)
+    body = json.loads(request.data)
     username = body.get("username")
 
     if not username:
         return failure_response("Please provide your username.")
 
-    login_user = Users.query.filter_by(username=username)
+    login_user = Users.query.filter_by(username=username).first()
     if not login_user:
         return failure_response("User not found. Please create an account.", 400)
 
-    current_user = Users.query.filter_by(logged_in=True)
+    current_user = Users.query.filter_by(logged_in=True).first()
     if current_user:
         current_user.logout()
 
     login_user.login()
 
-    return success_response(current_user.serialize())
+    return success_response(login_user.serialize())
 
 
 # Get the next nameable pet
