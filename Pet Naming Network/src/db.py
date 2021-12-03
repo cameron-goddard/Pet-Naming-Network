@@ -105,6 +105,9 @@ class Pet(db.Model):
             "date_created": self.date_created
         }
 
+    def get_user_id(self):
+        return self.user
+
     def update_state(self, state):
         self.state = state
 
@@ -137,7 +140,14 @@ class Users(db.Model):
             "username": self.username,
             "pets": [s.sub_serialize for s in self.pets],
             "names": [s.serialize for s in self.names],
-            "logged_in": (str)(self.logged_in)
+            "logged_in": self.logged_in#(str)(self.logged_in)
+        }
+    def sub_serialize(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "logged_in": self.logged_in#(str)(self.logged_in)
+
         }
 
     def login(self):

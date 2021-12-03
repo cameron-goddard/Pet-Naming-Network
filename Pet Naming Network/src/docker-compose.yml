@@ -1,0 +1,6 @@
+version: "3"
+services:
+  PNNBackend:
+    image: "noahbraun20/tryone:latest"
+    ports:
+      - 5000:5000
