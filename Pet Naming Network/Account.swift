@@ -31,6 +31,7 @@ class Account{
     }
     
 }
+
 class User:Codable{
     var id:Int
     var username:String

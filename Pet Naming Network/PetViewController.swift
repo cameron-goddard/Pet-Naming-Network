@@ -10,11 +10,19 @@ import SnapKit
 
 class PetViewController: UIViewController {
 
+    
+
     private var petImageView:UIImageView = UIImageView()
     private var petNameLabel:UILabel = UILabel()
     private var userNameLabel:UILabel = UILabel()
     private var closeButton = UIButton(type: .close)
-  
+    private var tableLabel:UILabel = UILabel()
+    private var namesTableView:UITableView = UITableView();
+    private var reuseIdentifier = "namesCellReuse"
+    
+    let cellHeight:CGFloat = 80;
+    
+    var names:[String] = [];
     private var pet:Pet
     init(pet:Pet){
         self.pet = pet;
@@ -31,6 +39,22 @@ class PetViewController: UIViewController {
         title = "Pet"
         view.backgroundColor = .white;
         
+        for x in 0...pet.nameSuggestions.count-1{
+            names.append(pet.nameSuggestions[x])
+        }
+        namesTableView.backgroundColor = .clear
+        namesTableView.translatesAutoresizingMaskIntoConstraints = false
+        namesTableView.dataSource = self
+        namesTableView.delegate = self
+        namesTableView.register(NamesTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        namesTableView.isScrollEnabled=true;
+        namesTableView.showsVerticalScrollIndicator = true;
+        view.addSubview(namesTableView)
+        namesTableView.reloadData()
+        
+        
+        
+        
         closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(closeButton)
@@ -42,10 +66,18 @@ class PetViewController: UIViewController {
         view.addSubview(petImageView)
         
         petNameLabel.text = pet.petName
-        petNameLabel.textAlignment = .center
+        petNameLabel.textAlignment = .left
         petNameLabel.font = UIFont.boldSystemFont(ofSize: 24)
         petNameLabel.textColor = .orange
         petNameLabel.translatesAutoresizingMaskIntoConstraints = false;
+ 
+        view.addSubview(petNameLabel)
+        
+        tableLabel.text = "Other Name Suggestions"
+        tableLabel.textAlignment = .center
+        tableLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        tableLabel.textColor = .black
+        tableLabel.translatesAutoresizingMaskIntoConstraints = false;
  
         view.addSubview(petNameLabel)
         
@@ -94,6 +126,55 @@ class PetViewController: UIViewController {
             userNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: padding),
             userNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -padding),
         ])
+        NSLayoutConstraint.activate([
+            tableLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor,constant: 20),
+            tableLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        NSLayoutConstraint.activate([
+            namesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            namesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            namesTableView.topAnchor.constraint(equalTo: tableLabel.bottomAnchor,constant: 10),
+            namesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
 }
+extension PetViewController: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return names.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? NamesTableViewCell {
+            let name = names[indexPath.row]
+            cell.configure(name: name)
+            cell.selectionStyle = .none
+            
+            return cell
+        } else {
+            return UITableViewCell()
+        }
+    }
+
+}
+
+extension PetViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return  cellHeight;
+    }
+
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let song = names[indexPath.row]
+//
+//        if let cell = tableView.cellForRow(at: indexPath) as? NamesTableViewCell {
+//            print("Cell Test In: \(cell)")
+//            let vc = SongViewController(delegate: self, song: song, cell:cell, index: indexPath.row)
+//            self.navigationController?.pushViewController(vc, animated: true)
+//        }
+//
+//    }
+}
+

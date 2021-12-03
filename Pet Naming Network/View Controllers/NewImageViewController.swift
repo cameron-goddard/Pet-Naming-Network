@@ -169,6 +169,11 @@ extension NewImageViewController: ImagePickerDelegate {
         let img:UIImage = image ?? UIImage()
         self.newImageView.image = cropToBounds(image: img, width: img.size.width, height: img.size.height);
         self.toggleUploadButton()
+        let imageData:Data? = image?.pngData()
+        print("Start")
+        print(imageData?.base64EncodedString())
+        print("End")
+        
     }
 }
 extension UIView {
