@@ -28,8 +28,9 @@ class PetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         title = "Pet"
-        view.backgroundColor = .white;
+        view.backgroundColor = .systemBackground
         
         closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
         closeButton.translatesAutoresizingMaskIntoConstraints = false

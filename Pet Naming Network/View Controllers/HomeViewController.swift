@@ -50,6 +50,7 @@ class HomeViewController: UIViewController{
       //  self.delegate = self
         view.backgroundColor = .systemBackground
         
+        
       
         petCollectionView = {
             let layout = UICollectionViewFlowLayout();
