@@ -40,7 +40,7 @@ class HomeViewController: UIViewController{
     private let headerReuseIdentifier = "headerReuseIdentifer"
     private let cellPadding: CGFloat = 10
     private let sectionPadding: CGFloat = 5
- 
+    let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +69,14 @@ class HomeViewController: UIViewController{
         petCollectionView.backgroundColor = .systemBackground
         
         view.addSubview(petCollectionView);
+        
+        if #available(iOS 10.0, *) {
+            petCollectionView.refreshControl = refreshControl
+        } else {
+            petCollectionView.addSubview(refreshControl)
+        }
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        
         //instantiateButtons();
         setupConstraints()
     }
@@ -90,7 +98,14 @@ class HomeViewController: UIViewController{
         ])
         
     }
+    @objc func refreshData() {
 
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            //self.petsShown = self.petsShown
+            self.petCollectionView.reloadData()
+            self.refreshControl.endRefreshing()
+        }
+    }
     
     
 

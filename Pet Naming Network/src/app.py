@@ -109,6 +109,7 @@ def vote(pet_id):
 
     body = json.loads(request.data)
     name_id = body.get("name_id")
+    
     if not name_id:
         return failure_response("Name not given.", 500)
 
@@ -163,12 +164,12 @@ def create_account():
     body = json.loads(request.data)
     username = body.get("username")
 
-    if not username:
+    if username is None:
         return failure_response("Please provide a username.")
 
     already_exists = Users.query.filter_by(username=username).all()
-    if already_exists:
-        return failure_response(already_exists, 400)
+    if len(already_exists) != 0:
+        return failure_response("this already exists", 400)
 
     new_user = Users(username=username)
 
@@ -190,7 +191,7 @@ def login():
         return failure_response("Please provide your username.")
 
     login_user = Users.query.filter_by(username=username).first()
-    if not login_user:
+    if login_user is None:
         return failure_response("User not found. Please create an account.", 400)
 
     current_user = Users.query.filter_by(logged_in=True).first()

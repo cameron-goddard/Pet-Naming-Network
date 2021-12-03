@@ -15,8 +15,10 @@ class NameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .secondarySystemBackground
+        
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "alphabet_1")
+        imageView.backgroundColor = .blue
         view.addSubview(imageView)
         
         nameTextField.textColor = .label
