@@ -223,7 +223,9 @@ def get_nameable_pet():
 
 @app.route("/home/voting/", methods=["GET"])
 def getvotable():
-    current_user = Users.query.filter_by(logged_in=True)
+    current_user = Users.query.filter_by(logged_in=True).first()
+    if current_user == None:
+        return failure_response("Please create an account to vote on pets!")
     pet = Pet.query.filter_by(
         state=State.VOTING and Pet.user != current_user.getID())
 
