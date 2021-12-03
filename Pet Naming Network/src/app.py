@@ -67,7 +67,7 @@ def upload_pet():
 def upload_name(pet_id):
     pet = Pet.query.filter_by(id=pet_id).first()
 
-    if(len(pet.serialize().get("state")) != State.NAMING):
+    if(pet.serialize().get("state") != "State.NAMING"):
         return failure_response("Should not be named right now!")
 
     body = json.loads(request.data)
@@ -99,8 +99,12 @@ def upload_name(pet_id):
 # get most popular name based on pet_id
 @app.route("/home/<int:pet_id>/popular/", methods=["GET"])
 def most_popular_name(pet_id):
-    names = Names(pet=pet_id).all()
-    top_name = names.query(func.max(Names.votes)).first()
+    names = Names.query.filter_by(pet=pet_id)
+    # top_name = names.query(func.max(Names.votes)).first()
+    top_name = names[0]
+    for n in names:
+        if n.votes > top_name.votes:
+            top_name = n
     return success_response(top_name.serialize())
 
 
@@ -132,13 +136,15 @@ def vote(pet_id):
 
     if(pet.get_votes() >= VOTE_CAP):
 
-        pet_names = Names.query.filter_by(pet=pet_id).order_by(Names.votes).first()
+        pet_names = Names.query.filter_by(
+            pet=pet_id).order_by(Names.votes).first()
         max = pet_names.get_votes()
 
-        same_votes = Names.query.filter(Names.pet == pet_id and Names.votes == max).all()
+        same_votes = Names.query.filter(
+            Names.pet == pet_id and Names.votes == max).all()
 
         #top_name = pet_names.query(func.max(Names.votes))
-        #same_votes = pet_names.query.filter_by(
+        # same_votes = pet_names.query.filter_by(
         #    votes=top_name.sub_serialize().get("votes"))
 
         if(len(same_votes) == 1):
@@ -171,7 +177,7 @@ def get_user_from_pet(pet_id):
     if user == None:
         return failure_response("User not found")
 
-    return success_response( user.sub_serialize() )
+    return success_response(user.sub_serialize())
 
 # create an account
 
@@ -227,7 +233,7 @@ def login():
 
 @app.route("/home/naming/", methods=["GET"])
 def get_nameable_pet():
-    current_user = Users.query.filter(Users.logged_in==True).all()
+    current_user = Users.query.filter(Users.logged_in == True).all()
     if current_user == None:
         return failure_response("Please create an account to name pets!")
 
@@ -237,7 +243,7 @@ def get_nameable_pet():
     if pets is None:
         return failure_response("There are no pets to name at this time.")
 
-    return success_response( [p.serialize() for p in pets] )
+    return success_response([p.serialize() for p in pets])
 
 # Get the next votable pet
 # Its names will be part of the success response
@@ -250,9 +256,9 @@ def getvotable():
         return failure_response("Please create an account to vote on pets!")
 
     pet = Pet.query.filter(
-        Pet.state==State.VOTING and Pet.user != current_user.getID()).all()
+        Pet.state == State.VOTING and Pet.user != current_user.getID()).all()
 
-    if len(pet)==0:
+    if len(pet) == 0:
         return failure_response("There are no pets to vote on at this time.")
 
     return success_response([p.serialize() for p in pet])
@@ -286,7 +292,7 @@ def getmynames():
 
     names = Names.query.filter_by(user=current_user.getID()).all()
 
-    if len(names)==0:
+    if len(names) == 0:
         return failure_response("You haven't named any pets yet!")
 
     return success_response(
@@ -300,9 +306,9 @@ def getmynames():
 def getfeaturedpets():
 
     pet = Pet.query.filter(
-        Pet.state==State.FEATURED ).all()
+        Pet.state == State.FEATURED).all()
 
-    if len(pet)==0:
+    if len(pet) == 0:
         return failure_response("There are no featured pets at this time.")
 
     return success_response([p.serialize() for p in pet])
