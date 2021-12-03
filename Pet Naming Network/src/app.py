@@ -37,7 +37,7 @@ NAME_CAP = 3
 @app.route("/home/uploading/", methods=["POST"])
 def upload_pet():
     body = json.loads(request.data)
-    user = Users.query.filter_by(logged_in=True)
+    user = Users.query.filter_by(logged_in=True).first()
     time = datetime.today()
 
     image_data = body.get("image_data")  # This should be a base64 url
@@ -47,13 +47,17 @@ def upload_pet():
     db.session.add(asset)
     db.session.commit()
     # THIS should be an id for a picture
-    pic_id = asset.getID
-
-    if (user == None):
-        user = 1
-    new_pet = Pet(pic_id=pic_id, user=user, time=time)
+    pic_id = asset.getID()
+    user_id = 1
+    if (user != None):
+        user_id = user.getID()
+    print("1")
+    new_pet = Pet(pic_id=pic_id, user=user_id, time=time)
+    print("2")
     db.session.add(new_pet)
+    print("3")
     db.session.commit()
+    print("4")
     return success_response(new_pet.serialize(), 201)
 
 
