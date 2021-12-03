@@ -20,10 +20,7 @@ class VoteViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //view.backgroundColor = .secondarySystemBackground
         view.backgroundColor = .secondarySystemBackground
-        
         
         namesTableView.tableHeaderView = UIView()
         namesTableView.alwaysBounceVertical = false
@@ -57,7 +54,6 @@ class VoteViewController: UIViewController {
         
         UIView.transition(with: imageView, duration: 1.0, options: .transitionFlipFromLeft, animations: {
             self.imageView.image = UIImage(systemName: "bolt.ring.closed")
-        
         }, completion: nil)
         UIView.transition(with: namesTableView, duration: 1.0, options: .transitionCrossDissolve, animations: {
             self.votableNames = [Pet(petName: "Doggo", user: "test", petImageURL: "doggo", petState: .FEATURED),Pet(petName: "???", user: "test", petImageURL: "nice", petState: .FEATURED),Pet(petName: "Gamer", user: "test", petImageURL: "gamer", petState: .FEATURED),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .FEATURED)]
@@ -107,22 +103,19 @@ extension VoteViewController: UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView,
-                   leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let hideAction = UIContextualAction(style: .destructive,
-                                        title: "Hide") { [weak self] (hideAction, view, completionHandler) in
-                                        self?.deleteAtIndex(index: indexPath.row)
-                                            completionHandler(true)
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let hideAction = UIContextualAction(style: .destructive, title: "Hide") { [weak self] (hideAction, view, completionHandler) in
+            self?.deleteAtIndex(index: indexPath.row)
+            completionHandler(true)
         }
         hideAction.backgroundColor = .systemRed
         return UISwipeActionsConfiguration(actions: [hideAction])
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let voteAction = UIContextualAction(style: .normal,
-                                        title: "Vote") { [weak self] (voteAction, view, completionHandler) in
-                                        self?.deleteAtIndex(index: indexPath.row)
-                                            completionHandler(true)
+        let voteAction = UIContextualAction(style: .normal, title: "Vote") { [weak self] (voteAction, view, completionHandler) in
+            self?.deleteAtIndex(index: indexPath.row)
+            completionHandler(true)
         }
         voteAction.backgroundColor = .systemBlue
         return UISwipeActionsConfiguration(actions: [voteAction])
@@ -130,12 +123,10 @@ extension VoteViewController: UITableViewDataSource {
     
     @objc func hideName(_ sender: UIButton) {
         votableNames.remove(at: sender.tag)
-        namesTableView.deleteRows(at: [IndexPath(row: sender.tag, section: 0)], with: .fade)
+        namesTableView.deleteRows(at: [IndexPath(row: sender.tag, section: 0)], with: .left)
         namesTableView.reloadData()
-        //setUpConstraints()
     }
 }
-
 
 extension VoteViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

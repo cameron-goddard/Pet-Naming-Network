@@ -27,6 +27,7 @@ class ActionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .systemBackground
         self.tabBarController?.title = "Pet Naming Network"
         

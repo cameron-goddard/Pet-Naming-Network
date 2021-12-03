@@ -25,7 +25,6 @@ class PetCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.layer.cornerRadius = 8
@@ -33,7 +32,6 @@ class PetCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .systemGray6
 
         petImageView.contentMode = .scaleAspectFit
-        
         
         petNameLabel.textAlignment = .center
         petNameLabel.font = UIFont.boldSystemFont(ofSize: 16)
@@ -55,7 +53,7 @@ class PetCollectionViewCell: UICollectionViewCell {
     func configure(for pet:Pet){
         petNameLabel.text = pet.petName;
         petImageView.image = cropToBounds(image: pet.petImage, width: pet.petImage.size.width, height: pet.petImage.size.height);
-        userNameLabel.text = "By:\(pet.user)"
+        userNameLabel.text = "By: \(pet.user)"
         let gradient = CAGradientLayer()
 
         gradient.frame = contentView.bounds

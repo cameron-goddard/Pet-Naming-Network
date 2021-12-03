@@ -115,6 +115,7 @@
 				26F452AB2759D62F00067ADB /* NamesTableViewCell.swift */,
 				264105CF27493FC3004C6DA4 /* PetCollectionViewCell.swift */,
 				26654B27274AA5CB006C014D /* PetViewController.swift */,
+				26F452AB2759D62F00067ADB /* NamesTableViewCell.swift */,
 				26654B29274B0172006C014D /* ImagePicker.swift */,
 				26F452A32757418700067ADB /* TabBarController.swift */,
 			);

@@ -21,9 +21,6 @@ class HomeViewController: UIViewController{
         return images;
     };
     
-  
-    
- 
     private var petsShown:[Pet] = []
   
     init(petsShown:[Pet]){
@@ -110,9 +107,6 @@ class HomeViewController: UIViewController{
             self.refreshControl.endRefreshing()
         }
     }
-    
-    
-
 }
 extension HomeViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {

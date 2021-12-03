@@ -9,7 +9,6 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
-
     private var userName:String = "Bob123"
     private var account:Account = Account(userName: "", userPosts: [])
     private var petsShown:[Pet] = []
@@ -58,8 +57,6 @@ class LoginViewController: UIViewController {
         myActivityIndicator.isHidden = true
         view.addSubview(appTitleLabel)
       
-       
-        
         view.addSubview(userNameTextField)
         view.addSubview(loginButton)
         view.addSubview(myActivityIndicator)
@@ -74,7 +71,7 @@ class LoginViewController: UIViewController {
 //        view.addSubview(spinner)
 //
                 
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         loginButton.center = view.center
         loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
         print("Please Work");

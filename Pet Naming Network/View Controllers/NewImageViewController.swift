@@ -33,7 +33,6 @@ class NewImageViewController: UIViewController {
         title = "New"
         view.backgroundColor = .systemBackground
         
-       
         addImageButton.translatesAutoresizingMaskIntoConstraints = false
         addImageButton.setTitle("+", for: .normal)
         addImageButton.setTitleColor(.black, for: .normal)
@@ -45,8 +44,6 @@ class NewImageViewController: UIViewController {
         addImageButton.titleLabel?.font = .boldSystemFont(ofSize: 50)
         addImageButton.titleLabel?.textColor = .white;
         addImageButton.addTarget(self, action: #selector(addImage), for: .touchUpInside)
-        
-        
         
         newImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width-padding*2, height: view.frame.size.width-padding*2))
         newImageView.addDashedBorder()
@@ -69,7 +66,11 @@ class NewImageViewController: UIViewController {
         setupConstraints()
     }
     
-    func  setupConstraints(){
+    override func viewDidAppear(_ animated: Bool) {
+        self.tabBarController?.title = "Upload New Image"
+    }
+    
+    func setupConstraints(){
         NSLayoutConstraint.activate([
             newImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: padding*2),
             newImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
