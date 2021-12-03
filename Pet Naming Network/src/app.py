@@ -73,7 +73,7 @@ def upload_name(pet_id):
     if not name:
         return failure_response("No name recieved.", 400)
 
-    current_user = Users.query.filter_by(logged_in=True)
+    current_user = Users.query.filter_by(logged_in=True).first()
 
     if not current_user:
         return failure_response("Please log in to upload a name.", 400)
@@ -109,7 +109,7 @@ def vote(pet_id):
 
     body = json.loads(request.data)
     name_id = body.get("name_id")
-    
+
     if not name_id:
         return failure_response("Name not given.", 500)
 
@@ -209,7 +209,7 @@ def login():
 
 @app.route("/home/naming/")
 def get_nameable_pet():
-    current_user = Users.query.filter_by(logged_in=True)
+    current_user = Users.query.filter_by(logged_in=True).first()
     pets = Pet.query.filter_by(
         Pet.state == State.NAMING and Pet.user != current_user.getID())
 
@@ -240,7 +240,7 @@ def getvotable():
 
 @app.route("/home/account/pets/", methods=["GET"])
 def getmypets():
-    current_user = Users.query.filter_by(logged_in=True)
+    current_user = Users.query.filter_by(logged_in=True).first()
     if not current_user:
         return failure_response("Please log in.", 400)
 
@@ -258,7 +258,7 @@ def getmypets():
 
 @app.route("/home/account/names/", methods=["GET"])
 def getmynames():
-    current_user = Users.query.filter_by(logged_in=True)
+    current_user = Users.query.filter_by(logged_in=True).first()
     if not current_user:
         return failure_response("Please log in.", 400)
 
