@@ -44,39 +44,28 @@ class Pet{
    
 }
 
+
 class PetPost:Codable{
-    
-    internal init(title: String, pic: String,state:State, user: String, names: [String], id: Int) {
-        self.title = title
-        self.pic = pic
-        self.state = state
-        self.user = user
-        self.names = names
-        self.id = id
-    }
-    let title: String
-    let pic:String
+    let id:Int;
     let state:State;
-    let user:String
-    let names:[String];
-    let id: Int
-
+    let pic:String;
+    let user:SmallUser;
+    let names:[PetName]
+    let date_created:String
+}
+class Name:Codable{
+    
+    let id:Int
+    let name:String
+    let pet:Int
+    let votes:Int
 }
 
-
-
-class PetsFeatured:Codable{
-    let pets_featured:[PetPost];
-}
-
-class PetNameResponse:Codable{
-    let names:[PetName];
-}
 
 class PetName:Codable{
     let id:Int;
     let name:String;
-    let votes:String;
+    let votes:Int;
 }
 
 

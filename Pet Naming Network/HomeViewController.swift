@@ -21,9 +21,6 @@ class HomeViewController: UIViewController{
         return images;
     };
     
-  
-    
- 
     private var petsShown:[Pet] = []
   
     init(petsShown:[Pet]){
@@ -57,14 +54,15 @@ class HomeViewController: UIViewController{
             layout.scrollDirection = .vertical;
             layout.minimumLineSpacing = cellPadding
             layout.minimumInteritemSpacing = cellPadding
-            let collectionView:UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout);
+            let collectionView:UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+            collectionView.delaysContentTouches = false
             collectionView.backgroundColor = .clear
             collectionView.translatesAutoresizingMaskIntoConstraints = false
             collectionView.register(PetCollectionViewCell.self, forCellWithReuseIdentifier: petCellReuseIdentifier)
             collectionView.dataSource = self
             collectionView.delegate = self
             collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
-            return collectionView;
+            return collectionView
         }()
         petCollectionView.backgroundColor = .systemBackground
         
@@ -93,8 +91,11 @@ class HomeViewController: UIViewController{
         NSLayoutConstraint.activate([
             petCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             petCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            petCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: collectionViewPadding),
-            petCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
+//            petCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: collectionViewPadding),
+//            petCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
+            petCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            petCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        
         ])
         
     }
@@ -106,9 +107,6 @@ class HomeViewController: UIViewController{
             self.refreshControl.endRefreshing()
         }
     }
-    
-    
-
 }
 extension HomeViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {

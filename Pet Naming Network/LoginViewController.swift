@@ -9,7 +9,6 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
-
     private var userName:String = "Bob123"
     private var account:Account = Account(userName: "", userPosts: [])
     private var petsShown:[Pet] = []
@@ -27,7 +26,9 @@ class LoginViewController: UIViewController {
         textField.placeholder = "Username"
         textField.textColor = .black
         textField.font = .systemFont(ofSize: 14)
-        textField.layer.backgroundColor = UIColor.systemGray6.cgColor
+        textField.addTarget(self, action: #selector(resignFirstResponder), for: .editingDidEndOnExit)
+        textField.clearButtonMode = .whileEditing
+        textField.backgroundColor = .secondarySystemFill
         textField.translatesAutoresizingMaskIntoConstraints = false;
         textField.borderStyle = .roundedRect
         textField.layer.cornerRadius = 20;
@@ -41,7 +42,7 @@ class LoginViewController: UIViewController {
         button.setTitle("Log In", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false;
         
-        return button;
+        return button
     }()
     
    // private var spinner = UIActivityIndicatorView()
@@ -50,14 +51,12 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-              myActivityIndicator.center = view.center
-              myActivityIndicator.hidesWhenStopped = false
-            myActivityIndicator.startAnimating()
-        myActivityIndicator.isHidden = true;
+        myActivityIndicator.center = view.center
+        myActivityIndicator.hidesWhenStopped = false
+        myActivityIndicator.startAnimating()
+        myActivityIndicator.isHidden = true
         view.addSubview(appTitleLabel)
       
-       
-        
         view.addSubview(userNameTextField)
         view.addSubview(loginButton)
         view.addSubview(myActivityIndicator)
@@ -72,7 +71,7 @@ class LoginViewController: UIViewController {
 //        view.addSubview(spinner)
 //
                 
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         loginButton.center = view.center
         loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
         print("Please Work");
@@ -83,7 +82,6 @@ class LoginViewController: UIViewController {
         NSLayoutConstraint.activate([
             appTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             appTitleLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor,constant: -50),
-   
         ])
         NSLayoutConstraint.activate([
             userNameTextField.topAnchor.constraint(equalTo: appTitleLabel.bottomAnchor,constant: 20),

@@ -27,9 +27,14 @@ class Account{
         let g:CGFloat = CGFloat.random(in: 0.7...1)
         let b:CGFloat = CGFloat.random(in: 0.7...1)
         bgColor = UIColor(displayP3Red: r, green: g, blue: b, alpha: CGFloat(1))
-       // bgColor = UIColor(displayP3Red: 0.2 , green: 0, blue: 0, alpha: CGFloat(1))
     }
     
+}
+
+class SmallUser:Codable{
+    var id:Int
+    var username:String
+    var logged_in:Bool
 }
 
 class User:Codable{
@@ -37,6 +42,5 @@ class User:Codable{
     var username:String
     var pets:[PetPost]
     var names:[String]
-
-
+    var logged_in:Bool
 }

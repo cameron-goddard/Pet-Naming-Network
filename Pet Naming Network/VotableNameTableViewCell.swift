@@ -28,23 +28,12 @@ class VotableNameTableViewCell: UITableViewCell {
         dislikeButton.configuration = .tinted()
         dislikeButton.configuration?.baseBackgroundColor = .systemRed
         dislikeButton.configuration?.baseForegroundColor = .systemRed
-        //dislikeButton.addTarget(self, action: #selector(whiteOut), for: .touchUpInside)
         dislikeButton.configuration?.image = UIImage(systemName: "hand.thumbsdown")
         dislikeButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(dislikeButton)
         
-        
-        
         setUpConstraints()
     }
-    
-    @objc func whiteOut() {
-        //print("here")
-        //self.tablev
-        //self.isOpaque = true
-        //contentView.willRemoveSubview(<#T##subview: UIView##UIView#>)
-    }
-    
     
     func configure(name: String) {
         nameLabel.text = name
@@ -63,13 +52,6 @@ class VotableNameTableViewCell: UITableViewCell {
             dislikeButton.trailingAnchor.constraint(equalTo: voteButton.leadingAnchor, constant: -10),
             dislikeButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
-    }
-    
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
     required init?(coder: NSCoder) {
