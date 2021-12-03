@@ -11,19 +11,35 @@ class AccountViewController: UIViewController {
 
     var imagePicker: ImagePicker!
     
+    // ============== Tables and Collection View ==============
     private var petsPostedCollectionView:UICollectionView!;
+    private var namesTableView:UITableView = UITableView();
     
+    /*
+        ===================== UI Elements =====================
+     */
     private var profilePic:UIButton = UIButton()
     private var userName:UITextView = UITextView()
     private var background:UIView = UIView()
-    
     private var closeButton = UIButton(type: .close)
-  
+    private var actionControl = UISegmentedControl(items: ["Pets Uploaded", "Names Suggested"])
+   
+    
+    /*
+        ===================== Parameters =====================
+     */
+    private var reuseIdentifier = "namesCellReuse"
     private var petPostCellReuseIdentifier = "petPostCellReuseIdentifier"
     private let headerReuseIdentifier = "headerReuseIdentifer2"
     private let cellPadding: CGFloat = 10
     private let sectionPadding: CGFloat = 5
+    private let collectionViewPadding: CGFloat = 12
+    
+    var names:[String] = ["dummy1","dummy2","dummy3","dummy4","dummy5"]
+    var votes:[Int] = [1,2,3,4,5];
+    let cellHeight:CGFloat = 50;
     var width:CGFloat = 150.0;
+    
     private var account:Account;
     init(){
         self.account = Account(userName: "Bob123", userPosts: [])
@@ -49,7 +65,12 @@ class AccountViewController: UIViewController {
         title = account.userName
         view.backgroundColor = .systemGray6
         
+        // Action Control
+        actionControl.selectedSegmentIndex = 0
+        actionControl.addTarget(self, action: #selector(changeViews), for: .valueChanged)
+        actionControl.translatesAutoresizingMaskIntoConstraints = false
         
+        view.addSubview(actionControl)
         
         userName.text = account.userName
         userName.textColor = .black
@@ -73,7 +94,7 @@ class AccountViewController: UIViewController {
         profilePic.titleLabel?.textColor = .white;
         profilePic.addTarget(self, action: #selector(editProfilePicture), for: .touchUpInside)
         
-        background = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height/2))
+        background = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height/3))
         background.backgroundColor = account.bgColor
         
         background.dropShadow()
@@ -104,7 +125,33 @@ class AccountViewController: UIViewController {
         
         view.addSubview(petsPostedCollectionView);
         
+        namesTableView.backgroundColor = .clear
+        namesTableView.translatesAutoresizingMaskIntoConstraints = false
+        namesTableView.dataSource = self
+        namesTableView.delegate = self
+        namesTableView.register(NamesTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        namesTableView.isScrollEnabled=true;
+        namesTableView.showsVerticalScrollIndicator = true;
+        view.addSubview(namesTableView)
+        namesTableView.reloadData()
+        namesTableView.isHidden = true;
+        
         setUpViews()
+       
+        NSLayoutConstraint.activate([
+            petsPostedCollectionView.topAnchor.constraint(equalTo: actionControl.bottomAnchor,constant:5),
+            petsPostedCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            petsPostedCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: collectionViewPadding),
+            petsPostedCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
+        ])
+        NSLayoutConstraint.activate([
+            namesTableView.topAnchor.constraint(equalTo: actionControl.bottomAnchor,constant:5),
+            namesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            namesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: collectionViewPadding),
+            namesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
+        ])
+
+        
     }
     @objc func editProfilePicture(_ sender: UIButton){
         self.imagePicker.present(from: sender)
@@ -113,13 +160,22 @@ class AccountViewController: UIViewController {
     @objc func closeView() {
         dismiss(animated: true, completion: nil)
     }
-    
+    @objc func changeViews() {
+        if actionControl.selectedSegmentIndex == 0 {
+            namesTableView.isHidden = true;
+            petsPostedCollectionView.isHidden = false;
+        }
+        else if actionControl.selectedSegmentIndex == 1 {
+            namesTableView.isHidden = false;
+            petsPostedCollectionView.isHidden = true;
+        }
+    }
     func setUpViews() {
         NSLayoutConstraint.activate([
             background.topAnchor.constraint(equalTo: view.topAnchor),
             background.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             background.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            background.heightAnchor.constraint(equalToConstant: view.frame.size.height/2),
+            background.heightAnchor.constraint(equalToConstant: view.frame.size.height/5),
         ])
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 15),
@@ -140,13 +196,12 @@ class AccountViewController: UIViewController {
             userName.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -30),
             userName.heightAnchor.constraint(equalToConstant:40)
         ])
-        let collectionViewPadding: CGFloat = 12
         NSLayoutConstraint.activate([
-            petsPostedCollectionView.topAnchor.constraint(equalTo: userName.topAnchor,constant:30),
-            petsPostedCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            petsPostedCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: collectionViewPadding),
-            petsPostedCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
+            actionControl.topAnchor.constraint(equalTo: userName.bottomAnchor,constant:5),
+            actionControl.widthAnchor.constraint(equalToConstant: self.view.frame.width-20)
+            
         ])
+        
     }
     
     
@@ -175,7 +230,6 @@ extension AccountViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as! HeaderView
-       
             header.configure(for: "Pets Posted")
             return header
         
@@ -227,3 +281,41 @@ extension AccountViewController: ImagePickerDelegate {
         self.profilePic.setImage(image, for: UIControl.State.normal)
     }
 }
+extension AccountViewController: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return names.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? NamesTableViewCell {
+            let name = names[indexPath.row]
+            let vote = votes[indexPath.row]
+            cell.configure(name: name,votes: vote)
+            cell.selectionStyle = .none
+            
+            return cell
+        } else {
+            return UITableViewCell()
+        }
+    }
+
+}
+
+extension AccountViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return  cellHeight;
+    }
+
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let song = names[indexPath.row]
+//
+//        if let cell = tableView.cellForRow(at: indexPath) as? NamesTableViewCell {
+//            print("Cell Test In: \(cell)")
+//            let vc = SongViewController(delegate: self, song: song, cell:cell, index: indexPath.row)
+//            self.navigationController?.pushViewController(vc, animated: true)
+//        }
+//
+//    }
+}
+

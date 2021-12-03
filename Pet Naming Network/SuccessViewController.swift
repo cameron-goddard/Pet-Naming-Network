@@ -24,13 +24,13 @@ class SuccessViewController: UIViewController {
         
         successLabel1.text = "Your Pet Has"
         successLabel1.textAlignment = .center
-        successLabel1.font = UIFont.boldSystemFont(ofSize: 24)
+        successLabel1.font = UIFont.boldSystemFont(ofSize: 32)
         successLabel1.textColor = .orange
         successLabel1.translatesAutoresizingMaskIntoConstraints = false;
         view.addSubview(successLabel1)
         successLabel2.text = "Been Successfully Uploaded!"
         successLabel2.textAlignment = .center
-        successLabel2.font = UIFont.boldSystemFont(ofSize: 24)
+        successLabel2.font = UIFont.boldSystemFont(ofSize: 32)
         successLabel2.textColor = .orange
         successLabel2.translatesAutoresizingMaskIntoConstraints = false;
         view.addSubview(successLabel2)

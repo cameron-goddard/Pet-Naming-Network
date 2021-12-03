@@ -93,8 +93,11 @@ class HomeViewController: UIViewController{
         NSLayoutConstraint.activate([
             petCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             petCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            petCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: collectionViewPadding),
-            petCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
+//            petCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: collectionViewPadding),
+//            petCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
+            petCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            petCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        
         ])
         
     }
