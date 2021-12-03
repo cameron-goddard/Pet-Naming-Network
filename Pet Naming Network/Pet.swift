@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+
 class Pet{
     
     var petName:String;
@@ -25,6 +26,13 @@ class Pet{
         self.petState = petState;
     }
     
+    init(petName:String, user:String,petImage:UIImage,petState:State){
+        self.petName = petName;
+        self.user = user;
+        self.petImage = petImage
+        self.petState = petState;
+    }
+    
     public func addPetName(name:String){
         nameSuggestions.append(name);
     }
@@ -34,33 +42,45 @@ class Pet{
     }
    
 }
-class PetPost:Codable{
-    let id:String;
-    let state:String;
-    let picture:String;
-    let user:String;
-    let names:[String];
-    let date_created:String;
 
-    init(id: String, state: String, picture: String, user: String, names: [String], date_created: String) {
-        self.id = id
-        self.state = state;
-        self.picture = picture
+class PetPost:Codable{
+    
+    internal init(title: String, pic: String,state:State, user: String, names: [String], id: Int) {
+        self.title = title
+        self.pic = pic
+        self.state = state
         self.user = user
         self.names = names
-        self.date_created = date_created
+        self.id = id
     }
+    let title: String
+    let pic:String
+    let state:State;
+    let user:String
+    let names:[String];
+    let id: Int
+
 }
+
+
+
+class PetsFeatured:Codable{
+    let pets_featured:[PetPost];
+}
+
+class PetNameResponse:Codable{
+    let names:[PetName];
+}
+
 class PetName:Codable{
     let id:Int;
     let name:String;
-    let pet:String;
     let votes:String;
 }
 
 
-enum State {
-    case Naming
-    case Voting
-    case Featured
+enum State:Codable{
+    case NAMING
+    case VOTING
+    case FEATURED
 }
