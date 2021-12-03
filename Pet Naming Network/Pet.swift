@@ -24,6 +24,7 @@ class Pet{
         self.user = user;
         self.petImage = UIImage(named: petImageURL) ?? UIImage()
         self.petState = petState;
+        nameSuggestions = ["dummy1","dummy2","dummy3","dummy4","dummy5"]
     }
     
     init(petName:String, user:String,petImage:UIImage,petState:State){
