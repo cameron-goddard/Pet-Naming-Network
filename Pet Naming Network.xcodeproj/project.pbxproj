@@ -27,6 +27,7 @@
 		3B2B610D273D9639000F99DC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B2B610B273D9639000F99DC /* LaunchScreen.storyboard */; };
 		3B489E982759526000FFB473 /* VoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B489E972759526000FFB473 /* VoteViewController.swift */; };
 		3B489E9A2759527300FFB473 /* NameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B489E992759527300FFB473 /* NameViewController.swift */; };
+		3B489E9F27597CA300FFB473 /* VotableNameTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B489E9E27597CA300FFB473 /* VotableNameTableViewCell.swift */; };
 		3B79241A273EF05F00B5FC5C /* NewImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B792419273EF05F00B5FC5C /* NewImageViewController.swift */; };
 		D25FBEF9B5702929ABA017E2 /* Pods_Pet_Naming_Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFCAFD3C6DEE5CF7917898F6 /* Pods_Pet_Naming_Network.framework */; };
 /* End PBXBuildFile section */
@@ -55,6 +56,7 @@
 		3B2B610E273D9639000F99DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B489E972759526000FFB473 /* VoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteViewController.swift; sourceTree = "<group>"; };
 		3B489E992759527300FFB473 /* NameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameViewController.swift; sourceTree = "<group>"; };
+		3B489E9E27597CA300FFB473 /* VotableNameTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VotableNameTableViewCell.swift; path = "Pet Naming Network/VotableNameTableViewCell.swift"; sourceTree = SOURCE_ROOT; };
 		3B792419273EF05F00B5FC5C /* NewImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewImageViewController.swift; sourceTree = "<group>"; };
 		F9E3C02795D06736FC224164 /* Pods-Pet Naming Network.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pet Naming Network.release.xcconfig"; path = "Target Support Files/Pods-Pet Naming Network/Pods-Pet Naming Network.release.xcconfig"; sourceTree = "<group>"; };
 		FFCAFD3C6DEE5CF7917898F6 /* Pods_Pet_Naming_Network.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pet_Naming_Network.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				3B489E972759526000FFB473 /* VoteViewController.swift */,
+				3B489E9E27597CA300FFB473 /* VotableNameTableViewCell.swift */,
 				3B489E992759527300FFB473 /* NameViewController.swift */,
 			);
 			path = Actions;
@@ -278,6 +281,7 @@
 				264105C827470DBD004C6DA4 /* AccountViewController.swift in Sources */,
 				3B489E9A2759527300FFB473 /* NameViewController.swift in Sources */,
 				3B2B6101273D9637000F99DC /* AppDelegate.swift in Sources */,
+				3B489E9F27597CA300FFB473 /* VotableNameTableViewCell.swift in Sources */,
 				264105CE27493F96004C6DA4 /* HeaderView.swift in Sources */,
 				264105CC27492C5D004C6DA4 /* Account.swift in Sources */,
 				264105CA274715DE004C6DA4 /* Pet.swift in Sources */,
