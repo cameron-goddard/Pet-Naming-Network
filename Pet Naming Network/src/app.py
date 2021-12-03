@@ -110,6 +110,9 @@ def most_popular_name(pet_id):
 def vote(pet_id):
     pet = Pet.query.filter_by(id=pet_id).first()
 
+    if(len(pet.serialize().get("state")) != State.VOTING):
+        return failure_response("Should not be voted on right now!")
+
     body = json.loads(request.data)
     name_id = body.get("name_id")
 
@@ -129,10 +132,14 @@ def vote(pet_id):
 
     if(pet.get_votes() >= VOTE_CAP):
 
-        pet_names = Names.query.filter_by(pet=pet_id).all()
-        top_name = pet_names.query(func.max(Names.votes))
-        same_votes = pet_names.query.filter_by(
-            votes=top_name.sub_serialize().get("votes"))
+        pet_names = Names.query.filter_by(pet=pet_id).order_by(Names.votes).first()
+        max = pet_names.get_votes()
+
+        same_votes = Names.query.filter(Names.pet == pet_id and Names.votes == max).all()
+
+        #top_name = pet_names.query(func.max(Names.votes))
+        #same_votes = pet_names.query.filter_by(
+        #    votes=top_name.sub_serialize().get("votes"))
 
         if(len(same_votes) == 1):
             pet.update_state(state=State.FEATURED)
@@ -291,6 +298,14 @@ def getmynames():
 
 @app.route("/home/", methods=["GET"])
 def getfeaturedpets():
+
+    pet = Pet.query.filter(
+        Pet.state==State.FEATURED ).all()
+
+    if len(pet)==0:
+        return failure_response("There are no featured pets at this time.")
+
+    return success_response([p.serialize() for p in pet])
     return success_response(
         {"Featured Pets":
          [p.serialize()
