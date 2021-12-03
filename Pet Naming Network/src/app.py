@@ -17,6 +17,8 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
     anonuser = Users(username="Anonymous")
+    db.session.add(anonuser)
+    db.session.commit()
     # Not sure if this works at all
 
 
@@ -35,7 +37,7 @@ def hello_world():
 
 
 VOTE_CAP = 10
-NAME_CAP = 3
+NAME_CAP = 5
 
 # upload your own pets
 
@@ -94,6 +96,7 @@ def upload_name(pet_id):
     pet.names.append(name)
 
     if(len(pet.serialize().get("names")) >= NAME_CAP):
+        print("updating state")
         pet.update_state(state=State.VOTING)
 
     db.session.add(name)
@@ -119,17 +122,19 @@ def most_popular_name(pet_id):
 @app.route("/home/voting/<int:pet_id>/", methods=["POST"])
 def vote(pet_id):
     pet = Pet.query.filter_by(id=pet_id).first()
+    print("GGGGGGGG" + (str)(pet.id))
 
-    if(len(pet.serialize().get("state")) != State.VOTING):
+    if(pet.serialize().get("state") != "State.VOTING"):
+        print("BOOOOOOOO" + pet.serialize().get("state"))
         return failure_response("Should not be voted on right now!")
 
     body = json.loads(request.data)
-    name_id = body.get("name_id")
+    name = body.get("name")
 
-    if not name_id:
+    if not name:
         return failure_response("Name not given.", 500)
 
-    name = Names.query.filter_by(id=name_id).first()
+    name = Names.query.filter_by(name=name, pet=pet.id).first()
     if not name:
         return failure_response("Name not found.", 500)
 
@@ -143,17 +148,23 @@ def vote(pet_id):
     if(pet.get_votes() >= VOTE_CAP):
 
         pet_names = Names.query.filter_by(
-            pet=pet_id).order_by(Names.votes).first()
-        max = pet_names.get_votes()
+            pet=pet_id).all()
+        max = pet_names[0]
+        for n in pet_names:
+            if n.votes > max.votes:
+                max = n
 
-        same_votes = Names.query.filter(
-            Names.pet == pet_id and Names.votes == max).all()
+        print("AAAAAAAA" + (str)(max))
+        same_votes = Names.query.filter_by(
+            pet=pet_id, votes=max.votes).all()
+        for n in same_votes:
+            print("BBBBB" + (str)(n.id))
 
         #top_name = pet_names.query(func.max(Names.votes))
         # same_votes = pet_names.query.filter_by(
         #    votes=top_name.sub_serialize().get("votes"))
 
-        if(len(same_votes) == 1):
+        if(len(same_votes) <= 1):
             pet.update_state(state=State.FEATURED)
             db.session.commit()
 
@@ -178,6 +189,7 @@ def get_user_from_pet(pet_id):
 
     pet = Pet.query.filter_by(id=pet_id).first()
     user_id = pet.get_user_id()
+    print(user_id)
     user = Users.query.filter_by(id=user_id).first()
 
     if user == None:
@@ -284,7 +296,7 @@ def getmypets():
         return failure_response("You haven't created any pets yet!")
 
     return success_response(
-        {"Your Pets": [p.sub_serialize() for p in pets]}
+        [p.sub_serialize() for p in pets]
     )
 
 
@@ -302,7 +314,7 @@ def getmynames():
         return failure_response("You haven't named any pets yet!")
 
     return success_response(
-        {"Your Names": [n.sub_serialize() for n in names]}
+        [n.sub_serialize() for n in names]
     )
 
 # Get featured pets
@@ -318,11 +330,11 @@ def getfeaturedpets():
         return failure_response("There are no featured pets at this time.")
 
     return success_response([p.serialize() for p in pet])
-    return success_response(
-        {"Featured Pets":
-         [p.serialize()
-          for p in Pet.query.filter_by(state=State.FEATURED).all()]}
-    )
+    # return success_response(
+    #     {"Featured Pets":
+    #      [p.serialize()
+    #       for p in Pet.query.filter_by(state=State.FEATURED).all()]}
+    # )
 
 
 @app.route("/reset/")
@@ -333,5 +345,5 @@ def reset():
 
 
 if __name__ == "__main__":
-    port = os.environ.get("PORT", 5000)
-    app.run(host="0.0.0.0", port=port)
+    port = os.environ.get("PORT", 6000)
+    app.run(host="0.0.0.0", port=port, debug=True)
