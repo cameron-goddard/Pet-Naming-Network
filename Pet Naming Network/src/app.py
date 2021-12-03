@@ -199,6 +199,7 @@ def login():
         current_user.logout()
 
     login_user.login()
+    db.session.commit()
 
     return success_response(login_user.serialize())
 
@@ -207,16 +208,19 @@ def login():
 # Its names will be part of the success response
 
 
-@app.route("/home/naming/")
+@app.route("/home/naming/", methods=["GET"])
 def get_nameable_pet():
-    current_user = Users.query.filter_by(logged_in=True).first()
-    pets = Pet.query.filter_by(
-        Pet.state == State.NAMING and Pet.user != current_user.getID())
+    current_user = Users.query.filter(Users.logged_in==True).all()
+    if current_user == None:
+        return failure_response("Please create an account to name pets!")
+
+    pets = Pet.query.filter(
+        Pet.state == State.NAMING and Pet.user != current_user.getID()).all()
 
     if pets is None:
         return failure_response("There are no pets to name at this time.")
 
-    return success_response(pets.serialize())
+    return success_response( [p.serialize() for p in pets] )
 
 # Get the next votable pet
 # Its names will be part of the success response
@@ -224,29 +228,30 @@ def get_nameable_pet():
 
 @app.route("/home/voting/", methods=["GET"])
 def getvotable():
-    current_user = Users.query.filter_by(logged_in=True).first()
+    current_user = Users.query.filter_by(logged_in=True).all()
     if current_user == None:
         return failure_response("Please create an account to vote on pets!")
-    pet = Pet.query.filter_by(
-        state=State.VOTING and Pet.user != current_user.getID())
 
-    if (pet == None):
+    pet = Pet.query.filter(
+        Pet.state==State.VOTING and Pet.user != current_user.getID()).all()
+
+    if len(pet)==0:
         return failure_response("There are no pets to vote on at this time.")
 
-    return success_response(pet.serialize())
+    return success_response([p.serialize() for p in pet])
 
 # Get the pets you have contributed
 
 
 @app.route("/home/account/pets/", methods=["GET"])
 def getmypets():
-    current_user = Users.query.filter_by(logged_in=True).first()
-    if not current_user:
+    current_user = Users.query.filter(Users.logged_in.is_(True)).first()
+    if current_user is None:
         return failure_response("Please log in.", 400)
 
     pets = Pet.query.filter_by(user=current_user.getID()).all()
 
-    if (pets is None):
+    if len(pets) == 0:
         return failure_response("You haven't created any pets yet!")
 
     return success_response(
@@ -264,7 +269,7 @@ def getmynames():
 
     names = Names.query.filter_by(user=current_user.getID()).all()
 
-    if (names is None):
+    if len(names)==0:
         return failure_response("You haven't named any pets yet!")
 
     return success_response(
