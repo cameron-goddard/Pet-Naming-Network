@@ -137,7 +137,7 @@ class Users(db.Model):
             "username": self.username,
             "pets": [s.sub_serialize for s in self.pets],
             "names": [s.serialize for s in self.names],
-            "logged_in": self.logged_in
+            "logged_in": (str)(self.logged_in)
         }
 
     def login(self):
