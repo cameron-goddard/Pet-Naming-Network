@@ -28,6 +28,7 @@ class ActionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        self.tabBarController?.title = "Pet Naming Network"
         
         actionControl.selectedSegmentIndex = 0
         actionControl.addTarget(self, action: #selector(changeViews), for: .valueChanged)

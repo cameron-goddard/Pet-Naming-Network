@@ -32,7 +32,6 @@ class NewImageViewController: UIViewController {
         super.viewDidLoad()
         title = "New"
         view.backgroundColor = .systemBackground
-       
         
        
         addImageButton.translatesAutoresizingMaskIntoConstraints = false
@@ -59,14 +58,9 @@ class NewImageViewController: UIViewController {
         view.addSubview(newImageView)
         newImageView.addSubview(addImageButton)
     
-        
+        uploadImageButton.configuration = .gray()
         uploadImageButton.translatesAutoresizingMaskIntoConstraints = false
         uploadImageButton.setTitle("Upload", for: .normal)
-        uploadImageButton.setTitleColor(.systemGray, for: .normal)
-        uploadImageButton.backgroundColor = .systemGray6
-        uploadImageButton.layer.borderColor = UIColor.systemGray.cgColor
-        uploadImageButton.layer.borderWidth = 2
-        uploadImageButton.layer.masksToBounds = true;
         uploadImageButton.titleLabel?.font = .boldSystemFont(ofSize: 24)
         uploadImageButton.addTarget(self, action: #selector(uploadImage), for: .touchUpInside)
         
@@ -95,7 +89,7 @@ class NewImageViewController: UIViewController {
             uploadImageButton.topAnchor.constraint(equalTo: newImageView.bottomAnchor,constant: padding*2),
             uploadImageButton.heightAnchor.constraint(equalToConstant: 48),
             uploadImageButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            uploadImageButton.widthAnchor.constraint(equalToConstant: view.frame.size.width/2)
+            uploadImageButton.widthAnchor.constraint(equalToConstant: view.frame.width-40)
         ])
         
     }
@@ -107,13 +101,15 @@ class NewImageViewController: UIViewController {
     }
     func toggleUploadButton(){
         if(newImageView.image == nil){
-            uploadImageButton.setTitleColor(.systemGray, for: .normal)
-            uploadImageButton.backgroundColor = .systemGray6
-            uploadImageButton.layer.borderColor = UIColor.systemGray.cgColor
+            uploadImageButton.configuration = .gray()
+            //uploadImageButton.setTitleColor(.systemGray, for: .normal)
+            //uploadImageButton.backgroundColor = .systemGray6
+            //uploadImageButton.layer.borderColor = UIColor.systemGray.cgColor
         }else{
-            uploadImageButton.setTitleColor(.white, for: .normal)
-            uploadImageButton.backgroundColor = .systemBlue
-            uploadImageButton.layer.borderColor = UIColor.white.cgColor
+            uploadImageButton.configuration = .filled()
+            //uploadImageButton.setTitleColor(.white, for: .normal)
+            //uploadImageButton.backgroundColor = .systemBlue
+            //uploadImageButton.layer.borderColor = UIColor.white.cgColor
         }
     }
     

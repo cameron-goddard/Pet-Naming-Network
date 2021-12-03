@@ -57,14 +57,15 @@ class HomeViewController: UIViewController{
             layout.scrollDirection = .vertical;
             layout.minimumLineSpacing = cellPadding
             layout.minimumInteritemSpacing = cellPadding
-            let collectionView:UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout);
+            let collectionView:UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+            collectionView.delaysContentTouches = false
             collectionView.backgroundColor = .clear
             collectionView.translatesAutoresizingMaskIntoConstraints = false
             collectionView.register(PetCollectionViewCell.self, forCellWithReuseIdentifier: petCellReuseIdentifier)
             collectionView.dataSource = self
             collectionView.delegate = self
             collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
-            return collectionView;
+            return collectionView
         }()
         petCollectionView.backgroundColor = .systemBackground
         

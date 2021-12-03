@@ -14,6 +14,18 @@ class PetCollectionViewCell: UICollectionViewCell {
     private var petImageView = UIImageView()
     private var petNameLabel = UILabel();
     private var userNameLabel = UILabel();
+    
+    override var isHighlighted: Bool {
+        didSet {
+            if self.isHighlighted {
+                alpha = 0.5
+            } else {
+                alpha = 1.0
+            }
+        }
+    }
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.layer.cornerRadius = 8

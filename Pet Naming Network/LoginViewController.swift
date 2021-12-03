@@ -27,7 +27,9 @@ class LoginViewController: UIViewController {
         textField.placeholder = "Username"
         textField.textColor = .black
         textField.font = .systemFont(ofSize: 14)
-        textField.layer.backgroundColor = UIColor.systemGray6.cgColor
+        textField.addTarget(self, action: #selector(resignFirstResponder), for: .editingDidEndOnExit)
+        textField.clearButtonMode = .whileEditing
+        textField.backgroundColor = .secondarySystemFill
         textField.translatesAutoresizingMaskIntoConstraints = false;
         textField.borderStyle = .roundedRect
         textField.layer.cornerRadius = 20;
@@ -41,7 +43,7 @@ class LoginViewController: UIViewController {
         button.setTitle("Log In", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false;
         
-        return button;
+        return button
     }()
     
    // private var spinner = UIActivityIndicatorView()
@@ -50,10 +52,10 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-              myActivityIndicator.center = view.center
-              myActivityIndicator.hidesWhenStopped = false
-            myActivityIndicator.startAnimating()
-        myActivityIndicator.isHidden = true;
+        myActivityIndicator.center = view.center
+        myActivityIndicator.hidesWhenStopped = false
+        myActivityIndicator.startAnimating()
+        myActivityIndicator.isHidden = true
         view.addSubview(appTitleLabel)
       
        
@@ -83,7 +85,6 @@ class LoginViewController: UIViewController {
         NSLayoutConstraint.activate([
             appTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             appTitleLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor,constant: -50),
-   
         ])
         NSLayoutConstraint.activate([
             userNameTextField.topAnchor.constraint(equalTo: appTitleLabel.bottomAnchor,constant: 20),

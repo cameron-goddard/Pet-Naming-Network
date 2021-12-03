@@ -34,15 +34,14 @@ class VoteViewController: UIViewController {
         namesTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(namesTableView)
         
-        
-        imageView.backgroundColor = .red
+        imageView.image = UIImage(named: "doggo")
+        imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
         
         skipButton.configuration = .filled()
-        
         skipButton.configuration?.buttonSize = .large
-        skipButton.setTitle("Skip", for: .normal)
+        skipButton.setTitle("Skip Image", for: .normal)
         skipButton.tag = -1
         skipButton.addTarget(self, action: #selector(newImage(_:)), for: .touchUpInside)
         skipButton.translatesAutoresizingMaskIntoConstraints = false
@@ -56,11 +55,11 @@ class VoteViewController: UIViewController {
             
         }
         
-        UIView.transition(with: imageView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+        UIView.transition(with: imageView, duration: 1.0, options: .transitionFlipFromLeft, animations: {
             self.imageView.image = UIImage(systemName: "bolt.ring.closed")
         
         }, completion: nil)
-        UIView.transition(with: namesTableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+        UIView.transition(with: namesTableView, duration: 1.0, options: .transitionCrossDissolve, animations: {
             self.votableNames = [Pet(petName: "Doggo", user: "test", petImageURL: "doggo", petState: .FEATURED),Pet(petName: "???", user: "test", petImageURL: "nice", petState: .FEATURED),Pet(petName: "Gamer", user: "test", petImageURL: "gamer", petState: .FEATURED),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .FEATURED)]
             self.namesTableView.reloadData()
         }, completion: nil)
@@ -69,7 +68,7 @@ class VoteViewController: UIViewController {
     func setUpConstraints() {
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            imageView.widthAnchor.constraint(equalToConstant: 200),
+            imageView.widthAnchor.constraint(equalToConstant: view.frame.width-40),
             imageView.heightAnchor.constraint(equalToConstant: 200),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
@@ -85,19 +84,6 @@ class VoteViewController: UIViewController {
             skipButton.widthAnchor.constraint(equalToConstant: view.frame.width-40)
         ])
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    
-
 }
 
 extension VoteViewController: UITableViewDataSource {
@@ -112,12 +98,34 @@ extension VoteViewController: UITableViewDataSource {
             cell.voteButton.tag = indexPath.row
             cell.dislikeButton.addTarget(self, action: #selector(hideName(_:)), for: .touchUpInside)
             cell.dislikeButton.tag = indexPath.row
+            cell.selectionStyle = .none
             let pet = votableNames[indexPath.row]
             cell.configure(name: pet.petName)
             return cell
         } else {
             return UITableViewCell()
         }
+    }
+    
+    func tableView(_ tableView: UITableView,
+                   leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let hideAction = UIContextualAction(style: .destructive,
+                                        title: "Hide") { [weak self] (hideAction, view, completionHandler) in
+                                        self?.deleteAtIndex(index: indexPath.row)
+                                            completionHandler(true)
+        }
+        hideAction.backgroundColor = .systemRed
+        return UISwipeActionsConfiguration(actions: [hideAction])
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let voteAction = UIContextualAction(style: .normal,
+                                        title: "Vote") { [weak self] (voteAction, view, completionHandler) in
+                                        self?.deleteAtIndex(index: indexPath.row)
+                                            completionHandler(true)
+        }
+        voteAction.backgroundColor = .systemBlue
+        return UISwipeActionsConfiguration(actions: [voteAction])
     }
     
     @objc func hideName(_ sender: UIButton) {
@@ -133,9 +141,9 @@ extension VoteViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let song = votableNames[indexPath.row]
-        //let vc = SongViewController(delegate: self, song: song, index: indexPath.row)
-        //navigationController?.pushViewController(vc, animated: true)
+    
+    func deleteAtIndex(index: Int) { //For deleting a song (on swipe)
+        votableNames.remove(at: index)
+        namesTableView.reloadData()
     }
 }
