@@ -22,7 +22,10 @@ class NameViewController: UIViewController {
         
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Pet(petPost: LoginViewController.petServer.petsNaming[0]).petImage
+        if(!LoginViewController.petServer.petsNaming.isEmpty){
+            imageView.image = Pet(petPost: LoginViewController.petServer.petsNaming[0]).petImage
+        }
+       
        
         view.addSubview(imageView)
         
@@ -60,11 +63,18 @@ class NameViewController: UIViewController {
         if(!name.elementsEqual("")){
             let pet = Pet(petPost: LoginViewController.petServer.petsNaming[index])
             NetworkManager.giveName(name: name, petID: pet.id, completion: {name in
-                self.nextImage()
                 PetServer.account.updateAccount()
+                LoginViewController.petServer.updateServer()
+                self.nextImage()
+                
             })
             
         }
+    }
+    
+    public func refresh(){
+        index = -1;
+        nextImage()
     }
     
     @objc func skipName() {

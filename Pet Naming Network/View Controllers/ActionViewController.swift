@@ -58,16 +58,26 @@ class ActionViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.title = ""
+        print("========================================================")
+        print("APPEAR")
+        print("========================================================")
+//        voteVC.refresh()
+        nameVC.refresh()
+     
+
     }
     
     @objc func changeViews() {
         if actionControl.selectedSegmentIndex == 0 {
             remove(vc: voteVC)
             add(vc: nameVC)
+            nameVC.refresh()
         }
         else if actionControl.selectedSegmentIndex == 1 {
+
             remove(vc: nameVC)
             add(vc: voteVC)
+            voteVC.refresh()
         }
     }
     

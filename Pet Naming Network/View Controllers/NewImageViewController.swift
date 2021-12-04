@@ -110,12 +110,20 @@ class NewImageViewController: UIViewController {
         }
     }
     
+    var imageBase64String:String = ""
     @objc func uploadImage(){
         if(newImageView.image != nil){
             let vc = SuccessViewController()
             present(vc, animated: true, completion: nil)
-            addImageButton.isHidden = false
+           // addImageButton.isHidden = false
             newImageView.image = nil
+            
+            NetworkManager.uploadImage(rawImage: "data:image/png;base64,"+imageBase64String, completion: { pet in
+                PetServer.account.userPosts.append(Pet(petPost: pet))
+                print("SUCEESS IMAGE Uploaded!!")
+                LoginViewController.petServer.updateServer()
+
+            })
             
             toggleUploadButton()
         }
@@ -157,7 +165,7 @@ class NewImageViewController: UIViewController {
 extension NewImageViewController: ImagePickerDelegate {
 
     func didSelect(image: UIImage?) {
-        self.addImageButton.isHidden = true;
+       // self.addImageButton.isHidden = true;
         let img:UIImage = image ?? UIImage()
         self.newImageView.image = cropToBounds(image: img, width: img.size.width, height: img.size.height);
         self.toggleUploadButton()
@@ -166,12 +174,8 @@ extension NewImageViewController: ImagePickerDelegate {
         print("========================================================")
         print("========================================================")
         let imageData = img.pngData()
-        let imageBase64String:String = imageData?.base64EncodedString() ?? "LOL"
-                NetworkManager.uploadImage(rawImage: "data:image/png;base64,"+imageBase64String, completion: { pet in
-                    PetServer.account.userPosts.append(Pet(petPost: pet))
-                    print("SUCEESS IMAGE Uploaded!!")
-                })
-        LoginViewController.petServer.updateServer()
+        imageBase64String = imageData?.base64EncodedString() ?? "LOL"
+               
         print("========================================================")
         print("========================================================")
         print("========================================================")

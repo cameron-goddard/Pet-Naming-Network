@@ -71,17 +71,13 @@ class PetCollectionViewCell: UICollectionViewCell {
     func accountConfigure(for pet:Pet){
         petNameLabel.text = "";
         petImageView.image = cropToBounds(image: pet.petImage, width: pet.petImage.size.width, height: pet.petImage.size.height);
-        print("THIS IS IT: \(pet.petState)")
-        print("THIS Name: \(pet.petName.name)")
+   
         switch(pet.petState){
         case .FEATURED:
-            print("NICE1")
             break;
         case .VOTING:
-            print("Okay")
             break;
         case .NAMING:
-            print("Boring")
             break;
         }
         
@@ -115,31 +111,12 @@ class PetCollectionViewCell: UICollectionViewCell {
             petImageView.heightAnchor.constraint(equalToConstant: width)
         ])
         
-        /*petImageView.snp.makeConstraints{make in
-            make.top.equalToSuperview().offset(padding)
-            make.centerX.equalToSuperview();
-            make.height.width.equalTo(width);
-            make.leading.equalToSuperview().offset(padding)
-            make.trailing.equalToSuperview().offset(-padding)
-            
-        }*/
-        /*petNameLabel.snp.makeConstraints{make in
-            make.top.equalTo(petImageView.snp.bottom).offset(padding);
-            make.trailing.leading.equalToSuperview()
-        }*/
-        /*userNameLabel.snp.makeConstraints{make in
-            make.top.equalTo(petNameLabel.snp.bottom).offset(padding);
-            make.trailing.leading.equalToSuperview()
-        }*/
+
         
         NSLayoutConstraint.activate([
             petNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             petNameLabel.topAnchor.constraint(equalTo: petImageView.bottomAnchor, constant: 5)
         ])
-        /*NSLayoutConstraint.activate([
-            userNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            userNameLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor)
-        ])*/
         NSLayoutConstraint.activate([
             backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),

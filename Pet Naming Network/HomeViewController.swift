@@ -96,6 +96,7 @@ class HomeViewController: UIViewController{
     
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.title = "Featured"
+        refreshData()
     }
     
     func setupConstraints() {
@@ -126,6 +127,8 @@ class HomeViewController: UIViewController{
         }
         
     }
+ 
+    
 }
 extension HomeViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {

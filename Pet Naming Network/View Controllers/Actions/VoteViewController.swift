@@ -43,7 +43,7 @@ class VoteViewController: UIViewController {
         skipButton.configuration?.buttonSize = .large
         skipButton.setTitle("Skip Image", for: .normal)
         skipButton.tag = -1
-        skipButton.addTarget(self, action: #selector(newImage(_:)), for: .touchUpInside)
+        skipButton.addTarget(self, action: #selector(nextImage), for: .touchUpInside)
         skipButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(skipButton)
         setupPets()
@@ -56,11 +56,18 @@ class VoteViewController: UIViewController {
         }
     }
     
+    public func refresh(){
+        index = -1;
+        nextImage()
+        namesTableView.reloadData()
+    }
     
-    @objc func newImage(_ sender: UIButton) {
-        if sender.tag != -1 {
-            
+    @objc func nextImage(){
+        self.index = self.index + 1;
+        if(self.index >= LoginViewController.petServer.petsVoting.count){
+            self.index = 0;
         }
+    
         if(LoginViewController.petServer.petsVoting.isEmpty){
             UIView.transition(with: imageView, duration: 1.0, options: .transitionFlipFromLeft, animations: {
                 self.imageView.image = UIImage(systemName: "bolt.ring.closed")
@@ -71,33 +78,42 @@ class VoteViewController: UIViewController {
                 self.namesTableView.reloadData()
             }, completion: nil)
         }else{
+            pet = Pet(petPost:LoginViewController.petServer.petsVoting[self.index])
         
-            let pet1 = Pet(petPost:LoginViewController.petServer.petsVoting[self.index])
-            let name:String = votableNames[sender.tag].name
-            
-            NetworkManager.addVote(name: name, petID: pet1.id, completion: {pet in
-                PetServer.account.updateAccount()
-                LoginViewController.petServer.updateServer()
-                DispatchQueue.main.async {
-                    self.index = self.index + 1;
-                    if(self.index >= LoginViewController.petServer.petsVoting.count){
-                        self.index = 0;
-                    }
-                    
-                    UIView.transition(with: self.imageView, duration: 1.0, options: .transitionFlipFromLeft, animations: {
-                        self.imageView.image = pet1.petImage
-                    }, completion: nil)
-                    
-                    UIView.transition(with: self.namesTableView, duration: 1.0, options: .transitionCrossDissolve, animations: {
-                        self.votableNames = LoginViewController.petServer.petsVoting[self.index].names
-                        self.namesTableView.reloadData()
-                    }, completion: nil)
-                }
+            UIView.transition(with: self.imageView, duration: 1.0, options: .transitionFlipFromLeft, animations: {
                 
-            })
+                self.imageView.image = self.pet.petImage
+            }, completion: nil)
             
+            UIView.transition(with: self.namesTableView, duration: 1.0, options: .transitionCrossDissolve, animations: {
+                self.votableNames = LoginViewController.petServer.petsVoting[self.index].names
+                self.namesTableView.reloadData()
+            }, completion: nil)
+        }
+    }
+    
+    var pet:Pet!;
+    @objc func newImage(_ sender: UIButton) {
+        if sender.tag != -1 {
             
-           
+        }
+        
+        let name:String = votableNames[sender.tag].name
+        if(!LoginViewController.petServer.petsVoting.isEmpty){
+            
+        
+        NetworkManager.addVote(name: name, petID: pet.id, completion: {pet in
+            PetServer.account.updateAccount()
+            LoginViewController.petServer.updateServer()
+            DispatchQueue.main.async {
+                
+                self.nextImage();
+            }
+        })
+        }else{
+            PetServer.account.updateAccount()
+            LoginViewController.petServer.updateServer()
+            self.nextImage()
         }
     }
     
