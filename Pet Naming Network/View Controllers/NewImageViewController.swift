@@ -19,11 +19,8 @@ class NewImageViewController: UIViewController {
     let padding:CGFloat = 20;
     let buttonSize:CGFloat = 120;
     
-    var account:Account;
-    var petServer:PetServer;
-    init(account:Account,petServer:PetServer){
-        self.account = account;
-        self.petServer = petServer;
+
+    init(){
         super .init(nibName: nil, bundle: nil)
         self.imagePicker = ImagePicker(presentationController: self, delegate: self)
     }
@@ -171,10 +168,10 @@ extension NewImageViewController: ImagePickerDelegate {
         let imageData = img.pngData()
         let imageBase64String:String = imageData?.base64EncodedString() ?? "LOL"
                 NetworkManager.uploadImage(rawImage: "data:image/png;base64,"+imageBase64String, completion: { pet in
-                    self.account.userPosts.append(Pet(petPost: pet))
+                    PetServer.account.userPosts.append(Pet(petPost: pet))
                     print("SUCEESS IMAGE Uploaded!!")
                 })
-        petServer.updateServer()
+        LoginViewController.petServer.updateServer()
         print("========================================================")
         print("========================================================")
         print("========================================================")

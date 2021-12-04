@@ -38,12 +38,11 @@ class AccountViewController: UIViewController {
     let cellHeight:CGFloat = 50;
     var width:CGFloat = 150.0;
     
-    var account:Account;
     
-    init(account:Account){
-        self.account = account;
-        account.updateAccount()
-        let c:String = account.userName[account.userName.index(account.userName.startIndex, offsetBy: 0)].uppercased()
+    init(){
+        
+        PetServer.account.updateAccount()
+        let c:String = PetServer.account.userName[PetServer.account.userName.index(PetServer.account.userName.startIndex, offsetBy: 0)].uppercased()
         let pic: UIImage = HomeViewController.DefaultPFP[c] ?? UIImage()
         profilePic.setImage(pic, for: UIControl.State.normal)
        
@@ -57,7 +56,7 @@ class AccountViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = account.userName
+        title = PetServer.account.userName
         view.backgroundColor = .systemGray6
         
         // Action Control
@@ -67,7 +66,7 @@ class AccountViewController: UIViewController {
         
         view.addSubview(actionControl)
         
-        userName.text = account.userName
+        userName.text = PetServer.account.userName
         userName.textAlignment = .center
         userName.font = .boldSystemFont(ofSize: 20)
         userName.translatesAutoresizingMaskIntoConstraints = false
@@ -76,7 +75,7 @@ class AccountViewController: UIViewController {
         profilePic.translatesAutoresizingMaskIntoConstraints = false
         profilePic.setTitle("P", for: .normal)
         profilePic.setTitleColor(.black, for: .normal)
-        profilePic.backgroundColor = account.bgColor
+        profilePic.backgroundColor = PetServer.account.bgColor
         profilePic.layer.borderColor = UIColor.white.cgColor
         profilePic.layer.borderWidth = 8
         profilePic.layer.cornerRadius = width/2
@@ -86,7 +85,7 @@ class AccountViewController: UIViewController {
         profilePic.addTarget(self, action: #selector(editProfilePicture), for: .touchUpInside)
         
         background = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height/3))
-        background.backgroundColor = account.bgColor
+        background.backgroundColor = PetServer.account.bgColor
         
         background.dropShadow()
         
@@ -143,7 +142,7 @@ class AccountViewController: UIViewController {
     }
     
     func reloadAccountPets(){
-        account.updateAccount()
+        PetServer.account.updateAccount()
         petsPostedCollectionView.reloadData()
         namesTableView.reloadData()
         
@@ -202,13 +201,13 @@ extension AccountViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return account.userPosts.count
+        return PetServer.account.userPosts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: petPostCellReuseIdentifier, for: indexPath) as! PetCollectionViewCell
-        cell.accountConfigure(for: account.userPosts[indexPath.row]);
+        cell.accountConfigure(for: PetServer.account.userPosts[indexPath.row]);
             
         return cell
     }
@@ -234,8 +233,10 @@ extension AccountViewController: UICollectionViewDelegateFlowLayout, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let vc = PetViewController(pet: account.userPosts[indexPath.item]);
+        PetServer.account.updateAccount()
+        print("YANDER")
+        print(PetServer.account.userPosts[indexPath.item].nameSuggestions)
+        let vc = PetViewController(pet: PetServer.account.userPosts[indexPath.item]);
             present(vc, animated: true, completion: nil)
        
     }
@@ -257,20 +258,20 @@ extension UIView {
 extension AccountViewController: ImagePickerDelegate {
 
     func didSelect(image: UIImage?) {
-        account.userPFP = image ?? UIImage();
+        PetServer.account.userPFP = image ?? UIImage();
         self.profilePic.setImage(image, for: UIControl.State.normal)
     }
 }
 extension AccountViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return account.userNames.count
+        return PetServer.account.userNames.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? NamesTableViewCell {
             
-            cell.configure(name:account.userNames[indexPath.row])
+            cell.configure(name:PetServer.account.userNames[indexPath.row])
             cell.selectionStyle = .none
             
             return cell

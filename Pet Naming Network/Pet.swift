@@ -50,9 +50,6 @@ class Pet{
 
         var max:Int = 0;
         var idx:Int = 0;
-        print("========================================================")
-        print(petPost.names);
-        print(petPost.names.count);
         for x in 0..<petPost.names.count{
             if max < petPost.names[x].votes{
                 max = petPost.names[x].votes
@@ -60,7 +57,6 @@ class Pet{
             }
             nameSuggestions.append(Name(petID: petPost.id, pet: petPost.names[x]))
         }
-        print("IDX: \(idx)");
         if(nameSuggestions.count > 0){
             nameSuggestions.remove(at: idx)
             self.petName = Name(petID: petPost.id, pet: petPost.names[idx])
@@ -120,10 +116,10 @@ class Name:Codable{
         self.votes = pet.votes
     }
     internal init() {
-        self.id = -1
+        self.id = 0
         self.name = ""
-        self.pet = -1
-        self.votes = -1
+        self.pet = 0
+        self.votes = 0
     }
     
     let id:Int

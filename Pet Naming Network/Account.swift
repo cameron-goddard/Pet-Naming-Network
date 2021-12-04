@@ -38,17 +38,18 @@ class Account{
     
     
     func updateAccount(){
-        NetworkManager.getAccountPets{pets in
-            for p in pets{
-                self.userPosts.append(Pet(petPost: p,userName: self.userName))
-            }
-        }
+//        NetworkManager.getAccountPets{pets in
+//            for p in pets{
+//                self.userPosts.append(Pet(petPost: p,userName: self.userName))
+//            }
+//        }
         
         NetworkManager.loginAccount(username: userName, completion: { user in
-            print("WE SURPASSED!!!")
-            print(self.userName)
-            print(user.names)
+            self.userPosts.removeAll()
             self.userNames = user.names
+            for p in user.pets{
+                self.userPosts.append(Pet(petPost: p,userName: self.userName))
+            }
         })
         
     }

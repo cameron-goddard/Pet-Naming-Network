@@ -87,6 +87,7 @@ class NetworkManager {
                 }
             case .failure(let error):
                 print(error)
+                completion([]);
             }
             
         }
@@ -259,8 +260,9 @@ class NetworkManager {
             response in
             switch response.result{
             case .success(let data):
+          
                 print(data)
-                print("GETTING USER")
+
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let userResponse = try? jsonDecoder.decode(User.self, from: data) {

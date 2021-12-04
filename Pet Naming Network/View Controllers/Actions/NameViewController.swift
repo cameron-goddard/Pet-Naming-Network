@@ -13,7 +13,6 @@ class NameViewController: UIViewController {
     private var nameTextField = UITextField()
     private var submitButton = UIButton()
     private var skipButton = UIButton()
-    private var petServer:PetServer = PetServer();
     private var index:Int = -1;
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +21,7 @@ class NameViewController: UIViewController {
         
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        
+        imageView.image = Pet(petPost: LoginViewController.petServer.petsNaming[0]).petImage
        
         view.addSubview(imageView)
         
@@ -52,25 +51,22 @@ class NameViewController: UIViewController {
         
         setUpConstraints()
     }
-    var account:Account!
-    func addData(account:Account,petServer:PetServer){
-        if(petServer.petsNaming.count == 0){
-            self.imageView.image = UIImage(systemName: "bolt.ring.closed")
-        }else {
-            self.imageView.image = Pet(petPost: petServer.petsNaming[0]).petImage
-        }
-        self.account = account;
-        self.petServer = petServer
-    }
+//    func addData(){
+//        if(petServer.petsNaming.count == 0){
+//            self.imageView.image = UIImage(systemName: "bolt.ring.closed")
+//        }else {
+//            self.imageView.image = Pet(petPost: petServer.petsNaming[0]).petImage
+//        }
+//    }
     
     
     @objc func submitName() {
         let name:String = nameTextField.text ?? ""
         if(!name.elementsEqual("")){
-            let pet = Pet(petPost: petServer.petsNaming[index])
+            let pet = Pet(petPost: LoginViewController.petServer.petsNaming[index])
             NetworkManager.giveName(name: name, petID: pet.id, completion: {name in
                 self.nextImage()
-                self.account.updateAccount()
+                PetServer.account.updateAccount()
             })
             
         }
@@ -84,16 +80,16 @@ class NameViewController: UIViewController {
         nameTextField.text = ""
         
         index = index + 1;
-        if(index >= petServer.petsNaming.count){
+        if(index >= LoginViewController.petServer.petsNaming.count){
             index = 0;
         }
-        if(petServer.petsNaming.count == 0){
+        if(LoginViewController.petServer.petsNaming.count == 0){
             UIView.transition(with: imageView, duration: 1.0, options: .transitionFlipFromLeft, animations: {
                 self.imageView.image = UIImage(systemName: "bolt.ring.closed")
             
             }, completion: nil)
         }else{
-            let pet = Pet(petPost: petServer.petsNaming[index])
+            let pet = Pet(petPost: LoginViewController.petServer.petsNaming[index])
             
             UIView.transition(with: imageView, duration: 1.0, options: .transitionFlipFromLeft, animations: {
                 self.imageView.image = pet.petImage
