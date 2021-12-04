@@ -45,7 +45,7 @@ NAME_CAP = 5
 @app.route("/home/uploading/", methods=["POST"])
 def upload_pet():
     body = json.loads(request.data)
-    user = Users.query.filter_by(logged_in=True).first()
+    user = Users.query.filter_by(loggedIn=1).first()
     time = datetime.today()
 
     image_data = body.get("image_data")  # This should be a base64 url
@@ -84,7 +84,7 @@ def upload_name(pet_id):
     if name is None:
         return failure_response("No name recieved.", 400)
 
-    current_user = Users.query.filter_by(logged_in=True).first()
+    current_user = Users.query.filter_by(loggedIn=1).first()
 
     if not current_user:
         return failure_response("Please log in to upload a name.", 400)
@@ -235,7 +235,7 @@ def login():
     if login_user is None:
         return failure_response("User not found. Please create an account.", 400)
 
-    current_user = Users.query.filter_by(logged_in=True).first()
+    current_user = Users.query.filter_by(loggedIn=1).first()
     if current_user:
         current_user.logout()
 
@@ -251,7 +251,7 @@ def login():
 
 @app.route("/home/naming/", methods=["GET"])
 def get_nameable_pet():
-    current_user = Users.query.filter(Users.logged_in == True).all()
+    current_user = Users.query.filter(Users.loggedIn == 1).all()
     if current_user == None:
         return failure_response("Please create an account to name pets!")
 
@@ -269,7 +269,7 @@ def get_nameable_pet():
 
 @app.route("/home/voting/", methods=["GET"])
 def getvotable():
-    current_user = Users.query.filter_by(logged_in=True).all()
+    current_user = Users.query.filter_by(loggedIn=1).all()
     if current_user == None:
         return failure_response("Please create an account to vote on pets!")
 
@@ -286,7 +286,7 @@ def getvotable():
 
 @app.route("/home/account/pets/", methods=["GET"])
 def getmypets():
-    current_user = Users.query.filter(Users.logged_in.is_(True)).first()
+    current_user = Users.query.filter(Users.loggedIn.is_(1)).first()
     if current_user is None:
         return failure_response("Please log in.", 400)
 
@@ -304,7 +304,7 @@ def getmypets():
 
 @app.route("/home/account/names/", methods=["GET"])
 def getmynames():
-    current_user = Users.query.filter_by(logged_in=True).first()
+    current_user = Users.query.filter_by(loggedIn=1).first()
     if not current_user:
         return failure_response("Please log in.", 400)
 
