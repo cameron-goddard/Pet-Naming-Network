@@ -19,7 +19,7 @@ class AccountViewController: UIViewController {
         ===================== UI Elements =====================
      */
     private var profilePic:UIButton = UIButton()
-    private var userName:UITextView = UITextView()
+    private var userName = UILabel()
     private var background:UIView = UIView()
     private var closeButton = UIButton(type: .close)
     private var actionControl = UISegmentedControl(items: ["Pets Uploaded", "Names Suggested"])
@@ -69,13 +69,9 @@ class AccountViewController: UIViewController {
         view.addSubview(actionControl)
         
         userName.text = account.userName
-        userName.textColor = .black
         userName.textAlignment = .center
         userName.font = .boldSystemFont(ofSize: 20)
-        userName.layer.backgroundColor = UIColor.systemGray6.cgColor
-        userName.translatesAutoresizingMaskIntoConstraints = false;
-        userName.layer.cornerRadius = 20;
-        
+        userName.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(userName)
         
         profilePic.translatesAutoresizingMaskIntoConstraints = false
@@ -102,8 +98,6 @@ class AccountViewController: UIViewController {
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         background.addSubview(closeButton)
         
-        
-        
         petsPostedCollectionView = {
             let layout = UICollectionViewFlowLayout();
             layout.scrollDirection = .vertical;
@@ -121,7 +115,8 @@ class AccountViewController: UIViewController {
         
         view.addSubview(petsPostedCollectionView);
         
-        namesTableView.backgroundColor = .clear
+        //namesTableView.backgroundColor = .clear
+        namesTableView.layer.cornerRadius = 10
         namesTableView.translatesAutoresizingMaskIntoConstraints = false
         namesTableView.dataSource = self
         namesTableView.delegate = self
@@ -132,7 +127,7 @@ class AccountViewController: UIViewController {
         namesTableView.reloadData()
         namesTableView.isHidden = true;
         
-        setUpViews()
+        setUpConstraints()
        
         NSLayoutConstraint.activate([
             petsPostedCollectionView.topAnchor.constraint(equalTo: actionControl.bottomAnchor,constant:5),
@@ -141,13 +136,11 @@ class AccountViewController: UIViewController {
             petsPostedCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
         ])
         NSLayoutConstraint.activate([
-            namesTableView.topAnchor.constraint(equalTo: actionControl.bottomAnchor,constant:5),
-            namesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            namesTableView.topAnchor.constraint(equalTo: actionControl.bottomAnchor,constant:20),
+            namesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30),
             namesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: collectionViewPadding),
             namesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
         ])
-
-        
     }
     func reloadAccountData(){
         petsPostedCollectionView.reloadData()
@@ -170,7 +163,7 @@ class AccountViewController: UIViewController {
             petsPostedCollectionView.isHidden = true;
         }
     }
-    func setUpViews() {
+    func setUpConstraints() {
         NSLayoutConstraint.activate([
             background.topAnchor.constraint(equalTo: view.topAnchor),
             background.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -181,8 +174,6 @@ class AccountViewController: UIViewController {
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 15),
             closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15)
         ])
-        
-
         NSLayoutConstraint.activate([
             profilePic.centerXAnchor.constraint(equalTo: background.centerXAnchor),
             profilePic.centerYAnchor.constraint(equalTo: background.centerYAnchor),
@@ -198,13 +189,10 @@ class AccountViewController: UIViewController {
         ])
         NSLayoutConstraint.activate([
             actionControl.topAnchor.constraint(equalTo: userName.bottomAnchor,constant:5),
-            actionControl.widthAnchor.constraint(equalToConstant: self.view.frame.width-20)
-            
+            actionControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            actionControl.widthAnchor.constraint(equalToConstant: view.frame.width-20)
         ])
-        
     }
-    
-    
 }
 extension AccountViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -213,29 +201,21 @@ extension AccountViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return account.userPosts.count
-      
     }
-    
-    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
        
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: petPostCellReuseIdentifier, for: indexPath) as! PetCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: petPostCellReuseIdentifier, for: indexPath) as! PetCollectionViewCell
         cell.accountConfigure(for: account.userPosts[indexPath.row]);
             
-            return cell;
-        
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as! HeaderView
-            header.configure(for: "Pets Posted")
+            header.configure(for: "Your Pets")
             return header
-        
     }
-    
-    
 }
 extension AccountViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     
@@ -244,8 +224,6 @@ extension AccountViewController: UICollectionViewDelegateFlowLayout, UICollectio
             let numItemsPerRow: CGFloat = 3.1
             let size = (collectionView.frame.width - cellPadding) / numItemsPerRow
             return CGSize(width: size, height: (size))
-       
-        
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
        
@@ -267,7 +245,7 @@ extension UIView {
     layer.shadowColor = UIColor.black.cgColor
     layer.shadowOpacity = 0.5
     layer.shadowOffset = CGSize(width: -1, height: 1)
-    layer.shadowRadius = 1
+    layer.shadowRadius = 3
 
     layer.shadowPath = UIBezierPath(rect: bounds).cgPath
     layer.shouldRasterize = true

@@ -15,7 +15,7 @@ class HeaderView: UICollectionReusableView {
         super.init(frame: frame)
 
         headerLabel.translatesAutoresizingMaskIntoConstraints = false
-        headerLabel.textColor = .gray
+        headerLabel.textColor = .systemGray
         headerLabel.text = ""
         addSubview(headerLabel)
 

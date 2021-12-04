@@ -91,7 +91,7 @@ class Pet(db.Model):
             "id": self.id,
             "state": e2s(self.state),
             "pic": Asset.query.filter_by(id=self.pic_id).first().getURL(),
-            "user": self.user,
+            "user": Users.query.filter_by(id=self.user).first().sub_serialize(),
             "names": [s.sub_serialize() for s in self.names],
             "date_created": self.date_created
         }
@@ -101,7 +101,7 @@ class Pet(db.Model):
             "id": self.id,
             "state": e2s(self.state),
             "pic": Asset.query.filter_by(id=self.pic_id).first().getURL(),
-            "names": [s.serialize() for s in self.names],
+            "names": [s.sub_serialize() for s in self.names],
             "date_created": self.date_created
         }
 
@@ -138,15 +138,16 @@ class Users(db.Model):
         return {
             "id": self.id,
             "username": self.username,
-            "pets": [s.sub_serialize for s in self.pets],
-            "names": [s.serialize for s in self.names],
-            "logged_in": self.logged_in#(str)(self.logged_in)
+            "pets": [s.sub_serialize() for s in self.pets],
+            "names": [s.serialize() for s in self.names],
+            "logged_in": self.logged_in  # (str)(self.logged_in)
         }
+
     def sub_serialize(self):
         return {
             "id": self.id,
             "username": self.username,
-            "logged_in": self.logged_in#(str)(self.logged_in)
+            "logged_in": self.logged_in  # (str)(self.logged_in)
 
         }
 
