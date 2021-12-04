@@ -8,24 +8,27 @@
 import Foundation
 import UIKit
 
+
+
 class Account{
     var userName:String;
     var userPFP:UIImage;
-    var userPosts:[Pet];
-    var userNames:[Name]
+    var userPosts:[Pet] = [];
+    var userNames:[Name] = []
     
     var bgColor:UIColor;
-    init(userName:String,userPFP:UIImage,userPosts:[Pet]){
-        self.userName = userName;
-        self.userPFP = userPFP;
-        self.userPosts = userPosts;
-        bgColor = UIColor(displayP3Red: CGFloat(Int.random(in: 180...255)), green: CGFloat(Int.random(in: 180...255)), blue: CGFloat(Int.random(in: 180...255)), alpha: CGFloat(1))
-        self.userNames = []
-    }
-    init(userName:String,userPosts:[Pet]){
-        self.userName = userName;
+    init(user:User){
+        self.userName = user.username
         self.userPFP = UIImage();
-        self.userPosts = userPosts;
+        
+        for p in user.pets{
+            self.userPosts.append(Pet(petPost: p,userName: userName))
+        }
+      
+        for n in user.names{
+            self.userNames.append(n)
+        }
+
         let r:CGFloat = CGFloat.random(in: 0.7...1)
         let g:CGFloat = CGFloat.random(in: 0.7...1)
         let b:CGFloat = CGFloat.random(in: 0.7...1)
@@ -33,15 +36,40 @@ class Account{
         self.userNames = []
     }
     
+    
+    func updateAccount(){
+        NetworkManager.getAccountPets{pets in
+            for p in pets{
+                self.userPosts.append(Pet(petPost: p,userName: self.userName))
+            }
+        }
+        
+        NetworkManager.loginAccount(username: userName, completion: { user in
+            print("WE SURPASSED!!!")
+            print(self.userName)
+            print(user.names)
+            self.userNames = user.names
+        })
+        
+    }
+    
 }
 
 class SmallUser:Codable{
     var id:Int
-    var loggedIn:Int
     var username:String
+    var loggedIn:Int
 }
 
 class User:Codable{
+    internal init(id: Int, username: String, pets: [PetAccount], names: [Name], loggedIn: Int) {
+        self.id = id
+        self.username = username
+        self.pets = pets
+        self.names = names
+        self.loggedIn = loggedIn
+    }
+    
     var id:Int
     var username:String
     var pets:[PetAccount]

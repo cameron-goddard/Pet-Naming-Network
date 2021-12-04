@@ -32,9 +32,9 @@ class NamesTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func configure(name:String, votes:Int) {
-        nameLabel.text = name;
-        voteLabel.text = "Votes: \(votes)"
+    func configure(name:Name) {
+        nameLabel.text = name.name;
+        voteLabel.text = "Votes: \(name.votes)"
     }
     func setupConstraints() {
         NSLayoutConstraint.activate([

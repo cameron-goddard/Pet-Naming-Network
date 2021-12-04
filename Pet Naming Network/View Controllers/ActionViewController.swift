@@ -9,7 +9,7 @@ import UIKit
 
 class ActionViewController: UIViewController {
 
-    private var actionControl = UISegmentedControl(items: ["Vote", "Name"])
+    private var actionControl = UISegmentedControl(items: ["Name", "Vote"])
     
     private lazy var voteVC : VoteViewController = {
         var vc = VoteViewController()
@@ -24,10 +24,13 @@ class ActionViewController: UIViewController {
     }()
     
     var account:Account;
-    
-    init(account:Account){
+    var petServer:PetServer
+    init(account:Account,petServer:PetServer){
         self.account = account;
+        self.petServer = petServer
         super.init(nibName: nil, bundle: nil)
+        self.nameVC.addData(account:account,petServer: petServer)
+        self.nameVC.nextImage()
     }
     
     required init?(coder: NSCoder) {
@@ -51,7 +54,7 @@ class ActionViewController: UIViewController {
         
         
         
-        add(vc: voteVC)
+        add(vc: nameVC)
         
         setUpConstraints()
     }
@@ -62,12 +65,12 @@ class ActionViewController: UIViewController {
     
     @objc func changeViews() {
         if actionControl.selectedSegmentIndex == 0 {
-            remove(vc: nameVC)
-            add(vc: voteVC)
-        }
-        else if actionControl.selectedSegmentIndex == 1 {
             remove(vc: voteVC)
             add(vc: nameVC)
+        }
+        else if actionControl.selectedSegmentIndex == 1 {
+            remove(vc: nameVC)
+            add(vc: voteVC)
         }
     }
     

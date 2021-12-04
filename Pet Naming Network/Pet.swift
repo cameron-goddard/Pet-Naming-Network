@@ -11,8 +11,8 @@ import UIKit
 
 class Pet{
     
-    var petName:String;
-    var nameSuggestions:[String] = [];
+    var petName:Name;
+    var nameSuggestions:[Name] = [];
     var user:String;
     var petImage:UIImage;
     var petState:String;
@@ -20,7 +20,7 @@ class Pet{
     var id:Int;
 
     init(petPost:PetPost){
-        self.petName = "";
+        self.petName = Name();
         var max:Int = 0;
         var idx:Int = 0;
         
@@ -29,10 +29,12 @@ class Pet{
                 max = petPost.names[x].votes
                 idx = x;
             }
-            nameSuggestions.append(petPost.names[x].name)
+            nameSuggestions.append(Name(petID: petPost.id, pet: petPost.names[x]))
         }
-        nameSuggestions.remove(at: idx)
-        self.petName = petPost.names[idx].name
+        if(petPost.names.count>0){
+            nameSuggestions.remove(at: idx)
+            self.petName = Name(petID: petPost.id, pet: petPost.names[idx])
+        }
         
         self.user = petPost.user.username
         let url = URL(string: petPost.pic)
@@ -44,27 +46,53 @@ class Pet{
         self.id = petPost.id
     }
     
-    public func getPopularName(pet:PetPost){
+    init(petPost:PetAccount,userName:String){
+
         var max:Int = 0;
         var idx:Int = 0;
-        for x in 0..<pet.names.count{
-            if max < pet.names[x].votes{
-                max = pet.names[x].votes
+        print("========================================================")
+        print(petPost.names);
+        print(petPost.names.count);
+        for x in 0..<petPost.names.count{
+            if max < petPost.names[x].votes{
+                max = petPost.names[x].votes
                 idx = x;
             }
-            nameSuggestions.append(pet.names[x].name)
+            nameSuggestions.append(Name(petID: petPost.id, pet: petPost.names[x]))
         }
-        nameSuggestions.remove(at: idx)
-        petName = pet.names[idx].name
+        print("IDX: \(idx)");
+        if(nameSuggestions.count > 0){
+            nameSuggestions.remove(at: idx)
+            self.petName = Name(petID: petPost.id, pet: petPost.names[idx])
+        }else{
+            self.petName = Name()
+        }
+        self.user = userName
+        let url = URL(string: petPost.pic)
+
+        let data = try? Data(contentsOf: url!)
+        self.petImage = UIImage(data: data! ) ?? UIImage()
+        self.petState = petPost.state
+        self.timeUploaded = petPost.dateCreated
+        self.id = petPost.id
     }
     
-    public func addPetName(name:String){
-        nameSuggestions.append(name);
-    }
+//    public func getPopularName(pet:PetPost){
+//        var max:Int = 0;
+//        var idx:Int = 0;
+//        for x in 0..<pet.names.count{
+//            if max < pet.names[x].votes{
+//                max = pet.names[x].votes
+//                idx = x;
+//            }
+//            nameSuggestions.append(Name(petID: pet.id, pet: pet.names[x]))
+//        }
+//        nameSuggestions.remove(at: idx)
+//        petName = pet.names[idx].name
+//    }
+//
     
-    public func petNames(nameSuggestions:[String]){
-        self.nameSuggestions=nameSuggestions;
-    }
+
    
 }
 
@@ -85,6 +113,18 @@ class PetPost:Codable{
 }
 
 class Name:Codable{
+    internal init(petID: Int, pet:PetName) {
+        self.id = pet.id
+        self.name = pet.name
+        self.pet = petID
+        self.votes = pet.votes
+    }
+    internal init() {
+        self.id = -1
+        self.name = ""
+        self.pet = -1
+        self.votes = -1
+    }
     
     let id:Int
     let name:String

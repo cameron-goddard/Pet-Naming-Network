@@ -21,13 +21,14 @@ class PetViewController: UIViewController {
     private var reuseIdentifier = "namesCellReuse"
     
 
-    var votes:[Int] = [];
     let cellHeight:CGFloat = 50;
     
-    var names:[String] = []
+//    var names:[Name] = []
     private var pet:Pet
+    
     init(pet:Pet){
         self.pet = pet;
+
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -41,10 +42,6 @@ class PetViewController: UIViewController {
         title = "Pet"
         view.backgroundColor = .secondarySystemBackground
         
-        for x in 0...pet.nameSuggestions.count-1{
-            names.append(pet.nameSuggestions[x])
-            votes.append(x)
-        }
         
         namesTableView.layer.cornerRadius = 10
         
@@ -78,7 +75,7 @@ class PetViewController: UIViewController {
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         backgroundImageView.addSubview(closeButton)
         
-        petNameLabel.text = pet.petName
+        petNameLabel.text = pet.petName.name
         petNameLabel.textAlignment = .center
         petNameLabel.font = UIFont.boldSystemFont(ofSize: 36)
         petNameLabel.textColor = .white
@@ -109,7 +106,7 @@ class PetViewController: UIViewController {
         attachmentString = NSAttributedString(attachment: voteImageAttachment)
         completeText = NSMutableAttributedString(string: "")
         completeText.append(attachmentString)
-        textAfterIcon = NSAttributedString(string: " 16", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
+        textAfterIcon = NSAttributedString(string: " \(pet.petName.votes)" , attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
         completeText.append(textAfterIcon)
         
         votesLabel.attributedText = completeText
@@ -123,7 +120,7 @@ class PetViewController: UIViewController {
         attachmentString = NSAttributedString(attachment: dateImageAttachment)
         completeText = NSMutableAttributedString(string: "")
         completeText.append(attachmentString)
-        textAfterIcon = NSAttributedString(string: " Date", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
+        textAfterIcon = NSAttributedString(string: " Date: " + pet.timeUploaded, attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
         completeText.append(textAfterIcon)
         
         dateLabel.attributedText = completeText
@@ -200,14 +197,12 @@ class PetViewController: UIViewController {
 extension PetViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return names.count
+        return pet.nameSuggestions.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? NamesTableViewCell {
-            let name = names[indexPath.row]
-            let vote = votes[indexPath.row]
-            cell.configure(name: name,votes: vote)
+            cell.configure(name: pet.nameSuggestions[indexPath.row])
             cell.selectionStyle = .none
             return cell
         } else {

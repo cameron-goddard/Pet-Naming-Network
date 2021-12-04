@@ -11,6 +11,9 @@ class TabBarController: UITabBarController {
 
     private var accountVC:AccountViewController
     
+    
+    //var account:Account;
+    
     init(account:Account){
         accountVC = AccountViewController(account: account)
         super.init(nibName: nil, bundle: nil)
@@ -37,7 +40,11 @@ class TabBarController: UITabBarController {
     }
     
     @objc func presentAccount() {
-        accountVC.reloadAccountData();
+        print("========================================================")
+        print("Refresh")
+        print("========================================================")
+        //account.updateAccount()
         present(accountVC, animated: true, completion: nil)
+        accountVC.reloadAccountPets()
     }
 }

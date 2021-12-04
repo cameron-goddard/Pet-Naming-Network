@@ -35,18 +35,17 @@ class AccountViewController: UIViewController {
     private let sectionPadding: CGFloat = 5
     private let collectionViewPadding: CGFloat = 12
     
-    var names:[String] = ["dummy1","dummy2","dummy3","dummy4","dummy5"]
-    var votes:[Int] = [1,2,3,4,5];
     let cellHeight:CGFloat = 50;
     var width:CGFloat = 150.0;
     
-    private var account:Account;
+    var account:Account;
     
     init(account:Account){
-        self.account=account;
+        self.account = account;
+        account.updateAccount()
         let c:String = account.userName[account.userName.index(account.userName.startIndex, offsetBy: 0)].uppercased()
         let pic: UIImage = HomeViewController.DefaultPFP[c] ?? UIImage()
-       profilePic.setImage(pic, for: UIControl.State.normal)
+        profilePic.setImage(pic, for: UIControl.State.normal)
        
         super.init(nibName: nil, bundle: nil)
         self.imagePicker = ImagePicker(presentationController: self, delegate: self)
@@ -142,8 +141,11 @@ class AccountViewController: UIViewController {
             namesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
         ])
     }
-    func reloadAccountData(){
+    
+    func reloadAccountPets(){
+        account.updateAccount()
         petsPostedCollectionView.reloadData()
+        namesTableView.reloadData()
         
     }
     @objc func editProfilePicture(_ sender: UIButton){
@@ -262,14 +264,13 @@ extension AccountViewController: ImagePickerDelegate {
 extension AccountViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return names.count
+        return account.userNames.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? NamesTableViewCell {
-            let name = names[indexPath.row]
-            let vote = votes[indexPath.row]
-            cell.configure(name: name,votes: vote)
+            
+            cell.configure(name:account.userNames[indexPath.row])
             cell.selectionStyle = .none
             
             return cell
