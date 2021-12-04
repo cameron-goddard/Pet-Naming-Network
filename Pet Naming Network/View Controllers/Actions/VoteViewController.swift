@@ -8,19 +8,22 @@
 import UIKit
 
 class VoteViewController: UIViewController {
-
+    
     private var imageView = UIImageView()
     private var namesTableView = UITableView()
     private var skipButton = UIButton()
     let userName = "test"
     
-    private var votableNames : [String] = []
+    private var votableNames : [PetName] = []
+    private var index = 0;
+    private var name:String = "";
     
     private let reuseIdentifier = "votableNameCellReuse"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemBackground
+        
         
         namesTableView.tableHeaderView = UIView()
         namesTableView.alwaysBounceVertical = false
@@ -43,36 +46,59 @@ class VoteViewController: UIViewController {
         skipButton.addTarget(self, action: #selector(newImage(_:)), for: .touchUpInside)
         skipButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(skipButton)
-        
-        print("right before")
-        NetworkManager.getPetsVoting { pets in
-            print("HERE")
-            print(Pet(petPost: pets[0]).petImage)
-            var tempNames : [String] = []
-            for pet in pets {
-                tempNames.append(Pet(petPost: pet).petName)
-            }
-            self.votableNames = tempNames
-            self.imageView.image = Pet(petPost: pets[0]).petImage
-            self.namesTableView.reloadData()
-        }
-        
-        
+        setupPets()
         setUpConstraints()
     }
+    public func setupPets(){
+        if(!LoginViewController.petServer.petsVoting.isEmpty){
+            votableNames = LoginViewController.petServer.petsVoting[0].names
+            imageView.image = Pet(petPost:LoginViewController.petServer.petsVoting[0]).petImage
+        }
+    }
+    
     
     @objc func newImage(_ sender: UIButton) {
         if sender.tag != -1 {
             
         }
+        if(LoginViewController.petServer.petsVoting.isEmpty){
+            UIView.transition(with: imageView, duration: 1.0, options: .transitionFlipFromLeft, animations: {
+                self.imageView.image = UIImage(systemName: "bolt.ring.closed")
+            }, completion: nil)
+            
+            UIView.transition(with: namesTableView, duration: 1.0, options: .transitionCrossDissolve, animations: {
+                self.votableNames = []
+                self.namesTableView.reloadData()
+            }, completion: nil)
+        }else{
         
-        UIView.transition(with: imageView, duration: 1.0, options: .transitionFlipFromLeft, animations: {
-            self.imageView.image = UIImage(systemName: "bolt.ring.closed")
-        }, completion: nil)
-        UIView.transition(with: namesTableView, duration: 1.0, options: .transitionCrossDissolve, animations: {
-            self.votableNames = []
-            self.namesTableView.reloadData()
-        }, completion: nil)
+            let pet1 = Pet(petPost:LoginViewController.petServer.petsVoting[self.index])
+            let name:String = votableNames[sender.tag].name
+            
+            NetworkManager.addVote(name: name, petID: pet1.id, completion: {pet in
+                PetServer.account.updateAccount()
+                LoginViewController.petServer.updateServer()
+                DispatchQueue.main.async {
+                    self.index = self.index + 1;
+                    if(self.index >= LoginViewController.petServer.petsVoting.count){
+                        self.index = 0;
+                    }
+                    
+                    UIView.transition(with: self.imageView, duration: 1.0, options: .transitionFlipFromLeft, animations: {
+                        self.imageView.image = pet1.petImage
+                    }, completion: nil)
+                    
+                    UIView.transition(with: self.namesTableView, duration: 1.0, options: .transitionCrossDissolve, animations: {
+                        self.votableNames = LoginViewController.petServer.petsVoting[self.index].names
+                        self.namesTableView.reloadData()
+                    }, completion: nil)
+                }
+                
+            })
+            
+            
+           
+        }
     }
     
     func setUpConstraints() {
@@ -101,16 +127,18 @@ extension VoteViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return votableNames.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? VotableNameTableViewCell {
             cell.voteButton.addTarget(self, action: #selector(newImage(_:)), for: .touchUpInside)
             cell.voteButton.tag = indexPath.row
+            
             cell.dislikeButton.addTarget(self, action: #selector(hideName(_:)), for: .touchUpInside)
             cell.dislikeButton.tag = indexPath.row
             cell.selectionStyle = .none
-            let petName = votableNames[indexPath.row]
-            cell.configure(name: petName)
+            let pet = votableNames[indexPath.row]
+            //cell.voteButton.titleLabel?.text = pet.name
+            cell.configure(name: pet.name)
             return cell
         } else {
             return UITableViewCell()

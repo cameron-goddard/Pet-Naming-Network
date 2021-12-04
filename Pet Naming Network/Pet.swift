@@ -15,7 +15,7 @@ class Pet{
     var nameSuggestions:[Name] = [];
     var user:String;
     var petImage:UIImage;
-    var petState:String;
+    var petState:State;
     var timeUploaded:String;
     var id:Int;
 
@@ -41,7 +41,23 @@ class Pet{
 
         let data = try? Data(contentsOf: url!)
         self.petImage = UIImage(data: data! ) ?? UIImage()
-        self.petState = petPost.state
+        
+        print("======================STATE=============================")
+        print(petPost.state)
+        print(petPost.state.elementsEqual("State.FEATURED"))
+        print("========================================================")
+        
+        if(petPost.state.elementsEqual("State.FEATURED")){
+            print(1)
+            self.petState = .FEATURED
+        }else if(petPost.state.elementsEqual("State.VOTING")){
+            print(2)
+            self.petState = .VOTING
+        }else{
+            print(3)
+            self.petState = .NAMING
+        }
+        
         self.timeUploaded = petPost.dateCreated
         self.id = petPost.id
     }
@@ -50,9 +66,6 @@ class Pet{
 
         var max:Int = 0;
         var idx:Int = 0;
-        print("========================================================")
-        print(petPost.names);
-        print(petPost.names.count);
         for x in 0..<petPost.names.count{
             if max < petPost.names[x].votes{
                 max = petPost.names[x].votes
@@ -60,7 +73,6 @@ class Pet{
             }
             nameSuggestions.append(Name(petID: petPost.id, pet: petPost.names[x]))
         }
-        print("IDX: \(idx)");
         if(nameSuggestions.count > 0){
             nameSuggestions.remove(at: idx)
             self.petName = Name(petID: petPost.id, pet: petPost.names[idx])
@@ -72,26 +84,16 @@ class Pet{
 
         let data = try? Data(contentsOf: url!)
         self.petImage = UIImage(data: data! ) ?? UIImage()
-        self.petState = petPost.state
+        if(petPost.state.elementsEqual("State.FEATURED")){
+            self.petState = .FEATURED
+        }else if(petPost.state.elementsEqual("State.VOTING")){
+            self.petState = .VOTING
+        }else{
+            self.petState = .NAMING
+        }
         self.timeUploaded = petPost.dateCreated
         self.id = petPost.id
     }
-    
-//    public func getPopularName(pet:PetPost){
-//        var max:Int = 0;
-//        var idx:Int = 0;
-//        for x in 0..<pet.names.count{
-//            if max < pet.names[x].votes{
-//                max = pet.names[x].votes
-//                idx = x;
-//            }
-//            nameSuggestions.append(Name(petID: pet.id, pet: pet.names[x]))
-//        }
-//        nameSuggestions.remove(at: idx)
-//        petName = pet.names[idx].name
-//    }
-//
-    
 
    
 }
@@ -120,10 +122,10 @@ class Name:Codable{
         self.votes = pet.votes
     }
     internal init() {
-        self.id = -1
+        self.id = 0
         self.name = ""
-        self.pet = -1
-        self.votes = -1
+        self.pet = 0
+        self.votes = 0
     }
     
     let id:Int
@@ -140,8 +142,8 @@ class PetName:Codable{
 }
 
 
-//enum State:Codable{
-//    case NAMING
-//    case VOTING
-//    case FEATURED
-//}
+enum State:Codable{
+    case NAMING
+    case VOTING
+    case FEATURED
+}

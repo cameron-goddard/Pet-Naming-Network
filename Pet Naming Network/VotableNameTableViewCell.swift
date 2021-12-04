@@ -16,7 +16,7 @@ class VotableNameTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        nameLabel.font = .systemFont(ofSize: 24, weight: .bold)
+        nameLabel.font = .systemFont(ofSize: 18)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(nameLabel)
         
@@ -58,3 +58,4 @@ class VotableNameTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+

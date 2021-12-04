@@ -13,9 +13,8 @@ class LoginViewController: UIViewController {
     private var nouns = ["Copper", "Building", "Harbor", "Flock", "Yarn", "Carpenter", "Pear", "Grain", "Ocean", "Yam", "Scent", "Toys", "Celery", "Education", "Toe", "Snow"]
     
     private var userName:String = "Bob123"
-    private var account:Account!;
     
-    private var petServer:PetServer!;
+    public static var petServer:PetServer!;
     
     private var welcomeLabel:UILabel = {
         let label = UILabel()
@@ -194,11 +193,12 @@ class LoginViewController: UIViewController {
         if(!userName.elementsEqual("")){
             NetworkManager.loginAccount(username: userName, completion: { user in
                 if user.loggedIn == 1{
-                    self.account = Account(user: user)
+                    PetServer.account = Account(user: user)
+                    
                     self.createTabs()
                 }else{
                     NetworkManager.createAccount(username: self.userName, completion: { user in
-                        self.account = Account(user: user)
+                        PetServer.account = Account(user: user)
 
                         self.createTabs()
                     })
@@ -217,29 +217,46 @@ class LoginViewController: UIViewController {
         loginButton.startAnimatingPressActions()
         
         petsShown = []
-        petServer = PetServer();
-        petServer.updateServer()
-        let tabBarVC = TabBarController(account:account)
         
-        let homeVC = HomeViewController(petsShown: petsShown)
-        let newImageVC = NewImageViewController(account:account,petServer: petServer)
-        let actionVC = UINavigationController(rootViewController: ActionViewController(account:account,petServer:petServer))
+        LoginViewController.petServer = PetServer();
         
-        homeVC.title = "Home"
-        newImageVC.title = "New"
-        actionVC.title = "Name/Vote"
-        
-        tabBarVC.setViewControllers([homeVC,newImageVC,actionVC], animated: false)
-        let items:[UITabBarItem] = tabBarVC.tabBar.items ?? [UITabBarItem()];
-        
-        let images = ["house",  "plus.circle.fill", "highlighter"]
-        for i in 0..<items.count{
-            items[i].image = UIImage(systemName: images[i])
+    
+        NetworkManager.getPetsNaming{ pets in
+
+            LoginViewController.petServer.petsNaming = pets;
+            NetworkManager.getPetsVoting{ pets2 in
+      
+                LoginViewController.petServer.petsVoting = pets2;
+                
+                let tabBarVC = TabBarController(account:PetServer.account)
+                let homeVC = HomeViewController(petsShown: self.petsShown)
+                let newImageVC = NewImageViewController()
+                let actionVC = UINavigationController(rootViewController: ActionViewController())
+                
+                homeVC.title = "Home"
+                newImageVC.title = "New"
+                actionVC.title = "Name/Vote"
+                
+                tabBarVC.setViewControllers([homeVC,newImageVC,actionVC], animated: false)
+                let items:[UITabBarItem] = tabBarVC.tabBar.items ?? [UITabBarItem()];
+                
+                let images = ["house",  "plus.circle.fill", "highlighter"]
+                for i in 0..<items.count{
+                    items[i].image = UIImage(systemName: images[i])
+                }
+                
+                
+                
+                self.navigationController?.pushViewController(tabBarVC, animated: true)
+                
+                
+                
+            }
         }
         
         
         
-        self.navigationController?.pushViewController(tabBarVC, animated: true)
+       
     }
     
 }

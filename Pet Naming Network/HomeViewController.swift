@@ -112,11 +112,19 @@ class HomeViewController: UIViewController{
         
     }
     @objc func refreshData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            //self.petsShown = self.petsShown
-            self.petCollectionView.reloadData()
-            self.refreshControl.endRefreshing()
+        NetworkManager.getFeaturedPets{ pets in
+            self.petsShown.removeAll()
+            for x in 0..<pets.count{
+                self.petsShown.append(Pet(petPost:pets[x]))
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                
+                self.petCollectionView.reloadData()
+                self.refreshControl.endRefreshing()
+            }
+            
         }
+        
     }
 }
 extension HomeViewController: UICollectionViewDataSource {

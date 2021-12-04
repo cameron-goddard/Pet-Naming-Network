@@ -14,6 +14,7 @@ class PetViewController: UIViewController {
     private var userNameLabel:UILabel = UILabel()
     private var votesLabel = UILabel()
     private var dateLabel = UILabel()
+    private var statusLabel = UILabel()
     private var closeButton = UIButton(type: .close)
     private var tableLabel:UILabel = UILabel()
     private var backgroundImageView = UIImageView()
@@ -127,6 +128,21 @@ class PetViewController: UIViewController {
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(dateLabel)
         
+        let stateImageAttachment = NSTextAttachment()
+        let stateImage = UIImage(systemName: "calendar.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .bold))!.withTintColor(.systemBlue)
+        stateImageAttachment.image = stateImage
+        stateImageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: stateImageAttachment.image!.size.width, height: dateImageAttachment.image!.size.height)
+        attachmentString = NSAttributedString(attachment: stateImageAttachment)
+        completeText = NSMutableAttributedString(string: "")
+        completeText.append(attachmentString)
+        textAfterIcon = NSAttributedString(string: " Status: \(pet.petState)", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
+        completeText.append(textAfterIcon)
+        
+        statusLabel.attributedText = completeText
+        statusLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(statusLabel)
+        
+        
         
         tableLabel.text = "Other Name Suggestions"
         tableLabel.font = UIFont.boldSystemFont(ofSize: 20)
@@ -181,8 +197,12 @@ class PetViewController: UIViewController {
             dateLabel.leadingAnchor.constraint(equalTo: votesLabel.leadingAnchor)
         ])
         NSLayoutConstraint.activate([
+            statusLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor,constant: 10),
+            statusLabel.leadingAnchor.constraint(equalTo: dateLabel.leadingAnchor)
+        ])
+        NSLayoutConstraint.activate([
             tableLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            tableLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor,constant: 40),
+            tableLabel.topAnchor.constraint(equalTo: statusLabel.bottomAnchor,constant: 30),
         ])
         NSLayoutConstraint.activate([
             //namesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),

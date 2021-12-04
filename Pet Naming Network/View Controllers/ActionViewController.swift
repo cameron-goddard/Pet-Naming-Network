@@ -23,13 +23,10 @@ class ActionViewController: UIViewController {
         return vc
     }()
     
-    var account:Account;
-    var petServer:PetServer
-    init(account:Account,petServer:PetServer){
-        self.account = account;
-        self.petServer = petServer
+    init(){
+
         super.init(nibName: nil, bundle: nil)
-        self.nameVC.addData(account:account,petServer: petServer)
+    
         self.nameVC.nextImage()
     }
     
