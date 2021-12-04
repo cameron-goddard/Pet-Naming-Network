@@ -22,7 +22,7 @@ class NameViewController: UIViewController {
         
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Pet(petPost: LoginViewController.petServer.petsNaming[0]).petImage
+        //imageView.image = Pet(petPost: LoginViewController.petServer.petsNaming[0]).petImage
        
         view.addSubview(imageView)
         
