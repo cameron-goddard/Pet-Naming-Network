@@ -121,7 +121,8 @@ class PetViewController: UIViewController {
         attachmentString = NSAttributedString(attachment: dateImageAttachment)
         completeText = NSMutableAttributedString(string: "")
         completeText.append(attachmentString)
-        textAfterIcon = NSAttributedString(string: " Date: " + pet.timeUploaded, attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
+        
+        textAfterIcon = NSAttributedString(string: " " + (pet.timeUploaded.components(separatedBy: " ").first ?? " "), attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
         completeText.append(textAfterIcon)
         
         dateLabel.attributedText = completeText
@@ -140,7 +141,7 @@ class PetViewController: UIViewController {
         
         statusLabel.attributedText = completeText
         statusLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(statusLabel)
+        //view.addSubview(statusLabel)
         
         
         
@@ -153,6 +154,7 @@ class PetViewController: UIViewController {
     }
     
     @objc func closeView() {
+        print("here")
         dismiss(animated: true, completion: nil)
     }
     
@@ -196,13 +198,13 @@ class PetViewController: UIViewController {
             dateLabel.topAnchor.constraint(equalTo: votesLabel.bottomAnchor,constant: 10),
             dateLabel.leadingAnchor.constraint(equalTo: votesLabel.leadingAnchor)
         ])
-        NSLayoutConstraint.activate([
+        /*NSLayoutConstraint.activate([
             statusLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor,constant: 10),
             statusLabel.leadingAnchor.constraint(equalTo: dateLabel.leadingAnchor)
-        ])
+        ])*/
         NSLayoutConstraint.activate([
             tableLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            tableLabel.topAnchor.constraint(equalTo: statusLabel.bottomAnchor,constant: 30),
+            tableLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor,constant: 30),
         ])
         NSLayoutConstraint.activate([
             //namesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -249,3 +251,10 @@ extension PetViewController: UITableViewDelegate {
 //    }
 }
 
+extension Date {
+   func getFormattedDate(format: String) -> String {
+        let dateformat = DateFormatter()
+        dateformat.dateFormat = format
+        return dateformat.string(from: self)
+    }
+}
