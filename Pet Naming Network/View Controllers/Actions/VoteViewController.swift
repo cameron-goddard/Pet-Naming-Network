@@ -34,7 +34,7 @@ class VoteViewController: UIViewController {
         namesTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(namesTableView)
         
-        imageView.image = UIImage(named: "doggo")
+        //imageView.image = UIImage(named: "doggo")
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)

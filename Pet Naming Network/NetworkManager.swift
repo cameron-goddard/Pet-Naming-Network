@@ -63,11 +63,13 @@ class NetworkManager {
                 //data)
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+                
                 if let petResponse = try? jsonDecoder.decode([PetPost].self, from: data) {
                     //petResponse);
                     completion(petResponse);
                 }
             case .failure(let error):
+                print("this is it")
                 print(error)
             }
             
