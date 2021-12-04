@@ -8,12 +8,12 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
+    
     private var adjs  = ["Wild", "Foregoing", "Talented", "Mysterious", "Incredible", "Gorgeous", "Dazzling", "Inquisitive", "Wealthy", "Educated", "Wrathful", "Axiomatic"]
     private var nouns = ["Copper", "Building", "Harbor", "Flock", "Yarn", "Carpenter", "Pear", "Grain", "Ocean", "Yam", "Scent", "Toys", "Celery", "Education", "Toe", "Snow"]
     
     private var userName:String = "Bob123"
-    private var account:Account = Account(userName: "", userPosts: [])
+    private var account:Account!;
     private var welcomeLabel:UILabel = {
         let label = UILabel()
         label.text = "Welcome to the"
@@ -49,7 +49,7 @@ class LoginViewController: UIViewController {
         textField.translatesAutoresizingMaskIntoConstraints = false;
         textField.borderStyle = .roundedRect
         textField.layer.cornerRadius = 20;
-      
+        
         return textField;
     }()
     
@@ -90,9 +90,9 @@ class LoginViewController: UIViewController {
         return label
     }()
     
-   // private var spinner = UIActivityIndicatorView()
+    // private var spinner = UIActivityIndicatorView()
     private var myActivityIndicator = UIActivityIndicatorView(style: .large)
-      
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -101,7 +101,7 @@ class LoginViewController: UIViewController {
         myActivityIndicator.startAnimating()
         myActivityIndicator.isHidden = true
         view.addSubview(appTitleLabel)
-      
+        
         view.addSubview(welcomeLabel)
         view.addSubview(infoLabel)
         view.addSubview(userNameTextField)
@@ -110,17 +110,7 @@ class LoginViewController: UIViewController {
         view.addSubview(myActivityIndicator)
         view.addSubview(disclaimerView)
         disclaimerView.addSubview(disclaimerLabel)
-//
-//        spinner.translatesAutoresizingMaskIntoConstraints = false
-//      //  spinner.center = self.view.center
-//        spinner.isHidden = true;
-//        spinner.backgroundColor = .clear
-//        spinner.hidesWhenStopped = true;
-//        spinner.style = .large
-//        spinner.color = UIColor.red
-//        view.addSubview(spinner)
-//
-                
+        
         view.backgroundColor = .systemBackground
         loginButton.center = view.center
         loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
@@ -178,11 +168,11 @@ class LoginViewController: UIViewController {
         ])
         
         
-//        NSLayoutConstraint.activate([
-//            spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor,constant: 20),
-//            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//
-//        ])
+        //        NSLayoutConstraint.activate([
+        //            spinner.topAnchor.constraint(equalTo: loginButton.bottomAnchor,constant: 20),
+        //            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        //
+        //        ])
     }
     @objc func newRandomName() {
         let randAdj = adjs.randomElement()!
@@ -192,59 +182,63 @@ class LoginViewController: UIViewController {
         userNameTextField.text = randName
         login()
     }
-                               
-    @objc func login2(){
-        myActivityIndicator.isHidden = false;
-        myActivityIndicator.startAnimating()
-        login();
-    }
+    
+    var check = 0;
     @objc func login(){
-
-
-        print("Attempting to Login!!");
-        NetworkManager.loginAccount(username: userName, completion: { account in
-            print("Attempting to Login!!");
-            print(account.username)
-        })
-        
         userName = userNameTextField.text ?? "";
-        if(userName.elementsEqual("")){
-            print("Deny!")
-           // loginButton.shake();
+        
+        
+        if(!userName.elementsEqual("")){
+            NetworkManager.loginAccount(username: userName, completion: { user in
+                if user.loggedIn == 1{
+                    self.account = Account(user: user)
+                    self.createTabs()
+                }else{
+                    NetworkManager.createAccount(username: self.userName, completion: { user in
+                        self.account = Account(user: user)
+
+                        self.createTabs()
+                    })
+                }
+                
+                
+            })
+            
         }else{
+            print("Deny!")
+        }
+        
+    }
+    
+    func createTabs(){
         loginButton.startAnimatingPressActions()
         
-
-            petsShown = [Pet(petName: "Doggo", user: userName, petImageURL: "doggo", petState: "State.FEATURED"),Pet(petName: "???", user: userName, petImageURL: "nice", petState: "State.FEATURED"),Pet(petName: "Gamer", user: userName, petImageURL: "gamer", petState: "State.FEATURED"),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: "State.FEATURED"),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: "State.FEATURED"),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: "State.FEATURED"),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: "State.FEATURED")]
-        account = Account(userName: userName,userPosts: petsShown)
-        
+        petsShown = []
         let tabBarVC = TabBarController(account:account)
         
         let homeVC = HomeViewController(petsShown: petsShown)
-            let newImageVC = NewImageViewController(account:account)
-            let actionVC = UINavigationController(rootViewController: ActionViewController(account:account))
+        let newImageVC = NewImageViewController(account:account)
+        let actionVC = UINavigationController(rootViewController: ActionViewController(account:account))
         
         homeVC.title = "Home"
         newImageVC.title = "New"
         actionVC.title = "Name/Vote"
-
+        
         tabBarVC.setViewControllers([homeVC,newImageVC,actionVC], animated: false)
         let items:[UITabBarItem] = tabBarVC.tabBar.items ?? [UITabBarItem()];
-
-        //"tray.and.arrow.down.fill",
-        //,"person.crop.circle"
+        
         let images = ["house",  "plus.circle.fill", "highlighter"]
         for i in 0..<items.count{
             
             items[i].image = UIImage(systemName: images[i])
         }
-           
-           
-          
-        self.navigationController?.pushViewController(tabBarVC, animated: true)
-        }
-       
-    }
         
+        
+        
+        self.navigationController?.pushViewController(tabBarVC, animated: true)
+    }
     
 }
+
+
+

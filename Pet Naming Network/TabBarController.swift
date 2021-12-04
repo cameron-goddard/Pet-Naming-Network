@@ -37,7 +37,8 @@ class TabBarController: UITabBarController {
     }
     
     @objc func presentAccount() {
-        accountVC.reloadAccountData();
+        
         present(accountVC, animated: true, completion: nil)
+        accountVC.reloadAccountPets()
     }
 }

@@ -83,11 +83,7 @@ class HomeViewController: UIViewController{
     }
     
     func createData(){
-        print("Creating Data!!");
-        NetworkManager.getFeaturedPets()
         NetworkManager.getFeaturedPets{ pets in
-            print("Data Obtained!");
-            print(pets);
         DispatchQueue.main.async {
             for x in 0..<pets.count{
                 self.petsShown.append(Pet(petPost:pets[x]))

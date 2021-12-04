@@ -92,14 +92,14 @@ class NetworkManager {
         }
     }
     
-    static func getAccountPets(completion: @escaping([Name]) -> Void) {
+    static func getAccountNames(completion: @escaping([PetName]) -> Void) {
         AF.request(host+"home/account/names/", method: .get).validate().responseData{response in
             switch response.result{
             case .success(let data):
                 print(data)
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-                if let nameResponse = try? jsonDecoder.decode([Name].self, from: data) {
+                if let nameResponse = try? jsonDecoder.decode([PetName].self, from: data) {
                     print(nameResponse);
                     completion(nameResponse);
                 }
@@ -109,37 +109,46 @@ class NetworkManager {
             
         }
     }
-    
-    static func getFeaturedPets() {
-        AF.request(host+"home/", method: .get).validate().responseJSON{response in
+    static func getAccountPets(completion: @escaping([PetAccount]) -> Void) {
+        AF.request(host+"home/account/Pets/", method: .get).validate().responseData{response in
             switch response.result{
             case .success(let data):
-                print(data)
+
+                let jsonDecoder = JSONDecoder()
+                jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+                if let petResponse = try? jsonDecoder.decode([PetAccount].self, from: data) {
+
+                    completion(petResponse);
+                }
             case .failure(let error):
-                print("SADGE!!!");
                 print(error)
             }
+            
         }
     }
+    
+//    static func getFeaturedPets() {
+//        AF.request(host+"home/", method: .get).validate().responseJSON{response in
+//            switch response.result{
+//            case .success(let data):
+//                print(data)
+//            case .failure(let error):
+//                print("SADGE!!!");
+//                print(error)
+//            }
+//        }
+//    }
     static func getFeaturedPets(completion: @escaping([PetPost]) -> Void) {
         
-        print("HELLO")
         AF.request(host+"home/", method: .get).validate().responseData{response in
             switch response.result{
             case .success(let data):
-                print(data)
-                print("We made it!")
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let petResponse = try? jsonDecoder.decode([PetPost].self, from: data) {
-                    print(petResponse);
-                    print("HELLO!!!! DOES THIS WORK!!!");
-                    print(petResponse[0].pic);
                     completion(petResponse);
                 }
-                print("Failed:(")
             case .failure(let error):
-                print("SADGE!!!");
                 print(error)
             }
             
@@ -150,13 +159,10 @@ class NetworkManager {
      ============================= Post Commands ============================================
      =======================================================================================
      */
-    static func uploadImage(rawImage:UIImage,completion: @escaping(PetPost) -> Void) {
-        
-        let imageData = rawImage.pngData()
-        let imageBase64String:String? = imageData?.base64EncodedString()
+    static func uploadImage(rawImage:String,completion: @escaping(PetPost) -> Void) {
         
         let parameters:[String:String]=[
-            "image_data":imageBase64String ?? ""
+            "image_data":rawImage
         ]
         AF.request(host+"home/uploading/", method: .post, parameters: parameters, encoding: JSONEncoding.default).validate().responseData {
             response in
@@ -248,7 +254,6 @@ class NetworkManager {
         let parameters:[String:String]=[
             "username":username
         ]
-        print("Getting dEEp!!")
         print(username)
         AF.request(host+"home/login/", method: .post, parameters: parameters, encoding: JSONEncoding.default).validate().responseData {
             response in
@@ -263,9 +268,9 @@ class NetworkManager {
                     print(userResponse);
                     completion(userResponse);
                 }
-                print("SUCCESS???")
             case .failure(let error):
                 print(error)
+                completion(User(id: 0, username: "", pets: [], names: [], loggedIn: 0));
             }
             
         }

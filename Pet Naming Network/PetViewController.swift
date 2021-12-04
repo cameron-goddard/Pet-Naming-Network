@@ -21,13 +21,14 @@ class PetViewController: UIViewController {
     private var reuseIdentifier = "namesCellReuse"
     
 
-    var votes:[Int] = [];
     let cellHeight:CGFloat = 50;
     
-    var names:[String] = []
+//    var names:[Name] = []
     private var pet:Pet
+    
     init(pet:Pet){
         self.pet = pet;
+
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -41,10 +42,6 @@ class PetViewController: UIViewController {
         title = "Pet"
         view.backgroundColor = .secondarySystemBackground
         
-        for x in 0...pet.nameSuggestions.count-1{
-            names.append(pet.nameSuggestions[x])
-            votes.append(x)
-        }
         
         namesTableView.layer.cornerRadius = 10
         
@@ -200,14 +197,12 @@ class PetViewController: UIViewController {
 extension PetViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return names.count
+        return pet.nameSuggestions.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? NamesTableViewCell {
-            let name = names[indexPath.row]
-            let vote = votes[indexPath.row]
-            cell.configure(name: name,votes: vote)
+            cell.configure(name: pet.nameSuggestions[indexPath.row])
             cell.selectionStyle = .none
             return cell
         } else {

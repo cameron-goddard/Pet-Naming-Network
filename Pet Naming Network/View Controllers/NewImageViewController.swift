@@ -163,11 +163,21 @@ extension NewImageViewController: ImagePickerDelegate {
         let img:UIImage = image ?? UIImage()
         self.newImageView.image = cropToBounds(image: img, width: img.size.width, height: img.size.height);
         self.toggleUploadButton()
-       
-        NetworkManager.uploadImage(rawImage: img, completion: { pet in
-            self.account.userPosts.append(Pet(petPost: pet))
-            
-        })
+       print("Uploading...")
+        print("========================================================")
+        print("========================================================")
+        print("========================================================")
+        let imageData = img.pngData()
+        let imageBase64String:String = imageData?.base64EncodedString() ?? "LOL"
+                NetworkManager.uploadImage(rawImage: "data:image/png;base64,"+imageBase64String, completion: { pet in
+                    self.account.userPosts.append(Pet(petPost: pet))
+                    print("SUCEESS IMAGE Uploaded!!")
+                })
+        print("========================================================")
+        print("========================================================")
+        print("========================================================")
+        
+
         
     }
 }
