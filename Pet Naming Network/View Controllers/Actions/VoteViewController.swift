@@ -14,7 +14,7 @@ class VoteViewController: UIViewController {
     private var skipButton = UIButton()
     let userName = "test"
     
-    private var votableNames : [Pet] = [Pet(petName: "Doggo", user: "test", petImageURL: "doggo", petState: "featured"),Pet(petName: "???", user: "test", petImageURL: "nice", petState: "featured"),Pet(petName: "Gamer", user: "test", petImageURL: "gamer", petState: "featured"),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: "featured"),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: "featured")]
+    private var votableNames : [String] = []
     
     private let reuseIdentifier = "votableNameCellReuse"
     
@@ -31,7 +31,7 @@ class VoteViewController: UIViewController {
         namesTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(namesTableView)
         
-        imageView.image = UIImage(named: "doggo")
+        //imageView.image = UIImage(named: "doggo")
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
@@ -43,6 +43,20 @@ class VoteViewController: UIViewController {
         skipButton.addTarget(self, action: #selector(newImage(_:)), for: .touchUpInside)
         skipButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(skipButton)
+        
+        print("right before")
+        NetworkManager.getPetsVoting { pets in
+            print("HERE")
+            print(Pet(petPost: pets[0]).petImage)
+            var tempNames : [String] = []
+            for pet in pets {
+                tempNames.append(Pet(petPost: pet).petName)
+            }
+            self.votableNames = tempNames
+            self.imageView.image = Pet(petPost: pets[0]).petImage
+            self.namesTableView.reloadData()
+        }
+        
         
         setUpConstraints()
     }
@@ -56,7 +70,7 @@ class VoteViewController: UIViewController {
             self.imageView.image = UIImage(systemName: "bolt.ring.closed")
         }, completion: nil)
         UIView.transition(with: namesTableView, duration: 1.0, options: .transitionCrossDissolve, animations: {
-            self.votableNames = [Pet(petName: "Doggo", user: "test", petImageURL: "doggo", petState: "featured"),Pet(petName: "???", user: "test", petImageURL: "nice", petState: "featured"),Pet(petName: "Gamer", user: "test", petImageURL: "gamer", petState: "featured"),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: "featured"),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: "featured")]
+            self.votableNames = []
             self.namesTableView.reloadData()
         }, completion: nil)
     }
@@ -95,8 +109,8 @@ extension VoteViewController: UITableViewDataSource {
             cell.dislikeButton.addTarget(self, action: #selector(hideName(_:)), for: .touchUpInside)
             cell.dislikeButton.tag = indexPath.row
             cell.selectionStyle = .none
-            let pet = votableNames[indexPath.row]
-            cell.configure(name: pet.petName)
+            let petName = votableNames[indexPath.row]
+            cell.configure(name: petName)
             return cell
         } else {
             return UITableViewCell()
