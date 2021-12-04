@@ -75,7 +75,7 @@ class PetViewController: UIViewController {
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         backgroundImageView.addSubview(closeButton)
         
-        petNameLabel.text = pet.petName
+        petNameLabel.text = pet.petName.name
         petNameLabel.textAlignment = .center
         petNameLabel.font = UIFont.boldSystemFont(ofSize: 36)
         petNameLabel.textColor = .white
@@ -106,7 +106,7 @@ class PetViewController: UIViewController {
         attachmentString = NSAttributedString(attachment: voteImageAttachment)
         completeText = NSMutableAttributedString(string: "")
         completeText.append(attachmentString)
-        textAfterIcon = NSAttributedString(string: " 16", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
+        textAfterIcon = NSAttributedString(string: " \(pet.petName.votes)" , attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
         completeText.append(textAfterIcon)
         
         votesLabel.attributedText = completeText
@@ -120,7 +120,7 @@ class PetViewController: UIViewController {
         attachmentString = NSAttributedString(attachment: dateImageAttachment)
         completeText = NSMutableAttributedString(string: "")
         completeText.append(attachmentString)
-        textAfterIcon = NSAttributedString(string: " Date", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
+        textAfterIcon = NSAttributedString(string: " Date: " + pet.timeUploaded, attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
         completeText.append(textAfterIcon)
         
         dateLabel.attributedText = completeText

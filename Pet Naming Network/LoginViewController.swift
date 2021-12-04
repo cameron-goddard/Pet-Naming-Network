@@ -14,6 +14,9 @@ class LoginViewController: UIViewController {
     
     private var userName:String = "Bob123"
     private var account:Account!;
+    
+    private var petServer:PetServer!;
+    
     private var welcomeLabel:UILabel = {
         let label = UILabel()
         label.text = "Welcome to the"
@@ -214,11 +217,13 @@ class LoginViewController: UIViewController {
         loginButton.startAnimatingPressActions()
         
         petsShown = []
+        petServer = PetServer();
+        petServer.updateServer()
         let tabBarVC = TabBarController(account:account)
         
         let homeVC = HomeViewController(petsShown: petsShown)
-        let newImageVC = NewImageViewController(account:account)
-        let actionVC = UINavigationController(rootViewController: ActionViewController(account:account))
+        let newImageVC = NewImageViewController(account:account,petServer: petServer)
+        let actionVC = UINavigationController(rootViewController: ActionViewController(account:account,petServer:petServer))
         
         homeVC.title = "Home"
         newImageVC.title = "New"
@@ -229,7 +234,6 @@ class LoginViewController: UIViewController {
         
         let images = ["house",  "plus.circle.fill", "highlighter"]
         for i in 0..<items.count{
-            
             items[i].image = UIImage(systemName: images[i])
         }
         

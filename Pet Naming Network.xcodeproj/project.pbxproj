@@ -20,6 +20,7 @@
 		26F452A82758388400067ADB /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F452A72758388400067ADB /* SuccessViewController.swift */; };
 		26F452AA2759783C00067ADB /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F452A92759783C00067ADB /* NetworkManager.swift */; };
 		26F452AC2759D62F00067ADB /* NamesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F452AB2759D62F00067ADB /* NamesTableViewCell.swift */; };
+		26F452AE275B49F300067ADB /* PetServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F452AD275B49F300067ADB /* PetServer.swift */; };
 		3B2B6101273D9637000F99DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B6100273D9637000F99DC /* AppDelegate.swift */; };
 		3B2B6103273D9637000F99DC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B6102273D9637000F99DC /* SceneDelegate.swift */; };
 		3B2B6105273D9637000F99DC /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B6104273D9637000F99DC /* HomeViewController.swift */; };
@@ -48,6 +49,7 @@
 		26F452A72758388400067ADB /* SuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
 		26F452A92759783C00067ADB /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		26F452AB2759D62F00067ADB /* NamesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamesTableViewCell.swift; sourceTree = "<group>"; };
+		26F452AD275B49F300067ADB /* PetServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetServer.swift; sourceTree = "<group>"; };
 		3B2B60FD273D9637000F99DC /* Pet Naming Network.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pet Naming Network.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B2B6100273D9637000F99DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3B2B6102273D9637000F99DC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				26F452AB2759D62F00067ADB /* NamesTableViewCell.swift */,
 				26654B29274B0172006C014D /* ImagePicker.swift */,
 				26F452A32757418700067ADB /* TabBarController.swift */,
+				26F452AD275B49F300067ADB /* PetServer.swift */,
 			);
 			path = "Pet Naming Network";
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 				26F452A42757418700067ADB /* TabBarController.swift in Sources */,
 				264105D027493FC3004C6DA4 /* PetCollectionViewCell.swift in Sources */,
 				3B2B6105273D9637000F99DC /* HomeViewController.swift in Sources */,
+				26F452AE275B49F300067ADB /* PetServer.swift in Sources */,
 				264105C827470DBD004C6DA4 /* AccountViewController.swift in Sources */,
 				3B489E9A2759527300FFB473 /* NameViewController.swift in Sources */,
 				3B2B6101273D9637000F99DC /* AppDelegate.swift in Sources */,

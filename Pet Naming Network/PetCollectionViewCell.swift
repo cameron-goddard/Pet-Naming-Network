@@ -47,7 +47,7 @@ class PetCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(for pet:Pet){
-        petNameLabel.text = pet.petName;
+        petNameLabel.text = pet.petName.name;
         petImageView.image = cropToBounds(image: pet.petImage, width: pet.petImage.size.width, height: pet.petImage.size.height);
         //userNameLabel.text = "By: \(pet.user)"
         let gradient = CAGradientLayer()

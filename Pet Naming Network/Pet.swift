@@ -11,7 +11,7 @@ import UIKit
 
 class Pet{
     
-    var petName:String;
+    var petName:Name;
     var nameSuggestions:[Name] = [];
     var user:String;
     var petImage:UIImage;
@@ -20,7 +20,7 @@ class Pet{
     var id:Int;
 
     init(petPost:PetPost){
-        self.petName = "";
+        self.petName = Name();
         var max:Int = 0;
         var idx:Int = 0;
         
@@ -33,7 +33,7 @@ class Pet{
         }
         if(petPost.names.count>0){
             nameSuggestions.remove(at: idx)
-            self.petName = petPost.names[idx].name
+            self.petName = Name(petID: petPost.id, pet: petPost.names[idx])
         }
         
         self.user = petPost.user.username
@@ -47,7 +47,7 @@ class Pet{
     }
     
     init(petPost:PetAccount,userName:String){
-        self.petName = "";
+
         var max:Int = 0;
         var idx:Int = 0;
         print("========================================================")
@@ -63,9 +63,9 @@ class Pet{
         print("IDX: \(idx)");
         if(nameSuggestions.count > 0){
             nameSuggestions.remove(at: idx)
-            self.petName = petPost.names[idx].name
+            self.petName = Name(petID: petPost.id, pet: petPost.names[idx])
         }else{
-            self.petName = ""
+            self.petName = Name()
         }
         self.user = userName
         let url = URL(string: petPost.pic)
@@ -77,20 +77,20 @@ class Pet{
         self.id = petPost.id
     }
     
-    public func getPopularName(pet:PetPost){
-        var max:Int = 0;
-        var idx:Int = 0;
-        for x in 0..<pet.names.count{
-            if max < pet.names[x].votes{
-                max = pet.names[x].votes
-                idx = x;
-            }
-            nameSuggestions.append(Name(petID: pet.id, pet: pet.names[x]))
-        }
-        nameSuggestions.remove(at: idx)
-        petName = pet.names[idx].name
-    }
-    
+//    public func getPopularName(pet:PetPost){
+//        var max:Int = 0;
+//        var idx:Int = 0;
+//        for x in 0..<pet.names.count{
+//            if max < pet.names[x].votes{
+//                max = pet.names[x].votes
+//                idx = x;
+//            }
+//            nameSuggestions.append(Name(petID: pet.id, pet: pet.names[x]))
+//        }
+//        nameSuggestions.remove(at: idx)
+//        petName = pet.names[idx].name
+//    }
+//
     
 
    
@@ -119,6 +119,13 @@ class Name:Codable{
         self.pet = petID
         self.votes = pet.votes
     }
+    internal init() {
+        self.id = -1
+        self.name = ""
+        self.pet = -1
+        self.votes = -1
+    }
+    
     let id:Int
     let name:String
     let pet:Int

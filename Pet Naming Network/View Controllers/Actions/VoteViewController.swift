@@ -96,7 +96,7 @@ extension VoteViewController: UITableViewDataSource {
             cell.dislikeButton.tag = indexPath.row
             cell.selectionStyle = .none
             let pet = votableNames[indexPath.row]
-            cell.configure(name: pet.petName)
+            cell.configure(name: pet.petName.name)
             return cell
         } else {
             return UITableViewCell()

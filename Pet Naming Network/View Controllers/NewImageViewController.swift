@@ -20,9 +20,10 @@ class NewImageViewController: UIViewController {
     let buttonSize:CGFloat = 120;
     
     var account:Account;
-    
-    init(account:Account){
+    var petServer:PetServer;
+    init(account:Account,petServer:PetServer){
         self.account = account;
+        self.petServer = petServer;
         super .init(nibName: nil, bundle: nil)
         self.imagePicker = ImagePicker(presentationController: self, delegate: self)
     }
@@ -173,6 +174,7 @@ extension NewImageViewController: ImagePickerDelegate {
                     self.account.userPosts.append(Pet(petPost: pet))
                     print("SUCEESS IMAGE Uploaded!!")
                 })
+        petServer.updateServer()
         print("========================================================")
         print("========================================================")
         print("========================================================")

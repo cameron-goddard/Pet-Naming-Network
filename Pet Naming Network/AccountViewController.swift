@@ -38,10 +38,10 @@ class AccountViewController: UIViewController {
     let cellHeight:CGFloat = 50;
     var width:CGFloat = 150.0;
     
-    private var account:Account;
+    var account:Account;
     
     init(account:Account){
-        self.account=account;
+        self.account = account;
         account.updateAccount()
         let c:String = account.userName[account.userName.index(account.userName.startIndex, offsetBy: 0)].uppercased()
         let pic: UIImage = HomeViewController.DefaultPFP[c] ?? UIImage()
@@ -264,7 +264,6 @@ extension AccountViewController: ImagePickerDelegate {
 extension AccountViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return account.userNames.count
     }
 
