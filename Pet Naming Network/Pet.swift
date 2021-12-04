@@ -17,25 +17,8 @@ class Pet{
     var petImage:UIImage;
     var petState:String;
     var timeUploaded:String;
-    
-    
-    init(petName:String, user:String,petImageURL:String,petState:String){
-        self.petName = petName;
-        self.user = user;
-        self.petImage = UIImage(named: petImageURL) ?? UIImage()
-        self.petState = petState;
-        nameSuggestions = ["dummy1","dummy2","dummy3","dummy4","dummy5"]
-        self.timeUploaded = "NEVER!!"
-    }
-    
-    init(petName:String, user:String,petImage:UIImage,petState:String){
-        self.petName = petName;
-        self.user = user;
-        self.petImage = petImage
-        self.petState = petState;
-        self.timeUploaded = "NEVER!!"
-    }
-    
+    var id:Int;
+
     init(petPost:PetPost){
         self.petName = "";
         var max:Int = 0;
@@ -53,14 +36,12 @@ class Pet{
         
         self.user = petPost.user.username
         let url = URL(string: petPost.pic)
-        print("===============Pet==============================")
-        print(petPost.pic)
-        print(url)
+
         let data = try? Data(contentsOf: url!)
         self.petImage = UIImage(data: data! ) ?? UIImage()
         self.petState = petPost.state
         self.timeUploaded = petPost.dateCreated
-        
+        self.id = petPost.id
     }
     
     public func getPopularName(pet:PetPost){
