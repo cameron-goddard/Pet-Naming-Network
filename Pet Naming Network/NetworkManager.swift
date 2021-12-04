@@ -25,11 +25,11 @@ class NetworkManager {
         AF.request(host+"home/\(petID)/names/", method: .get).validate().responseData{response in
             switch response.result{
             case .success(let data):
-                print(data)
+                //data)
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let namesResponse = try? jsonDecoder.decode([Name].self, from: data) {
-                    print(namesResponse);
+                    //namesResponse);
                     completion(namesResponse);
                 }
             case .failure(let error):
@@ -42,11 +42,11 @@ class NetworkManager {
         AF.request(host+"home/\(petID)/popular/", method: .get).validate().responseData{response in
             switch response.result{
             case .success(let data):
-                print(data)
+                //data)
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let nameResponse = try? jsonDecoder.decode(Name.self, from: data) {
-                    print(nameResponse);
+                    //nameResponse);
                     completion(nameResponse);
                 }
             case .failure(let error):
@@ -60,11 +60,11 @@ class NetworkManager {
         AF.request(host+"home/naming/", method: .get).validate().responseData{response in
             switch response.result{
             case .success(let data):
-                print(data)
+                //data)
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let petResponse = try? jsonDecoder.decode([PetPost].self, from: data) {
-                    print(petResponse);
+                    //petResponse);
                     completion(petResponse);
                 }
             case .failure(let error):
@@ -78,11 +78,11 @@ class NetworkManager {
         AF.request(host+"home/voting/", method: .get).validate().responseData{response in
             switch response.result{
             case .success(let data):
-                print(data)
+                //data)
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let petResponse = try? jsonDecoder.decode([PetPost].self, from: data) {
-                    print(petResponse);
+                    //petResponse);
                     completion(petResponse);
                 }
             case .failure(let error):
@@ -97,11 +97,11 @@ class NetworkManager {
         AF.request(host+"home/account/names/", method: .get).validate().responseData{response in
             switch response.result{
             case .success(let data):
-                print(data)
+                //data)
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let nameResponse = try? jsonDecoder.decode([PetName].self, from: data) {
-                    print(nameResponse);
+                    //nameResponse);
                     completion(nameResponse);
                 }
             case .failure(let error):
@@ -132,9 +132,9 @@ class NetworkManager {
 //        AF.request(host+"home/", method: .get).validate().responseJSON{response in
 //            switch response.result{
 //            case .success(let data):
-//                print(data)
+//                //data)
 //            case .failure(let error):
-//                print("SADGE!!!");
+//                //"SADGE!!!");
 //                print(error)
 //            }
 //        }
@@ -169,11 +169,11 @@ class NetworkManager {
             response in
             switch response.result{
             case .success(let data):
-                print(data)
+                //data)
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let petResponse = try? jsonDecoder.decode(PetPost.self, from: data) {
-                    print(petResponse);
+                    //petResponse);
                     completion(petResponse);
                 }
             case .failure(let error):
@@ -191,11 +191,11 @@ class NetworkManager {
             response in
             switch response.result{
             case .success(let data):
-                print(data)
+                //data)
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let nameResponse = try? jsonDecoder.decode(Name.self, from: data) {
-                    print(nameResponse);
+                    //nameResponse);
                     completion(nameResponse);
                 }
             case .failure(let error):
@@ -213,11 +213,11 @@ class NetworkManager {
             response in
             switch response.result{
             case .success(let data):
-                print(data)
+                //data)
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let petResponse = try? jsonDecoder.decode(PetPost.self, from: data) {
-                    print(petResponse);
+                    //petResponse);
                     completion(petResponse);
                 }
             case .failure(let error):
@@ -236,12 +236,12 @@ class NetworkManager {
             response in
             switch response.result{
             case .success(let data):
-                print(data)
+                //data)
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let userResponse = try? jsonDecoder.decode(User.self, from: data) {
-                    print("YESSS!!!sodfjasuiodfhasudfhasdjfhjasdhfasdjlf")
-                    print(userResponse);
+                    //"YESSS!!!sodfjasuiodfhasudfhasdjfhjasdhfasdjlf")
+                    //userResponse);
                     completion(userResponse);
                 }
             case .failure(let error):
@@ -255,19 +255,19 @@ class NetworkManager {
         let parameters:[String:String]=[
             "username":username
         ]
-        print(username)
+        //username)
         AF.request(host+"home/login/", method: .post, parameters: parameters, encoding: JSONEncoding.default).validate().responseData {
             response in
             switch response.result{
             case .success(let data):
           
-                print(data)
+                //data)
 
                 let jsonDecoder = JSONDecoder()
                 jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let userResponse = try? jsonDecoder.decode(User.self, from: data) {
-                    print("YEAH!")
-                    print(userResponse);
+                    //"YEAH!")
+                    //userResponse);
                     completion(userResponse);
                 }
             case .failure(let error):

@@ -14,6 +14,7 @@ class NameViewController: UIViewController {
     private var submitButton = UIButton()
     private var skipButton = UIButton()
     private var index:Int = -1;
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,13 +52,7 @@ class NameViewController: UIViewController {
         
         setUpConstraints()
     }
-//    func addData(){
-//        if(petServer.petsNaming.count == 0){
-//            self.imageView.image = UIImage(systemName: "bolt.ring.closed")
-//        }else {
-//            self.imageView.image = Pet(petPost: petServer.petsNaming[0]).petImage
-//        }
-//    }
+
     
     
     @objc func submitName() {

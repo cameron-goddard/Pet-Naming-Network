@@ -220,12 +220,12 @@ class LoginViewController: UIViewController {
         
         LoginViewController.petServer = PetServer();
         
-        print("Struggle1")
+    
         NetworkManager.getPetsNaming{ pets in
-            print("Struggle2")
+
             LoginViewController.petServer.petsNaming = pets;
             NetworkManager.getPetsVoting{ pets2 in
-                print("Struggle3")
+      
                 LoginViewController.petServer.petsVoting = pets2;
                 
                 let tabBarVC = TabBarController(account:PetServer.account)

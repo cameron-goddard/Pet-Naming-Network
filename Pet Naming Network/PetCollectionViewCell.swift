@@ -71,9 +71,31 @@ class PetCollectionViewCell: UICollectionViewCell {
     func accountConfigure(for pet:Pet){
         petNameLabel.text = "";
         petImageView.image = cropToBounds(image: pet.petImage, width: pet.petImage.size.width, height: pet.petImage.size.height);
-        //userNameLabel.text = ""
-        petImageView.layer.borderWidth = 2;
-        petImageView.layer.borderColor = UIColor.systemBlue.cgColor
+        print("THIS IS IT: \(pet.petState)")
+        print("THIS Name: \(pet.petName.name)")
+        switch(pet.petState){
+        case .FEATURED:
+            print("NICE1")
+            break;
+        case .VOTING:
+            print("Okay")
+            break;
+        case .NAMING:
+            print("Boring")
+            break;
+        }
+        
+        if(pet.petState == .FEATURED){
+            petImageView.layer.borderWidth = 5;
+            petImageView.layer.borderColor = UIColor.orange.cgColor
+        }else if(pet.petState == .VOTING){
+            petImageView.layer.borderWidth = 3;
+            petImageView.layer.borderColor = UIColor.black.cgColor
+        }else{
+            petImageView.layer.borderWidth = 2;
+            petImageView.layer.borderColor = UIColor.systemBlue.cgColor
+        }
+       
         let padding:CGFloat = 6;
         let width = contentView.frame.width-padding*2;
         petImageView.snp.makeConstraints{make in
