@@ -156,17 +156,9 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         UIView.animate(withDuration: 0.5) {
             if let cell = collectionView.cellForItem(at: indexPath) as? PetCollectionViewCell {
                 let animationOptions: UIView.AnimationOptions = [.allowUserInteraction]
-                PetCollectionViewCell.animate(withDuration: 0.5,
-                             delay: 0,
-                             usingSpringWithDamping: 1,
-                             initialSpringVelocity: 0,
-                             options: animationOptions, animations: {
-                              cell.transform = .init(scaleX: 0.96, y: 0.96)
-              }, completion: nil)
-                
-                
-                //cell.transform = .init(scaleX: 0.95, y: 0.95)
-                //cell.contentView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
+                PetCollectionViewCell.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: animationOptions, animations: {
+                    cell.transform = .init(scaleX: 0.96, y: 0.96)
+                }, completion: nil)
             }
         }
     }
@@ -175,17 +167,12 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         UIView.animate(withDuration: 0.5) {
             if let cell = collectionView.cellForItem(at: indexPath) as? PetCollectionViewCell {
                 let animationOptions: UIView.AnimationOptions = [.allowUserInteraction]
-                PetCollectionViewCell.animate(withDuration: 0.5,
-                                           delay: 0,
-                                           usingSpringWithDamping: 1,
-                                           initialSpringVelocity: 0,
-                                           options: animationOptions, animations: {
-                                            cell.transform = .identity
-                            }, completion: nil)
+                PetCollectionViewCell.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: animationOptions, animations: {
+                    cell.transform = .identity
+                }, completion: nil)
             }
         }
     }
-    
 }
 
 

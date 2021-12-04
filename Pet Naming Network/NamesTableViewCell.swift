@@ -22,8 +22,7 @@ class NamesTableViewCell: UITableViewCell {
         contentView.addSubview(nameLabel)
         
         voteLabel.font = .systemFont(ofSize: 16)
-        voteLabel.textColor = .black
-        voteLabel.textAlignment = .left
+        voteLabel.textAlignment = .right
         voteLabel.translatesAutoresizingMaskIntoConstraints = false;
         contentView.addSubview(voteLabel)
         
@@ -44,7 +43,7 @@ class NamesTableViewCell: UITableViewCell {
             nameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         NSLayoutConstraint.activate([
-            voteLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            voteLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             voteLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             voteLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             voteLabel.widthAnchor.constraint(equalToConstant: 100),

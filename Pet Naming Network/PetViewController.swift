@@ -13,6 +13,7 @@ class PetViewController: UIViewController {
     private var petNameLabel:UILabel = UILabel()
     private var userNameLabel:UILabel = UILabel()
     private var votesLabel = UILabel()
+    private var dateLabel = UILabel()
     private var closeButton = UIButton(type: .close)
     private var tableLabel:UILabel = UILabel()
     private var backgroundImageView = UIImageView()
@@ -58,19 +59,19 @@ class PetViewController: UIViewController {
         
         backgroundImageView.image = pet.petImage
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundImageView.dropShadow()
+        view.addSubview(backgroundImageView)
         let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         //blurEffectView.frame = contentView.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         backgroundImageView.addSubview(blurEffectView)
-        view.addSubview(backgroundImageView)
         
         petImageView.contentMode = .scaleToFill
-        petImageView.image = pet.petImage
-        petImageView.layer.masksToBounds = true
         petImageView.layer.cornerRadius = 10
+        petImageView.layer.masksToBounds = true
+        petImageView.image = pet.petImage
         petImageView.translatesAutoresizingMaskIntoConstraints = false
-        petImageView.dropShadow()
         backgroundImageView.addSubview(petImageView)
         
         closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
@@ -83,23 +84,52 @@ class PetViewController: UIViewController {
         petNameLabel.textColor = .white
         petNameLabel.translatesAutoresizingMaskIntoConstraints = false
         backgroundImageView.addSubview(petNameLabel)
-    
-        let submitText = "Submitted by: "
-        let attrs = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16)]
-        let submitAttrString = NSMutableAttributedString(string: submitText, attributes:attrs)
-        let user = NSMutableAttributedString(string:pet.user)
-        submitAttrString.append(user)
-        userNameLabel.attributedText = submitAttrString
+        
+        let imageOffsetY: CGFloat = -5.0
+        
+        let personImageAttachment = NSTextAttachment()
+        let personImage = UIImage(systemName: "person.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .bold))!.withTintColor(.systemBlue)
+        personImageAttachment.image = personImage
+        personImageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: personImageAttachment.image!.size.width, height: personImageAttachment.image!.size.height)
+        var attachmentString = NSAttributedString(attachment: personImageAttachment)
+        var completeText = NSMutableAttributedString(string: "")
+        completeText.append(attachmentString)
+        var textAfterIcon = NSAttributedString(string: " " + pet.user, attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
+        completeText.append(textAfterIcon)
+        
+        userNameLabel.attributedText = completeText
         userNameLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(userNameLabel)
         
-        let votesText = "Votes: "
-        let votesAttrString = NSMutableAttributedString(string: votesText, attributes:attrs)
-        let votes = NSMutableAttributedString(string:"test")
-        votesAttrString.append(votes)
-        votesLabel.attributedText = votesAttrString
+        
+        let voteImageAttachment = NSTextAttachment()
+        let thumbsUpImage = UIImage(systemName: "hand.thumbsup.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .bold))!.withTintColor(.systemBlue)
+        voteImageAttachment.image = thumbsUpImage
+        voteImageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: voteImageAttachment.image!.size.width, height: voteImageAttachment.image!.size.height)
+        attachmentString = NSAttributedString(attachment: voteImageAttachment)
+        completeText = NSMutableAttributedString(string: "")
+        completeText.append(attachmentString)
+        textAfterIcon = NSAttributedString(string: " 16", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
+        completeText.append(textAfterIcon)
+        
+        votesLabel.attributedText = completeText
         votesLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(votesLabel)
+        
+        let dateImageAttachment = NSTextAttachment()
+        let calendarImage = UIImage(systemName: "calendar.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .bold))!.withTintColor(.systemBlue)
+        dateImageAttachment.image = calendarImage
+        dateImageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: dateImageAttachment.image!.size.width, height: dateImageAttachment.image!.size.height)
+        attachmentString = NSAttributedString(attachment: dateImageAttachment)
+        completeText = NSMutableAttributedString(string: "")
+        completeText.append(attachmentString)
+        textAfterIcon = NSAttributedString(string: " Date", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20)])
+        completeText.append(textAfterIcon)
+        
+        dateLabel.attributedText = completeText
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(dateLabel)
+        
         
         tableLabel.text = "Other Name Suggestions"
         tableLabel.font = UIFont.boldSystemFont(ofSize: 20)
@@ -132,22 +162,17 @@ class PetViewController: UIViewController {
         NSLayoutConstraint.activate([
             petImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor,constant: 40),
             petImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
             petImageView.widthAnchor.constraint(equalToConstant: 200),
-            petImageView.heightAnchor.constraint(equalToConstant: 200),
-            //petImageView.leadingAnchor.constraint(equalTo: backgroundImageView.leadingAnchor,constant:imagePadding),
-            //petImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor,constant:-imagePadding),
+            petImageView.heightAnchor.constraint(equalToConstant: 200)
         ])
         NSLayoutConstraint.activate([
             petNameLabel.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor,constant: -10),
-            //petNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            petNameLabel.leadingAnchor.constraint(equalTo: backgroundImageView.leadingAnchor, constant: 20),
-            //petNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -padding),
+            petNameLabel.leadingAnchor.constraint(equalTo: backgroundImageView.leadingAnchor, constant: 30),
         ])
         NSLayoutConstraint.activate([
             userNameLabel.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor,constant: 20),
             //userNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            userNameLabel.leadingAnchor.constraint(equalTo: backgroundImageView.leadingAnchor),
+            userNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             userNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -padding),
         ])
         NSLayoutConstraint.activate([
@@ -155,8 +180,12 @@ class PetViewController: UIViewController {
             votesLabel.leadingAnchor.constraint(equalTo: userNameLabel.leadingAnchor)
         ])
         NSLayoutConstraint.activate([
+            dateLabel.topAnchor.constraint(equalTo: votesLabel.bottomAnchor,constant: 10),
+            dateLabel.leadingAnchor.constraint(equalTo: votesLabel.leadingAnchor)
+        ])
+        NSLayoutConstraint.activate([
             tableLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            tableLabel.topAnchor.constraint(equalTo: votesLabel.bottomAnchor,constant: 40),
+            tableLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor,constant: 40),
         ])
         NSLayoutConstraint.activate([
             //namesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),

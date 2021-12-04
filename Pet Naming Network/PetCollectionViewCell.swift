@@ -13,7 +13,7 @@ class PetCollectionViewCell: UICollectionViewCell {
     
     private var petImageView = UIImageView()
     private var petNameLabel = UILabel()
-    private var userNameLabel = UILabel()
+    //private var userNameLabel = UILabel()
     private var backgroundImageView = UIImageView()
     
     override init(frame: CGRect) {
@@ -28,19 +28,17 @@ class PetCollectionViewCell: UICollectionViewCell {
         
         //petNameLabel.textAlignment = .center
         petNameLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        //petNameLabel.textColor = .orange
         petNameLabel.translatesAutoresizingMaskIntoConstraints = false
        
         //userNameLabel.textAlignment = .center
-        userNameLabel.font = .systemFont(ofSize: 12)
+        //userNameLabel.font = .systemFont(ofSize: 12)
         //userNameLabel.textColor = .black
-        userNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        //userNameLabel.translatesAutoresizingMaskIntoConstraints = false
         
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(backgroundImageView)
-        contentView.addSubview(petNameLabel);
-        contentView.addSubview(userNameLabel);
+        contentView.addSubview(petNameLabel)
         contentView.addSubview(petImageView)
     }
     
@@ -51,7 +49,7 @@ class PetCollectionViewCell: UICollectionViewCell {
     func configure(for pet:Pet){
         petNameLabel.text = pet.petName;
         petImageView.image = cropToBounds(image: pet.petImage, width: pet.petImage.size.width, height: pet.petImage.size.height);
-        userNameLabel.text = "By: \(pet.user)"
+        //userNameLabel.text = "By: \(pet.user)"
         let gradient = CAGradientLayer()
         
         gradient.frame = contentView.bounds
@@ -73,7 +71,7 @@ class PetCollectionViewCell: UICollectionViewCell {
     func accountConfigure(for pet:Pet){
         petNameLabel.text = "";
         petImageView.image = cropToBounds(image: pet.petImage, width: pet.petImage.size.width, height: pet.petImage.size.height);
-        userNameLabel.text = ""
+        //userNameLabel.text = ""
         petImageView.layer.borderWidth = 2;
         petImageView.layer.borderColor = UIColor.systemBlue.cgColor
         let padding:CGFloat = 6;
@@ -113,13 +111,13 @@ class PetCollectionViewCell: UICollectionViewCell {
         }*/
         
         NSLayoutConstraint.activate([
-            petNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            petNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             petNameLabel.topAnchor.constraint(equalTo: petImageView.bottomAnchor, constant: 5)
         ])
-        NSLayoutConstraint.activate([
+        /*NSLayoutConstraint.activate([
             userNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
             userNameLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor)
-        ])
+        ])*/
         NSLayoutConstraint.activate([
             backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
