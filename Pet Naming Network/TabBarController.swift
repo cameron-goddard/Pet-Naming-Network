@@ -40,10 +40,6 @@ class TabBarController: UITabBarController {
     }
     
     @objc func presentAccount() {
-        print("========================================================")
-        print("Refresh")
-        print("========================================================")
-       // accountVC.pets
         present(accountVC, animated: true, completion: nil)
         accountVC.reloadAccountPets()
     }

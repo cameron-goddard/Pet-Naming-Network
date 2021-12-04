@@ -99,7 +99,6 @@ class NewImageViewController: UIViewController {
     
     @objc func addImage(_ sender: UIButton){
         sender.startAnimatingPressActions()
-        print("CLICK!!")
        self.imagePicker.present(from: sender)
     }
     func toggleUploadButton(){
@@ -115,12 +114,11 @@ class NewImageViewController: UIViewController {
         if(newImageView.image != nil){
             let vc = SuccessViewController()
             present(vc, animated: true, completion: nil)
-           // addImageButton.isHidden = false
             newImageView.image = nil
             
             NetworkManager.uploadImage(rawImage: "data:image/png;base64,"+imageBase64String, completion: { pet in
                 PetServer.account.userPosts.append(Pet(petPost: pet))
-                print("SUCEESS IMAGE Uploaded!!")
+            
                 LoginViewController.petServer.updateServer()
 
             })
@@ -169,16 +167,9 @@ extension NewImageViewController: ImagePickerDelegate {
         let img:UIImage = image ?? UIImage()
         self.newImageView.image = cropToBounds(image: img, width: img.size.width, height: img.size.height);
         self.toggleUploadButton()
-       print("Uploading...")
-        print("========================================================")
-        print("========================================================")
-        print("========================================================")
         let imageData = img.pngData()
         imageBase64String = imageData?.base64EncodedString() ?? "LOL"
-               
-        print("========================================================")
-        print("========================================================")
-        print("========================================================")
+
         
 
         
