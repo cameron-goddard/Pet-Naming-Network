@@ -40,22 +40,23 @@ class NewImageViewController: UIViewController {
         addImageButton.layer.borderColor = UIColor.systemGray.cgColor
         addImageButton.layer.borderWidth = 1
         addImageButton.layer.cornerRadius = buttonSize/2
-        addImageButton.layer.masksToBounds = true;
+        addImageButton.layer.masksToBounds = true
         addImageButton.titleLabel?.font = .boldSystemFont(ofSize: 50)
-        addImageButton.titleLabel?.textColor = .white;
+        addImageButton.titleLabel?.textColor = .white
         addImageButton.addTarget(self, action: #selector(addImage), for: .touchUpInside)
         
         newImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width-padding*2, height: view.frame.size.width-padding*2))
         newImageView.addDashedBorder()
         
-        newImageView.backgroundColor = .white
+        newImageView.backgroundColor = .secondarySystemBackground
         newImageView.translatesAutoresizingMaskIntoConstraints = false;
         newImageView.isUserInteractionEnabled = true;
         newImageView.image = nil;
         view.addSubview(newImageView)
         newImageView.addSubview(addImageButton)
     
-        uploadImageButton.configuration = .gray()
+        uploadImageButton.configuration = .filled()
+        uploadImageButton.isEnabled = false
         uploadImageButton.translatesAutoresizingMaskIntoConstraints = false
         uploadImageButton.setTitle("Upload", for: .normal)
         uploadImageButton.titleLabel?.font = .boldSystemFont(ofSize: 24)
@@ -101,26 +102,19 @@ class NewImageViewController: UIViewController {
        self.imagePicker.present(from: sender)
     }
     func toggleUploadButton(){
-        if(newImageView.image == nil){
-            uploadImageButton.configuration = .gray()
-            //uploadImageButton.setTitleColor(.systemGray, for: .normal)
-            //uploadImageButton.backgroundColor = .systemGray6
-            //uploadImageButton.layer.borderColor = UIColor.systemGray.cgColor
-        }else{
-            uploadImageButton.configuration = .filled()
-            //uploadImageButton.setTitleColor(.white, for: .normal)
-            //uploadImageButton.backgroundColor = .systemBlue
-            //uploadImageButton.layer.borderColor = UIColor.white.cgColor
+        if(newImageView.image == nil) {
+            uploadImageButton.isEnabled = false
+        } else {
+            uploadImageButton.isEnabled = true
         }
     }
-    
     
     @objc func uploadImage(){
         if(newImageView.image != nil){
             let vc = SuccessViewController()
             present(vc, animated: true, completion: nil)
             addImageButton.isHidden = false
-            newImageView.image = nil;
+            newImageView.image = nil
             
             toggleUploadButton()
         }
