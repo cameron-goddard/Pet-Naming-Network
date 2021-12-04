@@ -74,7 +74,7 @@ class Pet(db.Model):
     pic_id = db.Column(db.Integer, db.ForeignKey("asset.id"))
     user = db.Column(db.Integer, db.ForeignKey("user.id"))
     names = db.relationship("Names", cascade="delete")
-    date_created = db.Column(db.Integer, nullable=False)
+    dateCreated = db.Column(db.Integer, nullable=False)
     voted = db.Column(db.Integer, nullable=False)
 
     def __init__(self, **kwargs):
@@ -82,7 +82,7 @@ class Pet(db.Model):
         self.state = State.NAMING
         self.pic_id = kwargs.get("pic_id")
         self.user = kwargs.get("user")
-        self.date_created = kwargs.get("time")
+        self.dateCreated = kwargs.get("time")
         self.voted = 0
 
     def serialize(self):
@@ -93,7 +93,7 @@ class Pet(db.Model):
             "pic": Asset.query.filter_by(id=self.pic_id).first().getURL(),
             "user": Users.query.filter_by(id=self.user).first().sub_serialize(),
             "names": [s.sub_serialize() for s in self.names],
-            "date_created": self.date_created
+            "dateCreated": self.dateCreated
         }
 
     def sub_serialize(self):
@@ -102,7 +102,7 @@ class Pet(db.Model):
             "state": e2s(self.state),
             "pic": Asset.query.filter_by(id=self.pic_id).first().getURL(),
             "names": [s.sub_serialize() for s in self.names],
-            "date_created": self.date_created
+            "dateCreated": self.dateCreated
         }
 
     def get_user_id(self):
@@ -128,11 +128,11 @@ class Users(db.Model):
     username = db.Column(db.String, nullable=False)
     pets = db.relationship("Pet", cascade="delete")
     names = db.relationship("Names", cascade="delete")
-    logged_in = db.Column(db.Boolean, nullable=False)
+    loggedIn = db.Column(db.Integer, nullable=False)
 
     def __init__(self, **kwargs):
         self.username = kwargs.get("username")
-        self.logged_in = False
+        self.loggedIn = 0
 
     def serialize(self):
         return {
@@ -140,22 +140,22 @@ class Users(db.Model):
             "username": self.username,
             "pets": [s.sub_serialize() for s in self.pets],
             "names": [s.serialize() for s in self.names],
-            "logged_in": self.logged_in  # (str)(self.logged_in)
+            "loggedIn": self.loggedIn  # (str)(self.logged_in)
         }
 
     def sub_serialize(self):
         return {
             "id": self.id,
             "username": self.username,
-            "logged_in": self.logged_in  # (str)(self.logged_in)
+            "loggedIn": self.loggedIn  # (str)(self.logged_in)
 
         }
 
     def login(self):
-        self.logged_in = True
+        self.loggedIn = 1
 
     def logout(self):
-        self.logged_in = False
+        self.loggedIn = 0
 
     def getID(self):
         return self.id
