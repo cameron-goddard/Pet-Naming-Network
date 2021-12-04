@@ -42,19 +42,12 @@ class Pet{
         let data = try? Data(contentsOf: url!)
         self.petImage = UIImage(data: data! ) ?? UIImage()
         
-        print("======================STATE=============================")
-        print(petPost.state)
-        print(petPost.state.elementsEqual("State.FEATURED"))
-        print("========================================================")
-        
+
         if(petPost.state.elementsEqual("State.FEATURED")){
-            print(1)
             self.petState = .FEATURED
         }else if(petPost.state.elementsEqual("State.VOTING")){
-            print(2)
             self.petState = .VOTING
         }else{
-            print(3)
             self.petState = .NAMING
         }
         

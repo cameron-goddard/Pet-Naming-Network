@@ -58,10 +58,7 @@ class ActionViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.title = ""
-        print("========================================================")
-        print("APPEAR")
-        print("========================================================")
-//        voteVC.refresh()
+
         nameVC.refresh()
      
 

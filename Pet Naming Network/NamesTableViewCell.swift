@@ -34,7 +34,8 @@ class NamesTableViewCell: UITableViewCell {
     }
     func configure(name:Name) {
         nameLabel.text = name.name;
-        voteLabel.text = "Votes: \(name.votes)"
+        voteLabel.text = "Votes: \(name.votes
+)"
     }
     func setupConstraints() {
         NSLayoutConstraint.activate([

@@ -117,7 +117,6 @@ class LoginViewController: UIViewController {
         loginButton.center = view.center
         loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
         randomButton.addTarget(self, action: #selector(newRandomName), for: .touchUpInside)
-        //print("Please Work");
         setupConstraints()
     }
     
