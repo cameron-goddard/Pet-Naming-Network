@@ -18,12 +18,15 @@ class NewImageViewController: UIViewController {
 
     let padding:CGFloat = 20;
     let buttonSize:CGFloat = 120;
-    init(){
-        
+    
+    var account:Account;
+    
+    init(account:Account){
+        self.account = account;
         super .init(nibName: nil, bundle: nil)
         self.imagePicker = ImagePicker(presentationController: self, delegate: self)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -166,10 +169,11 @@ extension NewImageViewController: ImagePickerDelegate {
         let img:UIImage = image ?? UIImage()
         self.newImageView.image = cropToBounds(image: img, width: img.size.width, height: img.size.height);
         self.toggleUploadButton()
-        let imageData:Data? = image?.pngData()
-        print("Start")
-        print(imageData?.base64EncodedString())
-        print("End")
+       
+        NetworkManager.uploadImage(rawImage: img, completion: { pet in
+            self.account.userPosts.append(Pet(petPost: pet))
+            
+        })
         
     }
 }

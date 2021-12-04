@@ -14,7 +14,7 @@ class VoteViewController: UIViewController {
     private var skipButton = UIButton()
     let userName = "test"
     
-    private var votableNames : [Pet] = [Pet(petName: "Doggo", user: "test", petImageURL: "doggo", petState: .FEATURED),Pet(petName: "???", user: "test", petImageURL: "nice", petState: .FEATURED),Pet(petName: "Gamer", user: "test", petImageURL: "gamer", petState: .FEATURED),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .FEATURED)]
+    private var votableNames : [Pet] = [Pet(petName: "Doggo", user: "test", petImageURL: "doggo", petState: "featured"),Pet(petName: "???", user: "test", petImageURL: "nice", petState: "featured"),Pet(petName: "Gamer", user: "test", petImageURL: "gamer", petState: "featured"),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: "featured"),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: "featured")]
     
     private let reuseIdentifier = "votableNameCellReuse"
     
@@ -56,7 +56,7 @@ class VoteViewController: UIViewController {
             self.imageView.image = UIImage(systemName: "bolt.ring.closed")
         }, completion: nil)
         UIView.transition(with: namesTableView, duration: 1.0, options: .transitionCrossDissolve, animations: {
-            self.votableNames = [Pet(petName: "Doggo", user: "test", petImageURL: "doggo", petState: .FEATURED),Pet(petName: "???", user: "test", petImageURL: "nice", petState: .FEATURED),Pet(petName: "Gamer", user: "test", petImageURL: "gamer", petState: .FEATURED),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: .FEATURED)]
+            self.votableNames = [Pet(petName: "Doggo", user: "test", petImageURL: "doggo", petState: "featured"),Pet(petName: "???", user: "test", petImageURL: "nice", petState: "featured"),Pet(petName: "Gamer", user: "test", petImageURL: "gamer", petState: "featured"),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: "featured"),Pet(petName: "cat", user: "test", petImageURL: "waffle", petState: "featured")]
             self.namesTableView.reloadData()
         }, completion: nil)
     }

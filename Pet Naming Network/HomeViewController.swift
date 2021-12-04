@@ -24,7 +24,8 @@ class HomeViewController: UIViewController{
     private var petsShown:[Pet] = []
   
     init(petsShown:[Pet]){
-        self.petsShown = petsShown;
+//        self.petsShown = [];
+       
         super .init(nibName: nil, bundle: nil)
     }
     
@@ -42,12 +43,12 @@ class HomeViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("HELLO YOU TURN RED!!")
+        
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        //navigationItem.largeTitleDisplayMode = .always
-      //  self.delegate = self
         view.backgroundColor = .systemBackground
         
-        
+        createData();
       
         petCollectionView = {
             let layout = UICollectionViewFlowLayout();
@@ -75,10 +76,25 @@ class HomeViewController: UIViewController{
         }
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         
-        //instantiateButtons();
+       
         setupConstraints()
     }
     
+    func createData(){
+        print("Creating Data!!");
+        NetworkManager.getFeaturedPets()
+        NetworkManager.getFeaturedPets{ pets in
+            print("Data Obtained!");
+            print(pets);
+        DispatchQueue.main.async {
+            for x in 0..<pets.count{
+                self.petsShown.append(Pet(petPost:pets[x]))
+            }
+
+            self.petCollectionView.reloadData()
+            }
+        }
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.title = "Featured"

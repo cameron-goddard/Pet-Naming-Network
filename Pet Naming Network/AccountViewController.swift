@@ -41,10 +41,6 @@ class AccountViewController: UIViewController {
     var width:CGFloat = 150.0;
     
     private var account:Account;
-    init(){
-        self.account = Account(userName: "Bob123", userPosts: [])
-        super.init(nibName: nil, bundle: nil)
-    }
     
     init(account:Account){
         self.account=account;
@@ -151,6 +147,10 @@ class AccountViewController: UIViewController {
             namesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
         ])
 
+        
+    }
+    func reloadAccountData(){
+        petsPostedCollectionView.reloadData()
         
     }
     @objc func editProfilePicture(_ sender: UIButton){

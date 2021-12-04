@@ -108,13 +108,12 @@ class LoginViewController: UIViewController {
     }
     @objc func login(){
 
-//        spinner.isHidden = false;
-//        spinner.startAnimating()
-//        self.view.isUserInteractionEnabled = false;
-//
+        print("Attempting to Login!!");
+        NetworkManager.loginAccount(username: userName, completion: { account in
+            print("Attempting to Login!!");
+            print(account.username)
+        })
         
-        
-
        
         userName = userNameTextField.text ?? "";
         if(userName.elementsEqual("")){
@@ -124,16 +123,14 @@ class LoginViewController: UIViewController {
         loginButton.startAnimatingPressActions()
         
 
-            petsShown = [Pet(petName: "Doggo", user: userName, petImageURL: "doggo", petState: .FEATURED),Pet(petName: "???", user: userName, petImageURL: "nice", petState: .FEATURED),Pet(petName: "Gamer", user: userName, petImageURL: "gamer", petState: .FEATURED),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .FEATURED),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: .FEATURED)]
+            petsShown = [Pet(petName: "Doggo", user: userName, petImageURL: "doggo", petState: "State.FEATURED"),Pet(petName: "???", user: userName, petImageURL: "nice", petState: "State.FEATURED"),Pet(petName: "Gamer", user: userName, petImageURL: "gamer", petState: "State.FEATURED"),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: "State.FEATURED"),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: "State.FEATURED"),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: "State.FEATURED"),Pet(petName: "cat", user: userName, petImageURL: "waffle", petState: "State.FEATURED")]
         account = Account(userName: userName,userPosts: petsShown)
         
         let tabBarVC = TabBarController(account:account)
         
         let homeVC = HomeViewController(petsShown: petsShown)
-        let newImageVC = NewImageViewController()
-        //let homeVC = UINavigationController(rootViewController: HomeViewController(petsShown: petsShown))
-        //let newImageVC = UINavigationController(rootViewController: NewImageViewController())
-        let actionVC = UINavigationController(rootViewController: ActionViewController())
+            let newImageVC = NewImageViewController(account:account)
+            let actionVC = UINavigationController(rootViewController: ActionViewController(account:account))
         
         homeVC.title = "Home"
         newImageVC.title = "New"
@@ -149,7 +146,8 @@ class LoginViewController: UIViewController {
             
             items[i].image = UIImage(systemName: images[i])
         }
-        
+           
+           
           
         self.navigationController?.pushViewController(tabBarVC, animated: true)
         }
