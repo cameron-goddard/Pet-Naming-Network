@@ -69,8 +69,9 @@ class VoteViewController: UIViewController {
         }
     
         if(LoginViewController.petServer.petsVoting.isEmpty){
+            skipButton.setTitle("No images to vote on", for: .normal)
             UIView.transition(with: imageView, duration: 1.0, options: .transitionFlipFromLeft, animations: {
-                self.imageView.image = UIImage(systemName: "bolt.ring.closed")
+                self.imageView.image = UIImage(systemName: "photo")
             }, completion: nil)
             
             UIView.transition(with: namesTableView, duration: 1.0, options: .transitionCrossDissolve, animations: {
@@ -78,6 +79,7 @@ class VoteViewController: UIViewController {
                 self.namesTableView.reloadData()
             }, completion: nil)
         }else{
+            skipButton.setTitle("Skip Image", for: .normal)
             pet = Pet(petPost:LoginViewController.petServer.petsVoting[self.index])
         
             UIView.transition(with: self.imageView, duration: 1.0, options: .transitionFlipFromLeft, animations: {

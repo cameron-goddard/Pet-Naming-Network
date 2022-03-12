@@ -20,15 +20,15 @@ class NameViewController: UIViewController {
         
         view.backgroundColor = .secondarySystemBackground
         
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleToFill
+        imageView.layer.cornerRadius = 10
+        imageView.layer.masksToBounds = true
+        
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
         if(!LoginViewController.petServer.petsNaming.isEmpty){
             imageView.image = Pet(petPost: LoginViewController.petServer.petsNaming[0]).petImage
         }
-       
-
-       
         view.addSubview(imageView)
         
         nameTextField.textColor = .label
@@ -109,8 +109,8 @@ class NameViewController: UIViewController {
     func setUpConstraints() {
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            imageView.widthAnchor.constraint(equalToConstant: view.frame.width-40),
-            imageView.heightAnchor.constraint(equalToConstant: 200),
+            imageView.widthAnchor.constraint(equalToConstant: 300),
+            imageView.heightAnchor.constraint(equalToConstant: 300),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         NSLayoutConstraint.activate([
